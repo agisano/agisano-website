@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Email Signature Preview — Agisano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Inter',sans-serif;
+  background:#1a1a1a;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:48px;
+  padding:60px 24px;
+}
+
+/* MOCK EMAIL CONTEXT */
+.email-mock{
+  width:100%;max-width:680px;
+  background:#ffffff;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow:0 32px 80px rgba(0,0,0,0.5);
+}
+.email-header{
+  background:#f5f5f5;
+  padding:20px 28px;
+  border-bottom:1px solid #e0e0e0;
+}
+.email-header p{font-family:'Inter',sans-serif;font-size:13px;color:#888;margin-bottom:4px;}
+.email-header p strong{color:#333;font-weight:500;}
+.email-body-text{
+  padding:28px 28px 0;
+  font-family:'Inter',sans-serif;font-size:14px;color:#333;line-height:1.7;
+}
+.email-body-text p{margin-bottom:12px;}
+.email-divider{
+  height:1px;background:#e8e8e8;margin:28px 28px 0;
+}
+
+/* ── THE SIGNATURE ── */
+.sig{
+  padding:28px 28px 32px;
+  background:#ffffff;
+}
+
+.sig-card{
+  display:inline-block;
+  background:#07090C;
+  border-radius:10px;
+  padding:24px 28px;
+  min-width:360px;
+  max-width:440px;
+}
+
+/* Top row: mark + name block */
+.sig-top{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-bottom:20px;
+}
+.sig-mark{
+  width:44px;height:44px;
+  background:#E85D1B;
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.sig-mark span{
+  font-family:'Sora',sans-serif;
+  font-weight:900;font-size:22px;
+  color:white;line-height:1;
+}
+.sig-name{
+  font-family:'Sora',sans-serif;
+  font-weight:700;font-size:17px;
+  color:#F2EDE6;
+  letter-spacing:-0.01em;
+  margin-bottom:2px;
+}
+.sig-role{
+  font-family:'Inter',sans-serif;
+  font-weight:400;font-size:12px;
+  color:rgba(242,237,230,0.45);
+  letter-spacing:0.01em;
+}
+
+/* Divider */
+.sig-rule{
+  height:1px;
+  background:rgba(242,237,230,0.08);
+  margin-bottom:16px;
+}
+
+/* Contact lines */
+.sig-contacts{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  margin-bottom:20px;
+}
+.sig-contact-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.sig-dot{
+  width:4px;height:4px;
+  background:#E85D1B;
+  border-radius:50%;
+  flex-shrink:0;
+}
+.sig-contact-row a,
+.sig-contact-row span{
+  font-family:'Inter',sans-serif;
+  font-size:12px;
+  color:rgba(242,237,230,0.55);
+  text-decoration:none;
+  letter-spacing:0.01em;
+}
+.sig-contact-row a:hover{color:#E85D1B;}
+
+/* Bottom: wordmark + tagline */
+.sig-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding-top:16px;
+  border-top:1px solid rgba(242,237,230,0.07);
+}
+.sig-wordmark{
+  font-family:'Sora',sans-serif;
+  font-weight:800;font-size:13px;
+  color:rgba(242,237,230,0.35);
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+}
+.sig-tagline{
+  font-family:'Inter',sans-serif;
+  font-size:11px;
+  color:rgba(242,237,230,0.2);
+  letter-spacing:0.04em;
+  font-style:italic;
+}
+
+/* LABEL */
+.preview-label{
+  font-family:'Inter',sans-serif;
+  font-size:12px;
+  color:rgba(255,255,255,0.3);
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  text-align:center;
+}
+
+/* LIGHT VARIANT PREVIEW */
+.sig-card.light{
+  background:#F2EDE6;
+  border:1px solid rgba(7,9,12,0.08);
+}
+.sig-card.light .sig-name{color:#07090C;}
+.sig-card.light .sig-role{color:rgba(7,9,12,0.45);}
+.sig-card.light .sig-rule{background:rgba(7,9,12,0.08);}
+.sig-card.light .sig-contact-row a,
+.sig-card.light .sig-contact-row span{color:rgba(7,9,12,0.55);}
+.sig-card.light .sig-wordmark{color:rgba(7,9,12,0.3);}
+.sig-card.light .sig-tagline{color:rgba(7,9,12,0.2);}
+.sig-card.light .sig-bottom{border-top-color:rgba(7,9,12,0.08);}
+</style>
+</head>
+<body>
+
+<p class="preview-label">Dark variant — shown in email context</p>
+
+<!-- MOCK EMAIL -->
+<div class="email-mock">
+  <div class="email-header">
+    <p><strong>From:</strong> Your Name &lt;hello@agisano.com&gt;</p>
+    <p><strong>To:</strong> Principal &lt;principal@school.edu.za&gt;</p>
+    <p><strong>Subject:</strong> Following up on your free assessment</p>
+  </div>
+  <div class="email-body-text">
+    <p>Good morning,</p>
+    <p>Thank you for taking the time to speak with us yesterday. I've put together a few initial thoughts on what we could achieve at your school — I'd love to walk you through them in person.</p>
+    <p>Looking forward to hearing from you.</p>
+  </div>
+  <div class="email-divider"></div>
+
+  <!-- SIGNATURE DARK -->
+  <div class="sig">
+    <div class="sig-card">
+      <div class="sig-top">
+        <div class="sig-mark"><span>A</span></div>
+        <div>
+          <div class="sig-name">Your Name</div>
+          <div class="sig-role">Founder &amp; Director · Agisano</div>
+        </div>
+      </div>
+      <div class="sig-rule"></div>
+      <div class="sig-contacts">
+        <div class="sig-contact-row">
+          <span class="sig-dot"></span>
+          <a href="mailto:hello@agisano.com">hello@agisano.com</a>
+        </div>
+        <div class="sig-contact-row">
+          <span class="sig-dot"></span>
+          <a href="tel:+27000000000">+27 (0) 00 000 0000</a>
+        </div>
+        <div class="sig-contact-row">
+          <span class="sig-dot"></span>
+          <a href="https://agisano.com">agisano.com</a>
+        </div>
+        <div class="sig-contact-row">
+          <span class="sig-dot"></span>
+          <span>Gauteng, South Africa</span>
+        </div>
+      </div>
+      <div class="sig-bottom">
+        <span class="sig-wordmark">Agisano</span>
+        <span class="sig-tagline">Building Together</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="preview-label">Light variant — for replies on white backgrounds</p>
+
+<!-- LIGHT VARIANT -->
+<div class="email-mock">
+  <div class="sig" style="padding-top:32px;">
+    <div class="sig-card light">
+      <div class="sig-top">
+        <div class="sig-mark"><span>A</span></div>
+        <div>
+          <div class="sig-name">Your Name</div>
+          <div class="sig-role">Founder &amp; Director · Agisano</div>
+        </div>
+      </div>
+      <div class="sig-rule"></div>
+      <div class="sig-contacts">
+        <div class="sig-contact-row">
+          <span class="sig-dot"></span>
+          <a href="mailto:hello@agisano.com">hello@agisano.com</a>
+        </div>
+        <div class="sig-contact-row">
+          <span class="sig-dot"></span>
+          <a href="tel:+27000000000">+27 (0) 00 000 0000</a>
+        </div>
+        <div class="sig-contact-row">
+          <span class="sig-dot"></span>
+          <a href="https://agisano.com">agisano.com</a>
+        </div>
+        <div class="sig-contact-row">
+          <span class="sig-dot"></span>
+          <span>Gauteng, South Africa</span>
+        </div>
+      </div>
+      <div class="sig-bottom">
+        <span class="sig-wordmark">Agisano</span>
+        <span class="sig-tagline">Building Together</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Agisano — Building Together</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='5' fill='%23E85D1B'/><text x='50%25' y='54%25' dominant-baseline='central' text-anchor='middle' fill='white' font-family='Arial,sans-serif' font-weight='900' font-size='19'>A</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800;900&family=Inter:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --ink:#07090C;
+  --orange:#E85D1B;
+  --orange2:#F26B2A;
+  --cream:#F2EDE6;
+  --cream2:#EDE7DF;
+  --warm-white:#FAF8F5;
+  --muted:rgba(7,9,12,0.45);
+  --muted-light:rgba(242,237,230,0.5);
+}
+html{scroll-behavior:smooth;cursor:none;}
+body{font-family:'Inter',sans-serif;background:var(--ink);color:var(--cream);-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+img{display:block;max-width:100%;}
+::selection{background:var(--orange);color:white;}
+
+/* CUSTOM CURSOR */
+#cursor{
+  position:fixed;width:10px;height:10px;background:var(--orange);border-radius:50%;
+  pointer-events:none;z-index:9999;transform:translate(-50%,-50%);
+  transition:width 0.25s,height 0.25s,opacity 0.25s,background 0.25s;
+  mix-blend-mode:normal;
+}
+#cursor.expand{width:48px;height:48px;background:transparent;border:1.5px solid var(--orange);mix-blend-mode:normal;}
+#cursor.light{background:var(--cream);}
+
+/* GRAIN */
+.grain{position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:0.035;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size:200px;
+}
+
+/* PAGE SWITCHER */
+.switcher{
+  position:fixed;bottom:32px;left:50%;transform:translateX(-50%);z-index:500;
+  display:flex;gap:3px;background:rgba(7,9,12,0.85);backdrop-filter:blur(16px);
+  padding:5px;border-radius:100px;border:1px solid rgba(242,237,230,0.1);
+}
+.sw-btn{
+  padding:7px 18px;border-radius:100px;font-family:'Sora',sans-serif;font-size:11px;
+  font-weight:600;letter-spacing:0.06em;cursor:pointer;color:rgba(242,237,230,0.45);
+  border:none;background:none;transition:all 0.2s;
+}
+.sw-btn.on{background:var(--orange);color:white;}
+.sw-btn:hover:not(.on){color:var(--cream);}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:400;
+  display:flex;align-items:center;justify-content:space-between;
+  height:72px;padding:0 48px;
+}
+.nav-logo{display:flex;align-items:center;gap:12px;}
+.nav-mark{width:36px;height:36px;background:var(--orange);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-mark span{font-family:'Sora',sans-serif;font-weight:900;font-size:18px;color:white;line-height:1;}
+.nav-wordmark{font-family:'Sora',sans-serif;font-weight:700;font-size:17px;letter-spacing:0.02em;color:var(--cream);}
+.nav-right{display:flex;align-items:center;gap:40px;}
+.nav-right a{font-size:13px;color:rgba(242,237,230,0.55);transition:color 0.2s;letter-spacing:0.02em;}
+.nav-right a:hover{color:var(--cream);}
+.nav-cta{
+  background:transparent;border:1px solid rgba(242,237,230,0.2);color:var(--cream) !important;
+  font-family:'Sora',sans-serif;font-weight:600;font-size:12px;letter-spacing:0.06em;
+  padding:10px 22px;border-radius:100px;transition:all 0.25s !important;text-transform:uppercase;
+}
+.nav-cta:hover{background:var(--orange) !important;border-color:var(--orange) !important;}
+
+/* PAGE MANAGEMENT */
+.pg{display:none;}
+.pg.on{display:block;}
+
+/* ──────────────────────────────
+   HOME
+────────────────────────────── */
+
+/* HERO */
+.hero{
+  position:relative;min-height:100vh;display:flex;flex-direction:column;
+  justify-content:flex-end;overflow:hidden;background:var(--ink);
+}
+.hero-photo{
+  position:absolute;inset:0;
+  background:url('https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1800&q=85') center/cover no-repeat;
+  opacity:0.28;
+}
+/* The marquee strip sits below the 72px fixed nav */
+.top-strip{
+  position:absolute;top:72px;left:0;right:0;
+  border-bottom:1px solid rgba(242,237,230,0.08);
+  border-top:1px solid rgba(242,237,230,0.06);
+  padding:11px 0;overflow:hidden;z-index:2;
+}
+.strip-track{display:flex;gap:0;white-space:nowrap;animation:strip 18s linear infinite;}
+.strip-item{
+  font-family:'Sora',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.14em;
+  text-transform:uppercase;color:rgba(242,237,230,0.3);padding:0 32px;
+  border-right:1px solid rgba(242,237,230,0.1);
+}
+@keyframes strip{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+.hero-body{
+  position:relative;z-index:3;padding:0 48px 64px;
+}
+/* THE STATEMENT — massive */
+.hero-statement{
+  font-family:'Sora',sans-serif;font-weight:900;
+  font-size:clamp(64px,10.5vw,168px);
+  line-height:0.92;letter-spacing:-0.04em;
+  color:var(--cream);margin-bottom:0;
+}
+.hero-statement .line2{
+  display:block;
+  /* Photo clipped through this word */
+  background:url('https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1800&q=85') center 40%/cover no-repeat;
+  -webkit-background-clip:text;background-clip:text;
+  color:transparent;filter:brightness(1.4) contrast(1.1) saturate(1.2);
+}
+.hero-statement .line3{
+  display:block;color:var(--cream);opacity:0.12;font-size:0.55em;
+  letter-spacing:0.01em;font-weight:300;font-style:italic;
+  font-family:'Inter',sans-serif;margin-top:16px;
+}
+.hero-meta{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-top:40px;padding-top:32px;border-top:1px solid rgba(242,237,230,0.1);
+}
+.hero-desc{
+  max-width:340px;font-size:14px;line-height:1.75;color:rgba(242,237,230,0.55);
+}
+.hero-desc strong{color:var(--cream);font-weight:400;}
+.hero-actions{display:flex;align-items:center;gap:20px;}
+.btn-main{
+  background:var(--orange);color:white;font-family:'Sora',sans-serif;font-weight:700;
+  font-size:13px;letter-spacing:0.05em;text-transform:uppercase;
+  padding:16px 32px;border-radius:3px;border:none;cursor:none;
+  transition:all 0.25s;display:inline-flex;align-items:center;gap:10px;
+}
+.btn-main:hover{background:var(--orange2);transform:translateY(-2px);box-shadow:0 16px 40px rgba(232,93,27,0.4);}
+.btn-ghost{
+  color:rgba(242,237,230,0.5);font-size:13px;font-family:'Sora',sans-serif;
+  font-weight:600;letter-spacing:0.06em;display:inline-flex;align-items:center;gap:8px;
+  transition:all 0.2s;
+}
+.btn-ghost:hover{color:var(--cream);}
+.hero-index{
+  position:absolute;right:48px;top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:12px;z-index:3;
+}
+.hero-index span{
+  font-family:'Sora',sans-serif;font-size:10px;font-weight:600;
+  letter-spacing:0.14em;color:rgba(242,237,230,0.25);text-transform:uppercase;
+  writing-mode:vertical-rl;text-orientation:mixed;
+}
+.hero-index-line{width:1px;height:60px;background:linear-gradient(to bottom,rgba(232,93,27,0.6),transparent);}
+
+/* MARQUEE BAND */
+.marquee-band{
+  background:var(--orange);padding:14px 0;overflow:hidden;
+  border-top:none;border-bottom:none;
+}
+.marquee-track{display:flex;gap:0;animation:marquee 20s linear infinite;}
+.marquee-item{
+  font-family:'Sora',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.18em;
+  text-transform:uppercase;color:white;padding:0 40px;white-space:nowrap;opacity:0.9;
+}
+.marquee-dot{color:rgba(255,255,255,0.5);margin:0 8px;}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* MANIFESTO */
+.manifesto{
+  background:var(--cream);padding:120px 48px;
+  display:flex;flex-direction:column;gap:0;
+}
+.mani-eyebrow{
+  font-size:11px;font-family:'Sora',sans-serif;font-weight:600;
+  letter-spacing:0.18em;text-transform:uppercase;color:var(--orange);
+  margin-bottom:40px;display:flex;align-items:center;gap:12px;
+}
+.mani-eyebrow::after{content:'';flex:1;height:1px;background:rgba(7,9,12,0.15);}
+.mani-text{
+  font-family:'Sora',sans-serif;font-weight:800;
+  font-size:clamp(42px,7.5vw,118px);line-height:0.95;letter-spacing:-0.03em;
+  color:var(--ink);max-width:1100px;
+}
+.mani-text em{color:var(--orange);font-style:normal;}
+.mani-text .small{
+  display:block;font-family:'Inter',sans-serif;font-size:clamp(15px,1.8vw,20px);
+  font-weight:300;line-height:1.7;letter-spacing:0.01em;color:rgba(7,9,12,0.55);
+  max-width:480px;margin-top:40px;font-style:italic;
+}
+.mani-bottom{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-top:64px;padding-top:40px;border-top:1px solid rgba(7,9,12,0.1);
+}
+.mani-name{
+  font-family:'Sora',sans-serif;font-size:11px;font-weight:600;
+  letter-spacing:0.14em;text-transform:uppercase;color:rgba(7,9,12,0.35);
+}
+
+/* SERVICES — EDITORIAL LIST */
+.services-section{background:var(--ink);padding:0;}
+.services-header{
+  padding:80px 48px 48px;border-bottom:1px solid rgba(242,237,230,0.08);
+  display:flex;align-items:baseline;justify-content:space-between;
+}
+.services-header h2{
+  font-family:'Sora',sans-serif;font-size:clamp(28px,3.5vw,44px);font-weight:700;
+  color:var(--cream);letter-spacing:-0.02em;
+}
+.services-header p{
+  font-size:13px;color:rgba(242,237,230,0.4);max-width:260px;line-height:1.7;text-align:right;
+}
+.svc-list{list-style:none;}
+.svc-row{
+  position:relative;display:flex;align-items:center;
+  padding:32px 48px;border-bottom:1px solid rgba(242,237,230,0.07);
+  cursor:none;overflow:hidden;transition:background 0.3s;
+}
+.svc-row::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:0;
+  background:rgba(232,93,27,0.06);transition:width 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.svc-row:hover::before{width:100%;}
+.svc-row:hover .svc-arrow{transform:translateX(4px);}
+.svc-row:hover .svc-img-hover{opacity:1;transform:scale(1) translateY(0);}
+.svc-num{
+  font-family:'Sora',sans-serif;font-size:clamp(48px,5vw,72px);font-weight:800;
+  color:rgba(242,237,230,0.06);letter-spacing:-0.04em;
+  min-width:100px;line-height:1;flex-shrink:0;
+}
+.svc-info{flex:1;padding:0 32px;}
+.svc-name{
+  font-family:'Sora',sans-serif;font-size:clamp(18px,2.5vw,30px);font-weight:700;
+  color:var(--cream);letter-spacing:-0.01em;margin-bottom:6px;
+}
+.svc-desc{font-size:13px;color:rgba(242,237,230,0.4);line-height:1.65;max-width:380px;}
+.svc-tag{
+  display:inline-block;margin-top:10px;font-family:'Sora',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--orange);border:1px solid rgba(232,93,27,0.3);padding:4px 10px;border-radius:100px;
+}
+.svc-arrow{
+  margin-left:auto;font-size:22px;color:rgba(242,237,230,0.2);
+  transition:transform 0.3s,color 0.3s;flex-shrink:0;font-family:'Sora',sans-serif;
+}
+.svc-row:hover .svc-arrow{color:var(--orange);}
+/* HOVER IMAGE */
+.svc-img-hover{
+  position:absolute;right:140px;top:50%;transform:translateY(-50%) scale(0.92) translateY(8px);
+  width:160px;height:110px;border-radius:8px;overflow:hidden;
+  opacity:0;transition:all 0.4s cubic-bezier(0.16,1,0.3,1);pointer-events:none;z-index:10;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+.svc-img-hover img{width:100%;height:100%;object-fit:cover;}
+
+/* NUMBERS STATEMENT */
+.numbers-section{background:var(--cream2);padding:100px 48px;}
+.numbers-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;}
+.num-block{
+  padding:48px;border-right:1px solid rgba(7,9,12,0.1);
+}
+.num-block:last-child{border-right:none;}
+.num-val{
+  font-family:'Sora',sans-serif;font-size:clamp(60px,8vw,110px);font-weight:900;
+  letter-spacing:-0.05em;line-height:0.9;color:var(--ink);margin-bottom:16px;
+}
+.num-val .accent{color:var(--orange);}
+.num-label{
+  font-size:13px;color:rgba(7,9,12,0.5);line-height:1.65;max-width:200px;
+}
+.num-label strong{color:var(--ink);display:block;font-size:15px;margin-bottom:4px;font-family:'Sora',sans-serif;font-weight:600;}
+
+/* WHY SECTION */
+.why-section{background:var(--ink);padding:100px 48px;}
+.why-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+.why-left h2{
+  font-family:'Sora',sans-serif;font-size:clamp(36px,4.5vw,60px);font-weight:800;
+  color:var(--cream);letter-spacing:-0.03em;line-height:1.05;margin-bottom:24px;
+}
+.why-left h2 em{font-style:normal;color:var(--orange);}
+.why-left p{font-size:15px;color:rgba(242,237,230,0.5);line-height:1.8;margin-bottom:32px;}
+.why-list{list-style:none;display:flex;flex-direction:column;gap:0;}
+.why-item{
+  display:flex;align-items:flex-start;gap:20px;
+  padding:24px 0;border-bottom:1px solid rgba(242,237,230,0.07);
+}
+.why-item:first-child{border-top:1px solid rgba(242,237,230,0.07);}
+.why-n{
+  font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:var(--orange);
+  letter-spacing:0.1em;min-width:28px;margin-top:2px;
+}
+.why-text strong{
+  display:block;font-family:'Sora',sans-serif;font-size:15px;color:var(--cream);
+  font-weight:600;margin-bottom:4px;
+}
+.why-text p{font-size:13px;color:rgba(242,237,230,0.45);line-height:1.7;}
+
+/* PHOTO GRID */
+.photo-grid{display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:260px 260px;gap:3px;}
+.photo-cell{overflow:hidden;position:relative;}
+.photo-cell.tall{grid-row:span 2;}
+.photo-cell img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s cubic-bezier(0.16,1,0.3,1);}
+.photo-cell:hover img{transform:scale(1.06);}
+.photo-cell-overlay{
+  position:absolute;inset:0;background:linear-gradient(to top,rgba(7,9,12,0.6),transparent 60%);
+  opacity:0;transition:opacity 0.3s;
+}
+.photo-cell:hover .photo-cell-overlay{opacity:1;}
+
+/* CTA SECTION */
+.cta-final{
+  position:relative;padding:140px 48px;overflow:hidden;background:var(--ink);
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+}
+.cta-photo-bg{
+  position:absolute;inset:0;
+  background:url('https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1800&q=80') center/cover no-repeat;
+  opacity:0.12;
+}
+.cta-left h2{
+  font-family:'Sora',sans-serif;font-size:clamp(44px,5.5vw,80px);font-weight:900;
+  color:var(--cream);letter-spacing:-0.04em;line-height:0.95;margin-bottom:32px;
+}
+.cta-left h2 em{font-style:normal;color:var(--orange);}
+.cta-left p{font-size:15px;color:rgba(242,237,230,0.5);line-height:1.8;max-width:400px;margin-bottom:40px;}
+.cta-right{position:relative;z-index:1;}
+.cta-box{
+  background:rgba(242,237,230,0.04);border:1px solid rgba(242,237,230,0.1);
+  border-radius:12px;padding:40px;backdrop-filter:blur(8px);
+}
+.cta-box p{
+  font-family:'Sora',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.1em;
+  text-transform:uppercase;color:var(--orange);margin-bottom:6px;
+}
+.cta-box h3{
+  font-family:'Sora',sans-serif;font-size:22px;font-weight:700;color:var(--cream);
+  margin-bottom:24px;line-height:1.2;
+}
+.cta-promise{display:flex;flex-direction:column;gap:12px;margin-bottom:28px;}
+.promise-row{display:flex;align-items:center;gap:12px;font-size:13px;color:rgba(242,237,230,0.55);}
+.promise-row::before{content:'';width:6px;height:6px;background:var(--orange);border-radius:50%;flex-shrink:0;}
+
+/* FOOTER */
+footer{background:#040609;padding:64px 48px 32px;border-top:1px solid rgba(242,237,230,0.06);}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:56px;}
+.footer-statement{
+  font-family:'Sora',sans-serif;font-size:clamp(28px,3.5vw,46px);font-weight:800;
+  color:var(--cream);letter-spacing:-0.03em;line-height:1.1;max-width:500px;
+}
+.footer-statement em{font-style:normal;color:var(--orange);}
+.footer-cols{display:flex;gap:60px;}
+.footer-col h5{
+  font-family:'Sora',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.16em;
+  text-transform:uppercase;color:rgba(242,237,230,0.25);margin-bottom:20px;
+}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.footer-col ul li a{font-size:13px;color:rgba(242,237,230,0.5);transition:color 0.2s;}
+.footer-col ul li a:hover{color:var(--cream);}
+.footer-bottom{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-top:28px;border-top:1px solid rgba(242,237,230,0.06);
+}
+.footer-bottom p{font-size:12px;color:rgba(242,237,230,0.25);}
+
+/* ──────────────────────────────
+   ABOUT PAGE
+────────────────────────────── */
+.about-hero{
+  min-height:100vh;background:var(--ink);display:grid;
+  grid-template-columns:1fr 1fr;position:relative;overflow:hidden;
+}
+.about-hero-left{
+  padding:160px 48px 80px;display:flex;flex-direction:column;justify-content:flex-end;
+  position:relative;z-index:2;
+}
+.about-hero-left h1{
+  font-family:'Sora',sans-serif;font-size:clamp(48px,6.5vw,92px);font-weight:900;
+  color:var(--cream);letter-spacing:-0.04em;line-height:0.95;margin-bottom:32px;
+}
+.about-hero-left h1 em{font-style:normal;color:var(--orange);}
+.about-hero-left p{
+  font-size:15px;color:rgba(242,237,230,0.5);line-height:1.8;max-width:400px;margin-bottom:40px;
+}
+.about-hero-right{position:relative;}
+.about-hero-right img{width:100%;height:100%;object-fit:cover;opacity:0.7;}
+.about-hero-right::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to right,var(--ink) 0%,transparent 30%);
+}
+.about-pull{
+  background:var(--cream);padding:80px 48px;
+  display:flex;align-items:center;gap:80px;
+}
+.about-pull-quote{
+  font-family:'Sora',sans-serif;font-size:clamp(28px,4vw,54px);font-weight:800;
+  color:var(--ink);letter-spacing:-0.03em;line-height:1.1;flex:1;
+}
+.about-pull-quote em{font-style:normal;color:var(--orange);}
+.about-pull-right{min-width:300px;}
+.about-pull-right p{font-size:14px;color:rgba(7,9,12,0.55);line-height:1.8;margin-bottom:16px;}
+.about-story{
+  background:var(--ink);padding:100px 48px;
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;
+}
+.about-story-left h2{
+  font-family:'Sora',sans-serif;font-size:clamp(32px,4vw,52px);font-weight:800;
+  color:var(--cream);letter-spacing:-0.03em;line-height:1.05;margin-bottom:32px;
+}
+.about-story-left h2 em{font-style:normal;color:var(--orange);}
+.story-p{font-size:14px;color:rgba(242,237,230,0.5);line-height:1.85;margin-bottom:16px;}
+.story-p strong{color:var(--cream);font-weight:500;}
+.values-dark{background:var(--ink);padding:0 48px 100px;}
+.values-header{
+  padding:60px 0 40px;border-bottom:1px solid rgba(242,237,230,0.08);
+  display:flex;align-items:baseline;justify-content:space-between;margin-bottom:0;
+}
+.values-header h2{
+  font-family:'Sora',sans-serif;font-size:clamp(24px,3vw,38px);font-weight:700;
+  color:var(--cream);letter-spacing:-0.02em;
+}
+.values-header p{font-size:13px;color:rgba(242,237,230,0.35);}
+.val-list{list-style:none;}
+.val-row{
+  display:grid;grid-template-columns:80px 1fr 1fr;gap:40px;align-items:start;
+  padding:32px 0;border-bottom:1px solid rgba(242,237,230,0.07);
+}
+.val-n{font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:rgba(232,93,27,0.7);letter-spacing:0.1em;}
+.val-title{font-family:'Sora',sans-serif;font-size:17px;font-weight:700;color:var(--cream);}
+.val-body{font-size:13px;color:rgba(242,237,230,0.45);line-height:1.7;}
+
+/* ──────────────────────────────
+   SERVICES PAGE
+────────────────────────────── */
+.svc-page-hero{
+  min-height:60vh;background:var(--cream);padding:140px 48px 80px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+.svc-page-hero h1{
+  font-family:'Sora',sans-serif;font-size:clamp(52px,8vw,120px);font-weight:900;
+  color:var(--ink);letter-spacing:-0.05em;line-height:0.9;margin-bottom:32px;
+}
+.svc-page-hero h1 em{font-style:normal;color:var(--orange);}
+.svc-page-hero p{
+  font-size:16px;color:rgba(7,9,12,0.5);line-height:1.8;max-width:500px;
+}
+.svc-detail{padding:80px 48px;border-bottom:1px solid rgba(7,9,12,0.08);background:var(--warm-white);}
+.svc-detail:nth-child(even){background:var(--cream2);}
+.svc-detail-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.svc-detail-inner.rev{direction:rtl;}
+.svc-detail-inner.rev > *{direction:ltr;}
+.svc-d-img{border-radius:8px;overflow:hidden;aspect-ratio:4/3;}
+.svc-d-img img{width:100%;height:100%;object-fit:cover;}
+.svc-d-num{
+  font-family:'Sora',sans-serif;font-size:clamp(80px,9vw,130px);font-weight:900;
+  color:rgba(7,9,12,0.05);letter-spacing:-0.05em;line-height:1;margin-bottom:-20px;
+}
+.svc-d-title{font-family:'Sora',sans-serif;font-size:clamp(24px,3vw,38px);font-weight:800;color:var(--ink);letter-spacing:-0.02em;margin-bottom:16px;}
+.svc-d-body{font-size:14px;color:rgba(7,9,12,0.55);line-height:1.8;margin-bottom:24px;}
+.svc-d-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:28px;}
+.svc-d-list li{font-size:13px;color:rgba(7,9,12,0.6);display:flex;gap:10px;align-items:baseline;}
+.svc-d-list li::before{content:'—';color:var(--orange);flex-shrink:0;}
+.process-section{background:var(--ink);padding:100px 48px;}
+.process-header{margin-bottom:64px;}
+.process-header h2{font-family:'Sora',sans-serif;font-size:clamp(32px,4vw,52px);font-weight:800;color:var(--cream);letter-spacing:-0.03em;}
+.process-steps{display:flex;flex-direction:column;gap:0;}
+.proc-row{
+  display:grid;grid-template-columns:60px 1fr 2fr;gap:40px;align-items:start;
+  padding:28px 0;border-bottom:1px solid rgba(242,237,230,0.07);
+}
+.proc-n{font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:var(--orange);letter-spacing:0.12em;}
+.proc-title{font-family:'Sora',sans-serif;font-size:16px;font-weight:700;color:var(--cream);}
+.proc-body{font-size:13px;color:rgba(242,237,230,0.45);line-height:1.7;}
+
+/* ──────────────────────────────
+   CONTACT PAGE
+────────────────────────────── */
+.contact-hero{
+  min-height:55vh;background:var(--ink);padding:140px 48px 64px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+}
+.contact-hero h1{
+  font-family:'Sora',sans-serif;font-size:clamp(52px,8vw,110px);font-weight:900;
+  color:var(--cream);letter-spacing:-0.05em;line-height:0.9;margin-bottom:24px;
+}
+.contact-hero h1 em{font-style:normal;color:var(--orange);}
+.contact-hero p{font-size:15px;color:rgba(242,237,230,0.45);max-width:480px;line-height:1.8;}
+.contact-body{
+  background:var(--cream);padding:80px 48px;
+  display:grid;grid-template-columns:5fr 7fr;gap:80px;align-items:start;
+}
+.c-info h2{font-family:'Sora',sans-serif;font-size:24px;font-weight:700;color:var(--ink);margin-bottom:32px;}
+.c-item{margin-bottom:24px;}
+.c-item strong{
+  display:block;font-family:'Sora',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:0.12em;text-transform:uppercase;color:var(--orange);margin-bottom:4px;
+}
+.c-item span,.c-item a{font-size:14px;color:rgba(7,9,12,0.65);line-height:1.7;}
+.c-item a:hover{color:var(--ink);}
+.c-promise{margin-top:40px;padding-top:32px;border-top:1px solid rgba(7,9,12,0.1);}
+.c-promise h3{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:16px;letter-spacing:0.04em;}
+.c-promise ul{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.c-promise li{font-size:13px;color:rgba(7,9,12,0.55);display:flex;gap:10px;}
+.c-promise li::before{content:'→';color:var(--orange);flex-shrink:0;}
+.c-form{background:var(--ink);border-radius:12px;padding:48px;}
+.c-form h2{font-family:'Sora',sans-serif;font-size:22px;font-weight:700;color:var(--cream);margin-bottom:32px;}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+.f-group{margin-bottom:20px;}
+.f-group label{
+  display:block;font-family:'Sora',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;color:rgba(242,237,230,0.4);margin-bottom:8px;
+}
+.f-group input,.f-group select,.f-group textarea{
+  width:100%;background:rgba(242,237,230,0.05);border:1px solid rgba(242,237,230,0.1);
+  border-radius:4px;padding:14px 16px;font-size:14px;color:var(--cream);
+  font-family:'Inter',sans-serif;outline:none;transition:border 0.2s;
+}
+.f-group input::placeholder,.f-group textarea::placeholder{color:rgba(242,237,230,0.25);}
+.f-group input:focus,.f-group select:focus,.f-group textarea:focus{border-color:var(--orange);}
+.f-group select option{background:#1a2232;color:var(--cream);}
+.f-group textarea{resize:none;}
+.f-submit{
+  width:100%;background:var(--orange);color:white;font-family:'Sora',sans-serif;
+  font-weight:700;font-size:14px;letter-spacing:0.08em;text-transform:uppercase;
+  padding:18px;border-radius:4px;border:none;cursor:none;transition:all 0.25s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.f-submit:hover{background:var(--orange2);box-shadow:0 16px 40px rgba(232,93,27,0.35);}
+.f-note{text-align:center;margin-top:12px;font-size:11px;color:rgba(242,237,230,0.25);}
+
+/* UTILS */
+.eyebrow{
+  font-family:'Sora',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.16em;
+  text-transform:uppercase;color:var(--orange);margin-bottom:16px;
+  display:inline-block;
+}
+.link-arrow{
+  display:inline-flex;align-items:center;gap:8px;font-family:'Sora',sans-serif;
+  font-size:13px;font-weight:600;letter-spacing:0.04em;color:var(--orange);transition:gap 0.2s;
+}
+.link-arrow:hover{gap:14px;}
+.link-arrow-dark{color:var(--ink);}
+.link-arrow-dark:hover{color:var(--orange);}
+
+/* ANIMATE */
+@keyframes fadeUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
+.fade1{animation:fadeUp 0.7s 0.1s both ease-out}
+.fade2{animation:fadeUp 0.7s 0.25s both ease-out}
+.fade3{animation:fadeUp 0.7s 0.4s both ease-out}
+.fade4{animation:fadeUp 0.7s 0.55s both ease-out}
+
+/* COOKIE BANNER */
+.cookie-bar{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:600;
+  background:rgba(7,9,12,0.97);border:1px solid rgba(242,237,230,0.12);border-radius:10px;
+  padding:16px 20px;display:flex;align-items:center;gap:16px;max-width:560px;width:calc(100% - 48px);
+  backdrop-filter:blur(12px);box-shadow:0 16px 48px rgba(0,0,0,0.5);
+  transition:opacity 0.4s,transform 0.4s;
+}
+.cookie-bar.hidden{opacity:0;transform:translateX(-50%) translateY(16px);pointer-events:none;}
+.cookie-text{font-size:12px;color:rgba(242,237,230,0.6);line-height:1.6;flex:1;}
+.cookie-text a{color:var(--orange);text-decoration:underline;text-underline-offset:2px;}
+.cookie-btns{display:flex;gap:8px;flex-shrink:0;}
+.cookie-accept{
+  background:var(--orange);color:white;border:none;border-radius:6px;
+  font-family:'Sora',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.06em;
+  text-transform:uppercase;padding:8px 16px;cursor:pointer;transition:background 0.2s;white-space:nowrap;
+}
+.cookie-accept:hover{background:var(--orange2);}
+.cookie-decline{
+  background:transparent;color:rgba(242,237,230,0.4);border:1px solid rgba(242,237,230,0.15);
+  border-radius:6px;font-size:11px;font-family:'Sora',sans-serif;padding:8px 14px;cursor:pointer;
+  transition:color 0.2s;white-space:nowrap;
+}
+.cookie-decline:hover{color:var(--cream);}
+
+/* TOUCH: service image panel */
+.svc-touch-panel{
+  display:none;overflow:hidden;max-height:0;transition:max-height 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.svc-touch-panel img{width:100%;height:180px;object-fit:cover;border-radius:6px;margin-top:16px;}
+.svc-row.touch-open .svc-touch-panel{max-height:220px;}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  html{cursor:auto;}
+  #cursor{display:none;}
+
+  /* NAV */
+  nav{height:60px;padding:0 24px;}
+  .top-strip{top:60px;}
+  .nav-right a:not(.nav-cta){display:none;}
+  .nav-cta{font-size:11px;padding:8px 16px;}
+
+  /* SWITCHER */
+  .switcher{bottom:16px;padding:4px;gap:2px;}
+  .sw-btn{padding:6px 12px;font-size:10px;}
+
+  /* HERO */
+  .hero-index{display:none;}
+  .hero-body{padding:0 24px 48px;}
+  .hero-meta{flex-direction:column;gap:24px;align-items:flex-start;}
+  .hero-desc{max-width:100%;}
+  .btn-row{flex-direction:column;}
+  .btn-main,.btn-secondary{width:100%;justify-content:center;}
+
+  /* MARQUEE */
+  .marquee-band{padding:10px 0;}
+
+  /* MANIFESTO */
+  .manifesto{padding:72px 24px;}
+  .mani-bottom{flex-direction:column;gap:16px;align-items:flex-start;}
+
+  /* SERVICES LIST */
+  .services-header{padding:48px 24px 32px;flex-direction:column;gap:12px;}
+  .services-header p{text-align:left;max-width:100%;}
+  .svc-row{padding:20px 24px;flex-wrap:wrap;}
+  .svc-num{font-size:36px;min-width:56px;}
+  .svc-img-hover{display:none;}
+  .svc-info{padding:0 0 0 16px;}
+  .svc-touch-panel{display:block;}
+
+  /* NUMBERS */
+  .numbers-section{padding:72px 24px;}
+  .numbers-grid{grid-template-columns:1fr;}
+  .num-block{border-right:none;border-bottom:1px solid rgba(7,9,12,0.1);padding:32px 0;}
+  .num-block:last-child{border-bottom:none;}
+
+  /* PHOTO GRID */
+  .photo-grid{grid-template-columns:1fr 1fr;grid-template-rows:180px 180px;}
+  .photo-cell.tall{grid-row:span 2;grid-template-rows:180px 180px;}
+  .photo-cell:last-child{display:none;}
+
+  /* WHY */
+  .why-section{padding:72px 24px;}
+  .why-inner{grid-template-columns:1fr;gap:48px;}
+
+  /* CTA FINAL */
+  .cta-final{grid-template-columns:1fr;padding:80px 24px;gap:48px;}
+  .cta-right{display:none;}
+
+  /* FOOTER */
+  footer{padding:56px 24px 32px;}
+  .footer-top{flex-direction:column;gap:40px;}
+  .footer-cols{flex-direction:column;gap:28px;}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center;}
+
+  /* ABOUT */
+  .about-hero{grid-template-columns:1fr;min-height:auto;}
+  .about-hero-right{display:none;}
+  .about-hero-left{padding:120px 24px 64px;}
+  .about-pull{flex-direction:column;gap:32px;padding:64px 24px;}
+  .about-pull-right{min-width:auto;}
+  .about-story{grid-template-columns:1fr;padding:72px 24px;gap:48px;}
+  .values-dark{padding:0 24px 72px;}
+  .values-header{flex-direction:column;gap:8px;}
+  .val-row{
+    display:grid;grid-template-columns:48px 1fr;
+    grid-template-rows:auto auto;gap:8px 16px;
+  }
+  .val-n{grid-row:1;grid-column:1;}
+  .val-title{grid-row:1;grid-column:2;}
+  .val-body{grid-row:2;grid-column:2;}
+
+  /* SERVICES PAGE */
+  .svc-page-hero{padding:120px 24px 64px;}
+  .svc-detail{padding:64px 24px;}
+  .svc-detail .section-inner{padding:0 !important;}
+  .svc-detail-inner{grid-template-columns:1fr;gap:32px;}
+  .svc-detail-inner.rev{direction:ltr;}
+  .svc-d-img{order:-1;}
+  .process-section{padding:72px 24px;}
+  .process-section .section-inner{padding:0 !important;}
+  .proc-row{
+    display:grid;grid-template-columns:48px 1fr;
+    grid-template-rows:auto auto;gap:6px 16px;
+  }
+  .proc-n{grid-row:1;grid-column:1;}
+  .proc-title{grid-row:1;grid-column:2;}
+  .proc-body{grid-row:2;grid-column:2;}
+
+  /* CONTACT */
+  .contact-hero{padding:120px 24px 56px;}
+  .contact-body{grid-template-columns:1fr;padding:64px 24px;gap:48px;}
+  .c-form{padding:32px 24px;}
+  .f-row{grid-template-columns:1fr;gap:0;}
+  .f-row .f-group{margin-bottom:20px;}
+
+  /* COOKIE BAR */
+  .cookie-bar{flex-direction:column;align-items:flex-start;gap:12px;bottom:72px;}
+  .cookie-btns{width:100%;justify-content:flex-end;}
+}
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div class="grain"></div>
+
+<!-- COOKIE BANNER -->
+<div class="cookie-bar" id="cookieBar">
+  <p class="cookie-text">We use cookies to improve your experience and analyse site usage. By continuing you agree to our <a href="#" onclick="go('privacy')">Privacy Policy</a>. We comply with POPI Act requirements.</p>
+  <div class="cookie-btns">
+    <button class="cookie-decline" onclick="dismissCookie()">Decline</button>
+    <button class="cookie-accept" onclick="acceptCookie()">Accept</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-mark"><span>A</span></div>
+    <span class="nav-wordmark">Agisano</span>
+  </div>
+  <div class="nav-right">
+    <a href="#" onclick="go('services')">Services</a>
+    <a href="#" onclick="go('about')">About</a>
+    <a href="#" onclick="go('contact')" class="nav-cta">Book Assessment</a>
+  </div>
+</nav>
+
+<!-- PAGE SWITCHER -->
+<div class="switcher">
+  <button class="sw-btn on" onclick="go('home')">Home</button>
+  <button class="sw-btn" onclick="go('about')">About</button>
+  <button class="sw-btn" onclick="go('services')">Services</button>
+  <button class="sw-btn" onclick="go('contact')">Contact</button>
+  <button class="sw-btn" onclick="go('privacy')" style="opacity:0.5;">Privacy</button>
+</div>
+
+<!-- ══════════ HOME ══════════ -->
+<div id="home" class="pg on">
+
+  <!-- HERO: Problem-led. Make the principal feel seen before selling anything. -->
+  <section class="hero">
+    <div class="hero-photo"></div>
+    <div class="top-strip">
+      <div class="strip-track">
+        <span class="strip-item">Observatory Girls School</span>
+        <span class="strip-item">Enterprise WiFi</span>
+        <span class="strip-item">School Website</span>
+        <span class="strip-item">Brand Identity</span>
+        <span class="strip-item">Social Media</span>
+        <span class="strip-item">Managed IT</span>
+        <span class="strip-item">Building Together</span>
+        <span class="strip-item">Agisano</span>
+        <span class="strip-item">Observatory Girls School</span>
+        <span class="strip-item">Enterprise WiFi</span>
+        <span class="strip-item">School Website</span>
+        <span class="strip-item">Brand Identity</span>
+        <span class="strip-item">Social Media</span>
+        <span class="strip-item">Managed IT</span>
+        <span class="strip-item">Building Together</span>
+        <span class="strip-item">Agisano</span>
+      </div>
+    </div>
+    <div class="hero-index">
+      <span>Agisano</span>
+      <div class="hero-index-line"></div>
+      <span>2025</span>
+    </div>
+    <div class="hero-body">
+      <div class="hero-statement fade1">
+        <span>Your school</span>
+        <span class="line2">deserves</span>
+        <span class="line2b">better.</span>
+        <span class="line3">Most public schools are being prepared for a digital economy using analogue tools. We fix that.</span>
+      </div>
+      <div class="hero-meta fade2">
+        <p class="hero-desc">
+          <strong>Agisano</strong> partners exclusively with public schools — bringing enterprise-grade connectivity, technology, and digital presence to the schools that have been overlooked. Not as a side business. As our entire reason for existing.
+        </p>
+        <div class="hero-actions">
+          <a href="#" class="btn-main" onclick="go('contact')">
+            Is your school next?
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#" class="btn-ghost" onclick="scrollToOGS()">
+            See our work
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM STATEMENT: Name the reality principals live -->
+  <section class="manifesto" style="background:var(--ink);border-bottom:1px solid rgba(242,237,230,0.07);">
+    <p class="mani-eyebrow" style="color:rgba(242,237,230,0.35);">The reality</p>
+    <h2 class="mani-text" style="color:var(--cream);">
+      Your learners are<br>
+      preparing for<br>
+      <em>tomorrow's economy</em><br>
+      <span style="opacity:0.25;">with yesterday's tools.</span>
+      <span class="small" style="color:rgba(242,237,230,0.5);">No reliable internet. No school website. No brand. No IT support when things break. This isn't a resource problem — it's an access problem. And it's one we know how to solve.</span>
+    </h2>
+    <div class="mani-bottom">
+      <span class="mani-name" style="color:rgba(242,237,230,0.25);">Agisano · Gauteng · South Africa</span>
+      <a href="#" class="link-arrow" onclick="scrollToOGS()">See what we did for one school <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </section>
+
+  <!-- ORANGE MARQUEE -->
+  <div class="marquee-band">
+    <div class="marquee-track">
+      <span class="marquee-item">Before: No internet <span class="marquee-dot">·</span></span>
+      <span class="marquee-item">After: Enterprise WiFi <span class="marquee-dot">·</span></span>
+      <span class="marquee-item">Before: No website <span class="marquee-dot">·</span></span>
+      <span class="marquee-item">After: Live online <span class="marquee-dot">·</span></span>
+      <span class="marquee-item">Before: No identity <span class="marquee-dot">·</span></span>
+      <span class="marquee-item">After: Full brand CI <span class="marquee-dot">·</span></span>
+      <span class="marquee-item">Before: No IT support <span class="marquee-dot">·</span></span>
+      <span class="marquee-item">After: Managed 24/7 <span class="marquee-dot">·</span></span>
+      <span class="marquee-item">Before: No internet <span class="marquee-dot">·</span></span>
+      <span class="marquee-item">After: Enterprise WiFi <span class="marquee-dot">·</span></span>
+      <span class="marquee-item">Before: No website <span class="marquee-dot">·</span></span>
+      <span class="marquee-item">After: Live online <span class="marquee-dot">·</span></span>
+      <span class="marquee-item">Before: No identity <span class="marquee-dot">·</span></span>
+      <span class="marquee-item">After: Full brand CI <span class="marquee-dot">·</span></span>
+      <span class="marquee-item">Before: No IT support <span class="marquee-dot">·</span></span>
+      <span class="marquee-item">After: Managed 24/7 <span class="marquee-dot">·</span></span>
+    </div>
+  </div>
+
+  <!-- OBSERVATORY GIRLS SCHOOL — THE PROOF -->
+  <section id="ogs-section" style="background:var(--cream);padding:100px 48px;">
+    <div style="max-width:1200px;margin:0 auto;">
+
+      <!-- Section header -->
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:64px;flex-wrap:wrap;gap:16px;">
+        <div>
+          <p class="eyebrow">Case study · Gauteng, 2024</p>
+          <h2 style="font-family:'Sora',sans-serif;font-size:clamp(32px,4.5vw,58px);font-weight:900;color:var(--ink);letter-spacing:-0.03em;line-height:1.0;margin-top:8px;">
+            Observatory Girls School.<br>
+            <span style="color:var(--orange);">Four gaps. One partner.</span>
+          </h2>
+        </div>
+        <p style="font-size:13px;color:rgba(7,9,12,0.45);max-width:260px;line-height:1.7;text-align:right;">
+          Everything you see below was absent before Agisano arrived. Every single thing was new.
+        </p>
+      </div>
+
+      <!-- Before / After banner -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:3px;border-radius:8px;overflow:hidden;">
+        <div style="background:rgba(7,9,12,0.06);padding:28px 32px;">
+          <p style="font-family:'Sora',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(7,9,12,0.35);margin-bottom:12px;">Before Agisano</p>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+            <li style="display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(7,9,12,0.6);">
+              <span style="width:18px;height:18px;border-radius:50%;background:rgba(7,9,12,0.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(7,9,12,0.4);flex-shrink:0;">✕</span>
+              No internet connection — or unreliable at best
+            </li>
+            <li style="display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(7,9,12,0.6);">
+              <span style="width:18px;height:18px;border-radius:50%;background:rgba(7,9,12,0.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(7,9,12,0.4);flex-shrink:0;">✕</span>
+              No school website — zero digital presence
+            </li>
+            <li style="display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(7,9,12,0.6);">
+              <span style="width:18px;height:18px;border-radius:50%;background:rgba(7,9,12,0.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(7,9,12,0.4);flex-shrink:0;">✕</span>
+              No brand identity — inconsistent, dated look
+            </li>
+            <li style="display:flex;align-items:center;gap:10px;font-size:14px;color:rgba(7,9,12,0.6);">
+              <span style="width:18px;height:18px;border-radius:50%;background:rgba(7,9,12,0.1);display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(7,9,12,0.4);flex-shrink:0;">✕</span>
+              No social media — community had no channel
+            </li>
+          </ul>
+        </div>
+        <div style="background:var(--orange);padding:28px 32px;">
+          <p style="font-family:'Sora',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:12px;">After Agisano</p>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+            <li style="display:flex;align-items:center;gap:10px;font-size:14px;color:white;">
+              <span style="width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;flex-shrink:0;">✓</span>
+              Enterprise-grade WiFi — full campus coverage
+            </li>
+            <li style="display:flex;align-items:center;gap:10px;font-size:14px;color:white;">
+              <span style="width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;flex-shrink:0;">✓</span>
+              Professional school website — live and maintained
+            </li>
+            <li style="display:flex;align-items:center;gap:10px;font-size:14px;color:white;">
+              <span style="width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;flex-shrink:0;">✓</span>
+              Complete CI — logo, colours, typography, brand system
+            </li>
+            <li style="display:flex;align-items:center;gap:10px;font-size:14px;color:white;">
+              <span style="width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;flex-shrink:0;">✓</span>
+              Active social media — managed by Agisano monthly
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Four deliverables — deep detail -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:48px;">
+        <!-- Connectivity -->
+        <div style="background:var(--ink);padding:40px;border-radius:0;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+            <div style="width:36px;height:36px;background:rgba(232,93,27,0.15);border-radius:6px;display:flex;align-items:center;justify-content:center;">
+              <svg width="16" height="16" fill="none" stroke="#E85D1B" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20" stroke-linecap="round" stroke-width="3"/></svg>
+            </div>
+            <span style="font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:var(--orange);letter-spacing:0.12em;text-transform:uppercase;">Connectivity</span>
+          </div>
+          <h3 style="font-family:'Sora',sans-serif;font-size:20px;font-weight:800;color:var(--cream);letter-spacing:-0.02em;margin-bottom:10px;">Enterprise WiFi from scratch.</h3>
+          <p style="font-size:13px;color:rgba(242,237,230,0.5);line-height:1.75;">Designed and deployed a full enterprise-grade wireless network across the entire campus. No more dropped connections, no more sharing a single router. Staff and learners on separate SSIDs. Monitored and managed remotely, ongoing.</p>
+        </div>
+        <!-- Website -->
+        <div style="background:rgba(242,237,230,0.05);border:1px solid rgba(242,237,230,0.08);padding:40px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+            <div style="width:36px;height:36px;background:rgba(232,93,27,0.15);border-radius:6px;display:flex;align-items:center;justify-content:center;">
+              <svg width="16" height="16" fill="none" stroke="#E85D1B" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <span style="font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:var(--orange);letter-spacing:0.12em;text-transform:uppercase;">Digital Presence</span>
+          </div>
+          <h3 style="font-family:'Sora',sans-serif;font-size:20px;font-weight:800;color:var(--cream);letter-spacing:-0.02em;margin-bottom:10px;">A website that earns trust.</h3>
+          <p style="font-size:13px;color:rgba(242,237,230,0.5);line-height:1.75;">Designed and built a professional school website from zero — their first. Parents can find term dates, contact staff, and follow school news. The school now has a credible digital front door that matches the quality of its education.</p>
+        </div>
+        <!-- Brand CI -->
+        <div style="background:rgba(242,237,230,0.05);border:1px solid rgba(242,237,230,0.08);padding:40px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+            <div style="width:36px;height:36px;background:rgba(232,93,27,0.15);border-radius:6px;display:flex;align-items:center;justify-content:center;">
+              <svg width="16" height="16" fill="none" stroke="#E85D1B" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+            </div>
+            <span style="font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:var(--orange);letter-spacing:0.12em;text-transform:uppercase;">Brand Identity</span>
+          </div>
+          <h3 style="font-family:'Sora',sans-serif;font-size:20px;font-weight:800;color:var(--cream);letter-spacing:-0.02em;margin-bottom:10px;">A brand built from nothing.</h3>
+          <p style="font-size:13px;color:rgba(242,237,230,0.5);line-height:1.75;">Full corporate identity created from scratch — logo, colour palette, typography, and brand guidelines. The school now has a consistent visual identity across all printed and digital communications. Something to be proud of.</p>
+        </div>
+        <!-- Social -->
+        <div style="background:var(--ink);padding:40px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+            <div style="width:36px;height:36px;background:rgba(232,93,27,0.15);border-radius:6px;display:flex;align-items:center;justify-content:center;">
+              <svg width="16" height="16" fill="none" stroke="#E85D1B" stroke-width="2" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </div>
+            <span style="font-family:'Sora',sans-serif;font-size:11px;font-weight:700;color:var(--orange);letter-spacing:0.12em;text-transform:uppercase;">Social Media</span>
+          </div>
+          <h3 style="font-family:'Sora',sans-serif;font-size:20px;font-weight:800;color:var(--cream);letter-spacing:-0.02em;margin-bottom:10px;">A community, connected.</h3>
+          <p style="font-size:13px;color:rgba(242,237,230,0.5);line-height:1.75;">Set up and now manage the school's social media channels. Parents, learners, and alumni can follow school life, achievements, and updates. The school's voice is consistent, professional, and active — without adding to staff workload.</p>
+        </div>
+      </div>
+
+      <!-- Pull quote -->
+      <div style="border-top:1px solid rgba(7,9,12,0.1);padding-top:40px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;">
+        <p style="font-family:'Sora',sans-serif;font-size:clamp(18px,2.5vw,26px);font-weight:700;color:var(--ink);letter-spacing:-0.02em;line-height:1.3;max-width:640px;">
+          "Everything was new. The internet. The website. The brand. The social media. <em style="color:var(--orange);font-style:normal;">Agisano delivered all of it.</em>"
+        </p>
+        <div style="text-align:right;flex-shrink:0;">
+          <p style="font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:var(--ink);">Observatory Girls School</p>
+          <p style="font-size:12px;color:rgba(7,9,12,0.45);margin-top:2px;">Gauteng · Active client</p>
+          <a href="#" onclick="go('contact')" class="btn-main" style="display:inline-flex;margin-top:16px;font-size:12px;padding:12px 24px;">
+            Is your school next? →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES: outcome-led, not feature-led -->
+  <section class="services-section">
+    <div class="services-header">
+      <h2>How we do it</h2>
+      <p>Four capabilities. Delivered as one integrated partner — not four separate vendors.</p>
+    </div>
+    <ul class="svc-list">
+      <li class="svc-row" data-cursor="expand">
+        <span class="svc-num">01</span>
+        <div class="svc-info">
+          <div class="svc-name">Your school, connected.</div>
+          <div class="svc-desc">Enterprise-grade internet and WiFi designed for schools. The same infrastructure large companies use — built for your campus, your budget, your learners.</div>
+          <span class="svc-tag">Connectivity & WiFi</span>
+          <div class="svc-touch-panel"><img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=600&q=80" alt=""/></div>
+        </div>
+        <span class="svc-arrow">→</span>
+        <div class="svc-img-hover"><img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400&q=80" alt=""/></div>
+      </li>
+      <li class="svc-row" data-cursor="expand">
+        <span class="svc-num">02</span>
+        <div class="svc-info">
+          <div class="svc-name">The tools your learners need.</div>
+          <div class="svc-desc">Laptops, smart boards, projectors, ICT labs. Sourced, configured, asset-tagged, and delivered classroom-ready. No procurement headaches — we manage it.</div>
+          <span class="svc-tag">ICT Equipment</span>
+          <div class="svc-touch-panel"><img src="https://images.unsplash.com/photo-1588702547919-26089e690ecc?w=600&q=80" alt=""/></div>
+        </div>
+        <span class="svc-arrow">→</span>
+        <div class="svc-img-hover"><img src="https://images.unsplash.com/photo-1588702547919-26089e690ecc?w=400&q=80" alt=""/></div>
+      </li>
+      <li class="svc-row" data-cursor="expand">
+        <span class="svc-num">03</span>
+        <div class="svc-info">
+          <div class="svc-name">IT that stays on.</div>
+          <div class="svc-desc">Remote monitoring, a real helpdesk, and on-site support. We manage your infrastructure so your staff never have to. When something breaks at 7am before school starts, we're already on it.</div>
+          <span class="svc-tag">Managed Services</span>
+          <div class="svc-touch-panel"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&q=80" alt=""/></div>
+        </div>
+        <span class="svc-arrow">→</span>
+        <div class="svc-img-hover"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80" alt=""/></div>
+      </li>
+      <li class="svc-row" data-cursor="expand">
+        <span class="svc-num">04</span>
+        <div class="svc-info">
+          <div class="svc-name">A school parents are proud to show.</div>
+          <div class="svc-desc">Website, brand identity, and social media — built and managed. Your school's reputation online should reflect the quality of education inside. We make that happen.</div>
+          <span class="svc-tag">Digital Presence</span>
+          <div class="svc-touch-panel"><img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&q=80" alt=""/></div>
+        </div>
+        <span class="svc-arrow">→</span>
+        <div class="svc-img-hover"><img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=400&q=80" alt=""/></div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- NUMBERS -->
+  <section class="numbers-section">
+    <div class="numbers-grid">
+      <div class="num-block">
+        <div class="num-val">100<span class="accent">%</span></div>
+        <div class="num-label"><strong>Public schools only</strong>Not a side market. Our sole focus — by design.</div>
+      </div>
+      <div class="num-block">
+        <div class="num-val"><span class="accent">4</span></div>
+        <div class="num-label"><strong>Services. One partner.</strong>Connectivity, equipment, support, digital — integrated, not fragmented.</div>
+      </div>
+      <div class="num-block">
+        <div class="num-val">Q<span class="accent">1–3</span></div>
+        <div class="num-label"><strong>Quintile priority</strong>The schools that have waited longest get served first.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHOTO GRID -->
+  <div class="photo-grid">
+    <div class="photo-cell tall">
+      <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?w=800&q=80" alt=""/>
+      <div class="photo-cell-overlay"></div>
+    </div>
+    <div class="photo-cell">
+      <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=600&q=80" alt=""/>
+      <div class="photo-cell-overlay"></div>
+    </div>
+    <div class="photo-cell">
+      <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&q=80" alt=""/>
+      <div class="photo-cell-overlay"></div>
+    </div>
+    <div class="photo-cell">
+      <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=600&q=80" alt=""/>
+      <div class="photo-cell-overlay"></div>
+    </div>
+    <div class="photo-cell">
+      <img src="https://images.unsplash.com/photo-1588702547919-26089e690ecc?w=600&q=80" alt=""/>
+      <div class="photo-cell-overlay"></div>
+    </div>
+  </div>
+
+  <!-- WHY: trust-building, specific, no platitudes -->
+  <section class="why-section">
+    <div class="why-inner">
+      <div class="why-left">
+        <h2>Why principals<br>choose <em>Agisano.</em></h2>
+        <p>Other ICT companies see public schools as a difficult market with thin margins. We see them as the most important clients we could work with. That difference in belief changes everything about how we operate.</p>
+        <a href="#" class="btn-main" onclick="go('contact')">Talk to us — it's free <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <ul class="why-list">
+        <li class="why-item">
+          <span class="why-n">01</span>
+          <div class="why-text"><strong>We understand your constraints</strong><p>SGB budgets, NSNP funding cycles, Quintile classifications, circuit manager approvals. We've navigated all of it. We design solutions that fit the real world — not the ideal one.</p></div>
+        </li>
+        <li class="why-item">
+          <span class="why-n">02</span>
+          <div class="why-text"><strong>We don't disappear after install</strong><p>Our MSP model means we're still your team months and years later. When the wifi drops the morning of an exam, you call us. We pick up.</p></div>
+        </li>
+        <li class="why-item">
+          <span class="why-n">03</span>
+          <div class="why-text"><strong>One relationship. Everything included.</strong><p>You deal with one company for internet, hardware, IT support, and digital presence. No vendor blame game. No "that's not our problem." One account. Full accountability.</p></div>
+        </li>
+        <li class="why-item">
+          <span class="why-n">04</span>
+          <div class="why-text"><strong>We're from here. This is personal.</strong><p>Gauteng-born. We grew up in these communities. The schools we serve aren't a contract — they're our neighbours' children.</p></div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- FINAL CTA: specific, earned, emotionally charged -->
+  <section class="cta-final">
+    <div class="cta-photo-bg"></div>
+    <div class="cta-left" style="position:relative;z-index:1;">
+      <p style="font-family:'Sora',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--orange);margin-bottom:20px;">Free · On-site · No obligation</p>
+      <h2>Is your school<br><em>ready to be next?</em></h2>
+      <p>Observatory Girls School started with nothing digital. Today they have enterprise WiFi, a live website, a full brand identity, and active social media channels. The assessment that started it all took 60 minutes.</p>
+      <a href="#" class="btn-main" onclick="go('contact')">Book your 60-minute assessment <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="cta-right">
+      <div class="cta-box">
+        <p>What happens after you reach out</p>
+        <h3>A 60-minute visit. A clear plan. No pressure.</h3>
+        <div class="cta-promise">
+          <div class="promise-row">We reply within 1 business day</div>
+          <div class="promise-row">We schedule around your school calendar</div>
+          <div class="promise-row">60-minute on-site assessment — free, no obligation</div>
+          <div class="promise-row">Written proposal within 3 business days</div>
+          <div class="promise-row">You decide. We never hard sell.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-top">
+      <div class="footer-statement">
+        Every learner deserves a<br><em>connected classroom.</em>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <h5>Services</h5>
+          <ul>
+            <li><a href="#" onclick="go('services')">Internet & WiFi</a></li>
+            <li><a href="#" onclick="go('services')">ICT Equipment</a></li>
+            <li><a href="#" onclick="go('services')">Managed Services</a></li>
+            <li><a href="#" onclick="go('services')">Digital Presence</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Company</h5>
+          <ul>
+            <li><a href="#" onclick="go('about')">About</a></li>
+            <li><a href="#" onclick="go('contact')">Contact</a></li>
+            <li><a href="#" onclick="go('privacy')">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <ul>
+            <li><a href="mailto:hello@agisano.com">hello@agisano.com</a></li>
+            <li><a href="#">Gauteng, South Africa</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="nav-logo">
+        <div class="nav-mark"><span>A</span></div>
+        <span class="nav-wordmark">Agisano</span>
+      </div>
+      <p>© 2026 Agisano. Building Together.</p>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ══════════ ABOUT ══════════ -->
+<div id="about" class="pg">
+
+  <section class="about-hero">
+    <div class="about-hero-left">
+      <span class="eyebrow fade1">Who we are</span>
+      <h1 class="fade2">Built for the schools<br><em>that built us.</em></h1>
+      <p class="fade3">Agisano was founded in Gauteng by people who grew up in and care deeply about South Africa's public school system.</p>
+      <a href="#" class="link-arrow fade4" onclick="go('contact')">Work with us <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="about-hero-right">
+      <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?w=900&q=80" alt=""/>
+    </div>
+  </section>
+
+  <section class="about-pull">
+    <div class="about-pull-quote">
+      "The name says it all.<br><em>Agisano</em> — building together."
+    </div>
+    <div class="about-pull-right">
+      <p>We work exclusively with public schools. Quintile 1–3 priority. Communities that have been waiting for a partner who treats them like the priority they are — not a secondary market.</p>
+      <a href="#" class="link-arrow link-arrow-dark" onclick="go('services')">See our services <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+  </section>
+
+  <section class="about-story">
+    <div class="about-story-left">
+      <span class="eyebrow">Our story</span>
+      <h2>A solvable<br><em>problem.</em></h2>
+      <p class="story-p">Agisano was built on a single conviction: the digital divide in South African education is not inevitable. It's a solvable problem — and one that too many ICT providers have ignored because public schools aren't seen as a profitable market.</p>
+      <p class="story-p">We saw Quintile 1–3 schools being prepared for a digital economy using analogue tools. Teachers trying to teach 21st-century skills with no internet, no devices, and no support.</p>
+      <p class="story-p">So we built Agisano — structured to work within their realities: <strong>SGB budgets, NSNP constraints, and the need for a partner who actually shows up.</strong></p>
+      <a href="#" class="btn-main" style="margin-top:16px;display:inline-flex;" onclick="go('contact')">Book assessment <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div>
+      <div style="border-radius:8px;overflow:hidden;aspect-ratio:4/3;margin-bottom:3px;">
+        <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=700&q=80" alt="" style="width:100%;height:100%;object-fit:cover;"/>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;">
+        <div style="border-radius:4px;overflow:hidden;aspect-ratio:1;"><img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=400&q=80" alt="" style="width:100%;height:100%;object-fit:cover;"/></div>
+        <div style="border-radius:4px;overflow:hidden;aspect-ratio:1;background:var(--orange);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;">
+          <span style="font-family:'Sora',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.7);">Agisano</span>
+          <span style="font-family:'Sora',sans-serif;font-size:28px;font-weight:900;color:white;letter-spacing:-0.03em;">Building<br>Together</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="values-dark">
+    <div class="values-header">
+      <h2>What we stand for</h2>
+      <p>Four principles. Non-negotiable.</p>
+    </div>
+    <ul class="val-list">
+      <li class="val-row"><span class="val-n">01</span><div class="val-title">Community first</div><div class="val-body">We work exclusively with public schools. Not as a side market — as our entire reason for existing. Every decision gets made through that lens.</div></li>
+      <li class="val-row"><span class="val-n">02</span><div class="val-title">Honest and direct</div><div class="val-body">Clear pricing. Plain language. We tell you what you need, not what maximises our invoice. A principal shouldn't need an IT degree to understand our proposal.</div></li>
+      <li class="val-row"><span class="val-n">03</span><div class="val-title">Long-term partnership</div><div class="val-body">Our MSP model means we stay invested in your school's success long after installation day. We're still here in year two when something breaks.</div></li>
+      <li class="val-row"><span class="val-n">04</span><div class="val-title">Practical excellence</div><div class="val-body">We know what works in the real conditions of South African public schools. Not just what looks good on a spec sheet — what actually holds up.</div></li>
+    </ul>
+  </section>
+
+  <footer>
+    <div class="footer-top">
+      <div class="footer-statement">Every learner deserves a<br><em>connected classroom.</em></div>
+      <div class="footer-cols">
+        <div class="footer-col"><h5>Services</h5><ul><li><a href="#">Internet & WiFi</a></li><li><a href="#">ICT Equipment</a></li><li><a href="#">Managed Services</a></li><li><a href="#">Digital Presence</a></li></ul></div>
+        <div class="footer-col"><h5>Company</h5><ul><li><a href="#" onclick="go('about')">About</a></li><li><a href="#" onclick="go('contact')">Contact</a></li></ul></div>
+        <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:hello@agisano.com">hello@agisano.com</a></li><li><a href="#">Gauteng, SA</a></li></ul></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="nav-logo"><div class="nav-mark"><span>A</span></div><span class="nav-wordmark">Agisano</span></div>
+      <p>© 2026 Agisano. Building Together.</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════ SERVICES ══════════ -->
+<div id="services" class="pg">
+
+  <section class="svc-page-hero">
+    <span class="eyebrow fade1">What we offer</span>
+    <h1 class="fade2">Four services.<br><em>One partner.</em></h1>
+    <p class="fade3">Everything a public school needs to go from disconnected to fully equipped. Connectivity, hardware, support, and digital — under one roof.</p>
+  </section>
+
+  <section class="svc-detail">
+    <div class="section-inner" style="max-width:1200px;margin:0 auto;padding:0 48px;">
+      <div class="svc-detail-inner">
+        <div>
+          <div class="svc-d-num">01</div>
+          <div class="svc-d-title">Internet & WiFi Installation</div>
+          <p class="svc-d-body">We design, supply, and install reliable internet and WiFi networks built for school environments — high density, high usage, zero tolerance for downtime during school hours.</p>
+          <ul class="svc-d-list">
+            <li>Fibre, LTE, and fixed wireless options</li>
+            <li>Full campus WiFi design and installation</li>
+            <li>Network infrastructure and cabling</li>
+            <li>SSID segmentation (staff / learner / admin)</li>
+            <li>Signal testing and coverage mapping</li>
+            <li>Router, switch, and access point configuration</li>
+          </ul>
+          <a href="#" class="btn-main" style="display:inline-flex;" onclick="go('contact')">Get a free assessment <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+        <div class="svc-d-img"><img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=800&q=80" alt=""/></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="svc-detail">
+    <div class="section-inner" style="max-width:1200px;margin:0 auto;padding:0 48px;">
+      <div class="svc-detail-inner rev">
+        <div>
+          <div class="svc-d-num">02</div>
+          <div class="svc-d-title">ICT Equipment Supply</div>
+          <p class="svc-d-body">We source, configure, and deliver ICT equipment ready for the classroom. No unboxing chaos — everything arrives set up, labelled, and with asset registers included.</p>
+          <ul class="svc-d-list">
+            <li>Laptops and tablets for learners and staff</li>
+            <li>Smart boards and interactive displays</li>
+            <li>Projectors and AV equipment</li>
+            <li>ICT lab setup and infrastructure</li>
+            <li>Asset tagging and inventory management</li>
+            <li>Warranty management and replacement support</li>
+          </ul>
+          <a href="#" class="btn-main" style="display:inline-flex;" onclick="go('contact')">Get a free assessment <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+        <div class="svc-d-img"><img src="https://images.unsplash.com/photo-1588702547919-26089e690ecc?w=800&q=80" alt=""/></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="svc-detail">
+    <div class="section-inner" style="max-width:1200px;margin:0 auto;padding:0 48px;">
+      <div class="svc-detail-inner">
+        <div>
+          <div class="svc-d-num">03</div>
+          <div class="svc-d-title">Managed IT Services</div>
+          <p class="svc-d-body">The install is just the beginning. Our MSP offering means ongoing monitoring, support, and maintenance — so your infrastructure keeps working, and your staff have someone to call.</p>
+          <ul class="svc-d-list">
+            <li>Remote monitoring and alerting</li>
+            <li>Helpdesk and technical support</li>
+            <li>Device management (MDM)</li>
+            <li>Software updates and security patching</li>
+            <li>On-site support visits</li>
+            <li>Monthly reporting and health checks</li>
+          </ul>
+          <a href="#" class="btn-main" style="display:inline-flex;" onclick="go('contact')">Get a free assessment <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+        <div class="svc-d-img"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80" alt=""/></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="svc-detail">
+    <div class="section-inner" style="max-width:1200px;margin:0 auto;padding:0 48px;">
+      <div class="svc-detail-inner rev">
+        <div>
+          <div class="svc-d-num">04</div>
+          <div class="svc-d-title">Digital Presence</div>
+          <p class="svc-d-body">A professional school website and digital communications build trust with parents, attract learners, and give your school the presence it deserves in the community.</p>
+          <ul class="svc-d-list">
+            <li>Custom school website design and build</li>
+            <li>Digital newsletters (WhatsApp & email)</li>
+            <li>School branding and identity</li>
+            <li>Social media setup and templates</li>
+            <li>Event and notice management</li>
+            <li>Parent communication tools</li>
+          </ul>
+          <a href="#" class="btn-main" style="display:inline-flex;" onclick="go('contact')">Get a free assessment <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        </div>
+        <div class="svc-d-img"><img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=800&q=80" alt=""/></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="process-section">
+    <div class="section-inner" style="max-width:1200px;margin:0 auto;padding:0 48px;">
+      <div class="process-header">
+        <span class="eyebrow">How it works</span>
+        <h2>Simple. Structured. Supportive.</h2>
+      </div>
+      <div class="process-steps">
+        <div class="proc-row"><span class="proc-n">01</span><div class="proc-title">Free on-site assessment</div><div class="proc-body">We come to your school. Walk the campus. Understand your needs, your budget, and your constraints. No cost. No obligation.</div></div>
+        <div class="proc-row"><span class="proc-n">02</span><div class="proc-title">Tailored proposal</div><div class="proc-body">We design a solution that fits — not a generic package. A clear quote with exactly what's included, nothing padded.</div></div>
+        <div class="proc-row"><span class="proc-n">03</span><div class="proc-title">Installation</div><div class="proc-body">Scheduled around the school calendar to minimise disruption. Professional installation by our own team.</div></div>
+        <div class="proc-row"><span class="proc-n">04</span><div class="proc-title">Handover & staff training</div><div class="proc-body">Training, documentation, full walkthrough. We don't leave until you're confident.</div></div>
+        <div class="proc-row"><span class="proc-n">05</span><div class="proc-title">Ongoing managed support</div><div class="proc-body">Proactive monitoring, real helpdesk, regular check-ins. We stay in your corner — indefinitely.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-top">
+      <div class="footer-statement">Every learner deserves a<br><em>connected classroom.</em></div>
+      <div class="footer-cols">
+        <div class="footer-col"><h5>Services</h5><ul><li><a href="#">Internet & WiFi</a></li><li><a href="#">ICT Equipment</a></li><li><a href="#">Managed Services</a></li><li><a href="#">Digital Presence</a></li></ul></div>
+        <div class="footer-col"><h5>Company</h5><ul><li><a href="#" onclick="go('about')">About</a></li><li><a href="#" onclick="go('contact')">Contact</a></li></ul></div>
+        <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:hello@agisano.com">hello@agisano.com</a></li><li><a href="#">Gauteng, SA</a></li></ul></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="nav-logo"><div class="nav-mark"><span>A</span></div><span class="nav-wordmark">Agisano</span></div>
+      <p>© 2026 Agisano. Building Together.</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════ CONTACT ══════════ -->
+<div id="contact" class="pg">
+
+  <section class="contact-hero">
+    <span class="eyebrow fade1">Free · No obligation</span>
+    <h1 class="fade2">Book a free<br><em>assessment.</em></h1>
+    <p class="fade3">60 minutes on-site. We assess your school's connectivity, equipment, and digital needs — then give you a clear, honest picture of what's possible and what it costs.</p>
+  </section>
+
+  <section class="contact-body">
+    <div class="c-info">
+      <h2>Get in touch</h2>
+      <div class="c-item">
+        <strong>Location</strong>
+        <span>Gauteng, South Africa<br>Serving schools across the province</span>
+      </div>
+      <div class="c-item">
+        <strong>Email</strong>
+        <a href="mailto:hello@agisano.com">hello@agisano.com</a>
+      </div>
+      <div class="c-item">
+        <strong>Phone / WhatsApp</strong>
+        <a href="tel:+27000000000">+27 (0) 00 000 0000</a>
+      </div>
+      <div class="c-promise">
+        <h3>What happens next</h3>
+        <ul>
+          <li>We reply within 1 business day</li>
+          <li>Assessment scheduled at a time that suits you</li>
+          <li>60-minute on-site visit — no sales pressure</li>
+          <li>Clear proposal within 3 business days</li>
+        </ul>
+      </div>
+    </div>
+    <div class="c-form">
+      <h2>Book your free assessment</h2>
+      <div class="f-row">
+        <div class="f-group" style="margin-bottom:0;"><label>Your name *</label><input type="text" placeholder="Principal / HOD / IT coordinator"/></div>
+        <div class="f-group" style="margin-bottom:0;"><label>School name *</label><input type="text" placeholder="Full school name"/></div>
+      </div>
+      <div class="f-row" style="margin-top:20px;">
+        <div class="f-group" style="margin-bottom:0;"><label>Email *</label><input type="email" placeholder="you@school.edu.za"/></div>
+        <div class="f-group" style="margin-bottom:0;"><label>Phone / WhatsApp</label><input type="tel" placeholder="+27 82 000 0000"/></div>
+      </div>
+      <div class="f-group" style="margin-top:20px;"><label>What are you most interested in?</label>
+        <select><option value="">Select a service...</option><option>Internet & WiFi Installation</option><option>ICT Equipment Supply</option><option>Managed IT Services</option><option>Digital Presence</option><option>Not sure — need advice</option></select>
+      </div>
+      <div class="f-group"><label>Tell us about your school</label><textarea rows="4" placeholder="Number of learners, current situation, what you need most..."></textarea></div>
+      <button class="f-submit">Book free assessment <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+      <p class="f-note">No spam. No sales calls. Just a conversation about what's possible.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-top">
+      <div class="footer-statement">Every learner deserves a<br><em>connected classroom.</em></div>
+      <div class="footer-cols">
+        <div class="footer-col"><h5>Services</h5><ul><li><a href="#">Internet & WiFi</a></li><li><a href="#">ICT Equipment</a></li><li><a href="#">Managed Services</a></li><li><a href="#">Digital Presence</a></li></ul></div>
+        <div class="footer-col"><h5>Company</h5><ul><li><a href="#" onclick="go('about')">About</a></li><li><a href="#" onclick="go('contact')">Contact</a></li></ul></div>
+        <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:hello@agisano.com">hello@agisano.com</a></li><li><a href="#">Gauteng, SA</a></li></ul></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="nav-logo"><div class="nav-mark"><span>A</span></div><span class="nav-wordmark">Agisano</span></div>
+      <p>© 2026 Agisano. Building Together.</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ══════════ PRIVACY POLICY ══════════ -->
+<div id="privacy" class="pg">
+  <section style="background:var(--ink);padding:140px 48px 64px;">
+    <div style="max-width:760px;margin:0 auto;">
+      <span class="eyebrow">Legal</span>
+      <h1 style="font-family:'Sora',sans-serif;font-size:clamp(40px,6vw,72px);font-weight:900;color:var(--cream);letter-spacing:-0.04em;line-height:0.95;margin-top:16px;margin-bottom:24px;">Privacy Policy</h1>
+      <p style="font-size:13px;color:rgba(242,237,230,0.4);">Last updated: May 2026 · Agisano (Pty) Ltd · agisano.com</p>
+    </div>
+  </section>
+  <section style="background:var(--cream);padding:80px 48px;">
+    <div style="max-width:760px;margin:0 auto;font-family:'Inter',sans-serif;">
+
+      <div style="background:rgba(232,93,27,0.08);border-left:3px solid var(--orange);padding:16px 20px;border-radius:0 6px 6px 0;margin-bottom:48px;">
+        <p style="font-size:13px;color:rgba(7,9,12,0.7);line-height:1.7;">This Privacy Policy explains how Agisano (Pty) Ltd collects, uses, and protects your personal information in compliance with the <strong>Protection of Personal Information Act, 4 of 2013 (POPIA)</strong> of South Africa.</p>
+      </div>
+
+      <style>
+        .pp h2{font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:var(--ink);margin:40px 0 12px;}
+        .pp p{font-size:14px;color:rgba(7,9,12,0.65);line-height:1.85;margin-bottom:12px;}
+        .pp ul{margin:12px 0 16px 0;padding-left:0;list-style:none;}
+        .pp ul li{font-size:14px;color:rgba(7,9,12,0.65);line-height:1.7;padding:4px 0;display:flex;gap:10px;}
+        .pp ul li::before{content:'—';color:var(--orange);flex-shrink:0;}
+        .pp a{color:var(--orange);}
+        .pp strong{color:var(--ink);font-weight:600;}
+      </style>
+
+      <div class="pp">
+        <h2>1. Who we are</h2>
+        <p>Agisano (Pty) Ltd ("Agisano", "we", "us") is a South African company registered in Gauteng, providing ICT services to public schools. We are the <strong>Responsible Party</strong> under POPIA for personal information collected through agisano.com and our assessment booking process.</p>
+        <p>Contact: <a href="mailto:hello@agisano.com">hello@agisano.com</a> · Gauteng, South Africa</p>
+
+        <h2>2. What personal information we collect</h2>
+        <p>We only collect information that is necessary for the purposes described below:</p>
+        <ul>
+          <li>Your name and job title (Principal, HOD, IT Coordinator)</li>
+          <li>School name and location</li>
+          <li>Email address and phone number</li>
+          <li>Details about your school's ICT needs that you voluntarily provide</li>
+          <li>Website usage data (pages visited, time on site) via analytics cookies</li>
+        </ul>
+        <p>We do not collect sensitive personal information (as defined under POPIA Section 26) and do not collect information from learners or minors.</p>
+
+        <h2>3. Why we collect it (lawful purpose)</h2>
+        <ul>
+          <li><strong>To respond to your assessment booking request</strong> — processing your contact form submission</li>
+          <li><strong>To schedule and conduct on-site assessments</strong> — fulfilling the service you requested</li>
+          <li><strong>To send you a proposal</strong> — following up after your assessment</li>
+          <li><strong>To improve our website</strong> — only with your consent to analytics cookies</li>
+        </ul>
+        <p>We process your information on the basis of your consent (form submission) and legitimate interest (providing the service you enquired about).</p>
+
+        <h2>4. How we use and store your information</h2>
+        <p>Your information is used only for the purpose for which it was collected. We do not sell, rent, or share your personal information with third parties for marketing purposes.</p>
+        <p>We may share your information with:</p>
+        <ul>
+          <li>Email/CRM service providers used to manage our correspondence (subject to data processing agreements)</li>
+          <li>Law enforcement or regulatory bodies if required by law</li>
+        </ul>
+        <p>Information is stored on secure servers. We retain contact information for a maximum of 3 years after last engagement, after which it is securely deleted.</p>
+
+        <h2>5. Your rights under POPIA</h2>
+        <p>You have the right to:</p>
+        <ul>
+          <li>Request access to personal information we hold about you</li>
+          <li>Request correction of inaccurate information</li>
+          <li>Request deletion of your information (subject to legal retention requirements)</li>
+          <li>Object to processing of your information</li>
+          <li>Lodge a complaint with the <strong>Information Regulator of South Africa</strong> at <a href="https://inforegulator.org.za" target="_blank">inforegulator.org.za</a></li>
+        </ul>
+        <p>To exercise any of these rights, contact us at <a href="mailto:hello@agisano.com">hello@agisano.com</a>. We will respond within 30 days.</p>
+
+        <h2>6. Cookies</h2>
+        <p>Our website uses cookies in the following categories:</p>
+        <ul>
+          <li><strong>Essential cookies</strong> — required for the website to function. Cannot be declined.</li>
+          <li><strong>Analytics cookies</strong> — help us understand how visitors use the site (e.g. Vercel Analytics). Only set with your consent.</li>
+        </ul>
+        <p>You can withdraw cookie consent at any time by clearing your browser cookies and declining on your next visit.</p>
+
+        <h2>7. Security</h2>
+        <p>We take reasonable technical and organisational measures to protect your personal information against unauthorised access, loss, or disclosure. Our website uses HTTPS encryption for all data transmission.</p>
+
+        <h2>8. Changes to this policy</h2>
+        <p>We may update this Privacy Policy from time to time. The updated version will be posted on this page with a revised date. Continued use of our website after any changes constitutes acceptance of the updated policy.</p>
+
+        <h2>9. Contact & complaints</h2>
+        <p>For any privacy-related queries: <a href="mailto:hello@agisano.com">hello@agisano.com</a></p>
+        <p>Information Regulator (South Africa): <a href="https://inforegulator.org.za" target="_blank">inforegulator.org.za</a> · +27 (0)10 023 5207</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-top">
+      <div class="footer-statement">Every learner deserves a<br><em>connected classroom.</em></div>
+      <div class="footer-cols">
+        <div class="footer-col"><h5>Services</h5><ul><li><a href="#" onclick="go('services')">Our services</a></li></ul></div>
+        <div class="footer-col"><h5>Legal</h5><ul><li><a href="#" onclick="go('privacy')">Privacy Policy</a></li></ul></div>
+        <div class="footer-col"><h5>Contact</h5><ul><li><a href="mailto:hello@agisano.com">hello@agisano.com</a></li></ul></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="nav-logo"><div class="nav-mark"><span>A</span></div><span class="nav-wordmark">Agisano</span></div>
+      <p>© 2026 Agisano (Pty) Ltd · POPIA compliant</p>
+    </div>
+  </footer>
+</div>
+
+<script>
+// PAGE SWITCHING
+function go(id){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.sw-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.querySelectorAll('.sw-btn').forEach(b=>{
+    if(b.textContent.trim().toLowerCase()===id||(id==='home'&&b.textContent.trim()==='Home'))b.classList.add('on');
+  });
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+// CUSTOM CURSOR (desktop only)
+const isTouchDevice=('ontouchstart' in window)||navigator.maxTouchPoints>0;
+if(!isTouchDevice){
+  const cur=document.getElementById('cursor');
+  let mx=0,my=0,cx=0,cy=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.opacity='1';});
+  function animCursor(){
+    cx+=(mx-cx)*0.18;cy+=(my-cy)*0.18;
+    cur.style.left=cx+'px';cur.style.top=cy+'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+  document.querySelectorAll('a,button,.svc-row,.photo-cell').forEach(el=>{
+    el.addEventListener('mouseenter',()=>cur.classList.add('expand'));
+    el.addEventListener('mouseleave',()=>cur.classList.remove('expand'));
+  });
+}
+
+// TOUCH: service row tap to reveal image
+if(isTouchDevice){
+  document.querySelectorAll('.svc-row').forEach(row=>{
+    row.addEventListener('click',()=>{
+      const isOpen=row.classList.contains('touch-open');
+      document.querySelectorAll('.svc-row').forEach(r=>r.classList.remove('touch-open'));
+      if(!isOpen)row.classList.add('touch-open');
+    });
+  });
+}
+
+// COOKIE BANNER
+function acceptCookie(){
+  localStorage.setItem('cookie_consent','accepted');
+  document.getElementById('cookieBar').classList.add('hidden');
+}
+function dismissCookie(){
+  localStorage.setItem('cookie_consent','declined');
+  document.getElementById('cookieBar').classList.add('hidden');
+}
+// Show banner if no stored preference
+if(localStorage.getItem('cookie_consent')){
+  document.getElementById('cookieBar').classList.add('hidden');
+}
+</script>
+</body>
+</html>

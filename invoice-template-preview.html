@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Invoice Template — Agisano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Inter',sans-serif;
+  background:#2a2a2a;
+  padding:60px 24px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+}
+.label{
+  font-family:'Inter',sans-serif;
+  font-size:11px;color:rgba(255,255,255,0.3);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:8px;align-self:flex-start;
+  max-width:794px;width:100%;
+}
+
+/* A4 PAGE */
+.page{
+  width:794px;
+  background:#ffffff;
+  box-shadow:0 40px 100px rgba(0,0,0,0.5);
+  border-radius:4px;
+  overflow:hidden;
+  font-size:13px;
+}
+
+/* ── HEADER ── */
+.inv-header{
+  background:#07090C;
+  padding:40px 48px 36px;
+  position:relative;
+  overflow:hidden;
+}
+/* Ghost invoice number behind header */
+.inv-header-ghost{
+  position:absolute;
+  right:-10px;top:-20px;
+  font-family:'Sora',sans-serif;
+  font-weight:900;
+  font-size:160px;
+  color:rgba(255,255,255,0.03);
+  letter-spacing:-0.05em;
+  line-height:1;
+  pointer-events:none;
+  user-select:none;
+}
+.inv-header-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:40px;
+}
+.inv-logo{display:flex;align-items:center;gap:12px;}
+.inv-mark{
+  width:40px;height:40px;background:#E85D1B;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.inv-mark span{font-family:'Sora',sans-serif;font-weight:900;font-size:20px;color:white;line-height:1;}
+.inv-wordmark{font-family:'Sora',sans-serif;font-weight:700;font-size:18px;color:#F2EDE6;letter-spacing:0.01em;}
+
+.inv-number-block{text-align:right;}
+.inv-number-label{
+  font-family:'Sora',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:0.16em;text-transform:uppercase;
+  color:rgba(242,237,230,0.3);margin-bottom:6px;
+}
+.inv-number{
+  font-family:'Sora',sans-serif;font-weight:800;
+  font-size:28px;letter-spacing:-0.03em;color:#F2EDE6;
+}
+
+.inv-header-bottom{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;
+  border-top:1px solid rgba(242,237,230,0.07);
+  padding-top:28px;
+}
+.inv-meta-block{}
+.inv-meta-block + .inv-meta-block{
+  padding-left:32px;
+  border-left:1px solid rgba(242,237,230,0.07);
+  margin-left:0;
+}
+.inv-meta-label{
+  font-family:'Sora',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:0.16em;text-transform:uppercase;
+  color:rgba(242,237,230,0.25);margin-bottom:8px;
+}
+.inv-meta-val{
+  font-family:'Inter',sans-serif;font-size:12px;
+  color:rgba(242,237,230,0.7);line-height:1.65;
+}
+.inv-meta-val strong{color:#F2EDE6;font-weight:500;display:block;font-size:13px;margin-bottom:2px;}
+
+/* ── BILL TO BAND ── */
+.inv-billto{
+  background:#F2EDE6;
+  padding:24px 48px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.inv-billto-left{}
+.inv-billto-label{
+  font-family:'Sora',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:0.18em;text-transform:uppercase;
+  color:rgba(7,9,12,0.35);margin-bottom:6px;
+}
+.inv-billto-name{
+  font-family:'Sora',sans-serif;font-weight:700;font-size:16px;
+  color:#07090C;letter-spacing:-0.01em;
+}
+.inv-billto-detail{
+  font-family:'Inter',sans-serif;font-size:12px;
+  color:rgba(7,9,12,0.5);margin-top:3px;line-height:1.6;
+}
+.inv-status{
+  background:#07090C;
+  color:#F2EDE6;
+  font-family:'Sora',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:0.12em;text-transform:uppercase;
+  padding:8px 18px;border-radius:100px;
+}
+.inv-status.paid{background:#2d6a35;color:white;}
+.inv-status.overdue{background:#c0392b;color:white;}
+
+/* ── LINE ITEMS ── */
+.inv-items{
+  padding:0 48px;
+  background:#ffffff;
+}
+
+/* Table header */
+.inv-table-head{
+  display:grid;
+  grid-template-columns:1fr 80px 100px 110px;
+  gap:16px;
+  padding:16px 0 12px;
+  border-bottom:2px solid #07090C;
+}
+.inv-th{
+  font-family:'Sora',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;color:rgba(7,9,12,0.35);
+}
+.inv-th.right{text-align:right;}
+
+/* Row */
+.inv-row{
+  display:grid;
+  grid-template-columns:1fr 80px 100px 110px;
+  gap:16px;
+  padding:18px 0;
+  border-bottom:1px solid rgba(7,9,12,0.06);
+  align-items:start;
+}
+.inv-row:last-child{border-bottom:none;}
+.inv-item-name{
+  font-family:'Inter',sans-serif;font-size:13px;
+  color:#07090C;font-weight:500;margin-bottom:3px;
+}
+.inv-item-desc{
+  font-family:'Inter',sans-serif;font-size:11px;
+  color:rgba(7,9,12,0.4);line-height:1.5;
+}
+.inv-cell{
+  font-family:'Inter',sans-serif;font-size:13px;color:rgba(7,9,12,0.6);
+}
+.inv-cell.right{text-align:right;}
+.inv-cell.amount{color:#07090C;font-weight:500;}
+
+/* Ghost row number */
+.inv-row-num{
+  font-family:'Sora',sans-serif;font-size:10px;font-weight:700;
+  color:rgba(7,9,12,0.12);letter-spacing:0.06em;margin-bottom:4px;
+}
+
+/* ── TOTALS ── */
+.inv-totals{
+  padding:0 48px 0;
+  background:#ffffff;
+}
+.inv-totals-inner{
+  margin-left:auto;
+  width:320px;
+  border-top:2px solid #07090C;
+  padding-top:20px;
+  padding-bottom:32px;
+}
+.inv-total-row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:6px 0;
+}
+.inv-total-label{
+  font-family:'Inter',sans-serif;font-size:12px;color:rgba(7,9,12,0.5);
+}
+.inv-total-val{
+  font-family:'Inter',sans-serif;font-size:13px;color:rgba(7,9,12,0.7);font-weight:500;
+}
+.inv-total-row.total{
+  margin-top:12px;padding-top:16px;
+  border-top:1px solid rgba(7,9,12,0.1);
+}
+.inv-total-row.total .inv-total-label{
+  font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:#07090C;
+}
+.inv-total-row.total .inv-total-val{
+  font-family:'Sora',sans-serif;font-size:20px;font-weight:800;
+  color:#E85D1B;letter-spacing:-0.02em;
+}
+
+/* ── NOTES BAND ── */
+.inv-notes{
+  background:#07090C;
+  padding:24px 48px;
+  display:grid;grid-template-columns:1fr 1fr;gap:48px;
+}
+.inv-notes-label{
+  font-family:'Sora',sans-serif;font-size:9px;font-weight:700;
+  letter-spacing:0.16em;text-transform:uppercase;
+  color:rgba(242,237,230,0.25);margin-bottom:10px;
+}
+.inv-notes-val{
+  font-family:'Inter',sans-serif;font-size:12px;
+  color:rgba(242,237,230,0.55);line-height:1.7;
+}
+.inv-notes-val strong{color:rgba(242,237,230,0.8);font-weight:500;}
+
+/* ── FOOTER ── */
+.inv-footer{
+  background:#040609;
+  padding:20px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid rgba(242,237,230,0.05);
+}
+.inv-footer-left{
+  font-family:'Inter',sans-serif;font-size:11px;
+  color:rgba(242,237,230,0.2);line-height:1.6;
+}
+.inv-footer-right{
+  font-family:'Sora',sans-serif;font-size:10px;font-weight:700;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(242,237,230,0.15);
+}
+</style>
+</head>
+<body>
+
+<p class="label">Invoice template — A4 reference · Agisano brand</p>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="inv-header">
+    <div class="inv-header-ghost">INV</div>
+    <div class="inv-header-top">
+      <div class="inv-logo">
+        <div class="inv-mark"><span>A</span></div>
+        <span class="inv-wordmark">Agisano</span>
+      </div>
+      <div class="inv-number-block">
+        <div class="inv-number-label">Invoice</div>
+        <div class="inv-number">AGS-0042</div>
+      </div>
+    </div>
+    <div class="inv-header-bottom">
+      <div class="inv-meta-block">
+        <div class="inv-meta-label">From</div>
+        <div class="inv-meta-val">
+          <strong>Agisano (Pty) Ltd</strong>
+          Gauteng, South Africa<br/>
+          hello@agisano.com<br/>
+          agisano.com
+        </div>
+      </div>
+      <div class="inv-meta-block">
+        <div class="inv-meta-label">Issue Date</div>
+        <div class="inv-meta-val">
+          <strong>19 May 2026</strong>
+        </div>
+        <div class="inv-meta-label" style="margin-top:16px;">Due Date</div>
+        <div class="inv-meta-val">
+          <strong style="color:#E85D1B;">02 June 2026</strong>
+        </div>
+      </div>
+      <div class="inv-meta-block">
+        <div class="inv-meta-label">Tax / VAT Ref</div>
+        <div class="inv-meta-val">
+          <strong>VAT: [your VAT no.]</strong>
+          Reg: [company reg no.]
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BILL TO -->
+  <div class="inv-billto">
+    <div class="inv-billto-left">
+      <div class="inv-billto-label">Billed to</div>
+      <div class="inv-billto-name">Observatory Girls School</div>
+      <div class="inv-billto-detail">
+        Attn: Principal · [School address]<br/>
+        principal@school.edu.za · Gauteng
+      </div>
+    </div>
+    <div class="inv-status">Awaiting payment</div>
+  </div>
+
+  <!-- LINE ITEMS -->
+  <div class="inv-items">
+    <div class="inv-table-head">
+      <div class="inv-th">Description</div>
+      <div class="inv-th right">Qty</div>
+      <div class="inv-th right">Unit price</div>
+      <div class="inv-th right">Amount</div>
+    </div>
+
+    <div class="inv-row">
+      <div>
+        <div class="inv-row-num">01</div>
+        <div class="inv-item-name">Enterprise WiFi Installation</div>
+        <div class="inv-item-desc">Full campus wireless network design and deployment.<br/>Includes hardware supply, cabling, and configuration.</div>
+      </div>
+      <div class="inv-cell right">1</div>
+      <div class="inv-cell right">R 24 500.00</div>
+      <div class="inv-cell right amount">R 24 500.00</div>
+    </div>
+
+    <div class="inv-row">
+      <div>
+        <div class="inv-row-num">02</div>
+        <div class="inv-item-name">Managed IT Services — Monthly Retainer</div>
+        <div class="inv-item-desc">Remote monitoring, helpdesk support, on-site visits.<br/>3-month minimum. Billed monthly.</div>
+      </div>
+      <div class="inv-cell right">3</div>
+      <div class="inv-cell right">R 3 200.00</div>
+      <div class="inv-cell right amount">R 9 600.00</div>
+    </div>
+
+    <div class="inv-row">
+      <div>
+        <div class="inv-row-num">03</div>
+        <div class="inv-item-name">School Website Design &amp; Build</div>
+        <div class="inv-item-desc">Custom website, content upload, domain configuration,<br/>and 12-month hosting included.</div>
+      </div>
+      <div class="inv-cell right">1</div>
+      <div class="inv-cell right">R 12 000.00</div>
+      <div class="inv-cell right amount">R 12 000.00</div>
+    </div>
+
+    <div class="inv-row">
+      <div>
+        <div class="inv-row-num">04</div>
+        <div class="inv-item-name">Brand Identity — Corporate Identity Pack</div>
+        <div class="inv-item-desc">Logo, colour palette, typography, brand guidelines PDF,<br/>letterhead, and social media templates.</div>
+      </div>
+      <div class="inv-cell right">1</div>
+      <div class="inv-cell right">R 8 500.00</div>
+      <div class="inv-cell right amount">R 8 500.00</div>
+    </div>
+
+  </div>
+
+  <!-- TOTALS -->
+  <div class="inv-totals">
+    <div class="inv-totals-inner">
+      <div class="inv-total-row">
+        <span class="inv-total-label">Subtotal</span>
+        <span class="inv-total-val">R 54 600.00</span>
+      </div>
+      <div class="inv-total-row">
+        <span class="inv-total-label">VAT (15%)</span>
+        <span class="inv-total-val">R 8 190.00</span>
+      </div>
+      <div class="inv-total-row total">
+        <span class="inv-total-label">Total due</span>
+        <span class="inv-total-val">R 62 790.00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTES + BANKING -->
+  <div class="inv-notes">
+    <div>
+      <div class="inv-notes-label">Banking details</div>
+      <div class="inv-notes-val">
+        <strong>Agisano (Pty) Ltd</strong>
+        Bank: [Your bank]<br/>
+        Account no: [Account number]<br/>
+        Branch code: [Branch code]<br/>
+        Reference: AGS-0042
+      </div>
+    </div>
+    <div>
+      <div class="inv-notes-label">Payment terms &amp; notes</div>
+      <div class="inv-notes-val">
+        Payment due within 14 days of invoice date.<br/>
+        Please use invoice number as payment reference.<br/><br/>
+        Queries: hello@agisano.com<br/>
+        Thank you for partnering with Agisano.
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="inv-footer">
+    <div class="inv-footer-left">
+      Agisano (Pty) Ltd · Reg: [company reg] · VAT: [VAT no.] · Gauteng, South Africa
+    </div>
+    <div class="inv-footer-right">agisano.com</div>
+  </div>
+
+</div>
+
+</body>
+</html>
