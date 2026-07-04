@@ -55,7 +55,7 @@ export default function Home() {
       {/* HERO */}
       <section
         className="relative flex flex-col justify-end overflow-hidden"
-        style={{ minHeight: "100vh", background: "var(--ink)" }}
+        style={{ minHeight: "100vh", background: "var(--ink)", paddingTop: 120 }}
       >
         <div
           className="absolute inset-0"

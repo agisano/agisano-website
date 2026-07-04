@@ -139,7 +139,8 @@ img { display: block; max-width: 100%; }
 /* STRIP */
 .top-strip {
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 72px; left: 0; right: 0;
+  border-top: 1px solid rgba(242,237,230,0.08);
   border-bottom: 1px solid rgba(242,237,230,0.08);
   padding: 12px 0;
   overflow: hidden;
