@@ -1,54 +1,27 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 export default function Home() {
-  const cursorRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-    if (isTouchDevice) {
-      // Touch: tap-to-reveal service images
-      document.querySelectorAll<HTMLElement>(".svc-row").forEach((row) => {
-        row.addEventListener("click", () => {
-          const isOpen = row.classList.contains("touch-open");
-          document.querySelectorAll(".svc-row").forEach((r) => r.classList.remove("touch-open"));
-          if (!isOpen) row.classList.add("touch-open");
-        });
-      });
-      return;
-    }
-
-    const cur = cursorRef.current;
-    if (!cur) return;
-    let mx = 0, my = 0, cx = 0, cy = 0;
-    const onMove = (e: MouseEvent) => { mx = e.clientX; my = e.clientY; cur.style.opacity = "1"; };
-    document.addEventListener("mousemove", onMove);
-
-    let rafId: number;
-    function animCursor() {
-      cx += (mx - cx) * 0.18;
-      cy += (my - cy) * 0.18;
-      cur!.style.left = cx + "px";
-      cur!.style.top = cy + "px";
-      rafId = requestAnimationFrame(animCursor);
-    }
-    animCursor();
-
-    document.querySelectorAll<HTMLElement>("a,button,.svc-row,.photo-cell").forEach((el) => {
-      el.addEventListener("mouseenter", () => cur!.classList.add("expand"));
-      el.addEventListener("mouseleave", () => cur!.classList.remove("expand"));
+    if (!isTouchDevice) return;
+    // Touch: tap-to-reveal service images
+    const handlers: Array<[HTMLElement, () => void]> = [];
+    document.querySelectorAll<HTMLElement>(".svc-row").forEach((row) => {
+      const handler = () => {
+        const isOpen = row.classList.contains("touch-open");
+        document.querySelectorAll(".svc-row").forEach((r) => r.classList.remove("touch-open"));
+        if (!isOpen) row.classList.add("touch-open");
+      };
+      row.addEventListener("click", handler);
+      handlers.push([row, handler]);
     });
-
-    return () => {
-      document.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(rafId);
-    };
+    return () => handlers.forEach(([row, handler]) => row.removeEventListener("click", handler));
   }, []);
 
   return (
     <>
-      <div id="cursor" ref={cursorRef} style={{ opacity: 0 }} />
       <div className="grain" />
       <CookieBanner />
 
@@ -625,7 +598,7 @@ export default function Home() {
           {[
             { val: <>100<span style={{ color: "var(--orange)" }}>%</span></>, strong: "Public schools only", body: "Not a side market. Our sole focus — by design." },
             { val: <><span style={{ color: "var(--orange)" }}>4</span></>, strong: "Services. One partner.", body: "Connectivity, equipment, support, digital — integrated, not fragmented." },
-            { val: <>Q<span style={{ color: "var(--orange)" }}>1–3</span></>, strong: "Quintile priority", body: "The schools that have waited longest get served first." },
+            { val: <>Q<span style={{ color: "var(--orange)" }}>1–3</span></>, strong: "Quintile priority", body: "The lowest-funded, no-fee schools — the ones that have waited longest get served first." },
           ].map(({ val, strong, body }, i) => (
             <div key={i} className="num-block">
               <div
