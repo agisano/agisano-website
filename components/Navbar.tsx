@@ -30,7 +30,7 @@ export default function Navbar() {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        height: 72,
+        height: 88,
         padding: "0 48px",
         transition: "background 0.4s",
         background: scrolled ? "rgba(7,9,12,0.95)" : "transparent",
@@ -41,10 +41,10 @@ export default function Navbar() {
         <Image
           src="/logo.png"
           alt="Agisano"
-          width={140}
-          height={45}
+          width={200}
+          height={64}
           priority
-          style={{ height: 34, width: "auto" }}
+          style={{ height: 63, width: "auto" }}
         />
       </Link>
 

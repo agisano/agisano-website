@@ -94,9 +94,9 @@ export default function Footer() {
           <Image
             src="/logo.png"
             alt="Agisano"
-            width={140}
-            height={45}
-            style={{ height: 34, width: "auto" }}
+            width={200}
+            height={64}
+            style={{ height: 63, width: "auto" }}
           />
         </div>
         <p style={{ fontSize: 12, color: "rgba(242,237,230,0.25)" }}>© {new Date().getFullYear()} Agisano. Building Together.</p>
