@@ -22,10 +22,17 @@ export const metadata: Metadata = {
   description:
     "Agisano connects South Africa's public schools to the internet, technology, and digital tools their learners deserve. Gauteng-based. Community-focused.",
   keywords: ["school ICT", "public school wifi", "school internet South Africa", "managed IT services schools", "Gauteng school technology"],
+  metadataBase: new URL("https://agisano.com"),
   icons: {
-    icon: "/favicon.png",
-    apple: "/favicon.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+      { url: "/icon-512.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
+  manifest: "/site.webmanifest",
   openGraph: {
     title: "Agisano — Building Together",
     description: "Connecting the schools that have been waiting.",
@@ -33,6 +40,7 @@ export const metadata: Metadata = {
     siteName: "Agisano",
     locale: "en_ZA",
     type: "website",
+    images: [{ url: "/logo.png", width: 2400, height: 771, alt: "Agisano" }],
   },
 };
 
