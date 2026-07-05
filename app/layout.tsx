@@ -3,6 +3,7 @@ import { Sora, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Cursor from "@/components/Cursor";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -43,6 +44,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${sora.variable} ${inter.variable} h-full`}>
       <body className="min-h-full flex flex-col antialiased">
+        <Cursor />
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
