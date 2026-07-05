@@ -22,7 +22,8 @@ export const metadata: Metadata = {
     "Agisano connects South Africa's public schools to the internet, technology, and digital tools their learners deserve. Gauteng-based. Community-focused.",
   keywords: ["school ICT", "public school wifi", "school internet South Africa", "managed IT services schools", "Gauteng school technology"],
   icons: {
-    icon: "/favicon.svg",
+    icon: "/favicon.png",
+    apple: "/favicon.png",
   },
   openGraph: {
     title: "Agisano — Building Together",

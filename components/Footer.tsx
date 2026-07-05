@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -89,22 +90,14 @@ export default function Footer() {
         </div>
       </div>
       <div className="footer-bottom">
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div
-            style={{
-              width: 34,
-              height: 34,
-              background: "var(--orange)",
-              borderRadius: 5,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-            }}
-          >
-            <span style={{ fontFamily: "var(--font-sora)", fontWeight: 900, fontSize: 17, color: "white", lineHeight: 1 }}>A</span>
-          </div>
-          <span style={{ fontFamily: "var(--font-sora)", fontWeight: 700, fontSize: 16, color: "var(--cream)" }}>Agisano</span>
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Image
+            src="/logo.png"
+            alt="Agisano"
+            width={140}
+            height={45}
+            style={{ height: 34, width: "auto" }}
+          />
         </div>
         <p style={{ fontSize: 12, color: "rgba(242,237,230,0.25)" }}>© {new Date().getFullYear()} Agisano. Building Together.</p>
         <p style={{ fontSize: 12, color: "rgba(242,237,230,0.25)" }}>Registered in South Africa · agisano.com</p>

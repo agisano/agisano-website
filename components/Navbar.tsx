@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 const links = [
   { label: "Services", href: "/services" },
@@ -36,22 +37,15 @@ export default function Navbar() {
         backdropFilter: scrolled ? "blur(16px)" : "none",
       }}
     >
-      <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-        <div
-          style={{
-            width: 34,
-            height: 34,
-            background: "var(--orange)",
-            borderRadius: 5,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-          }}
-        >
-          <span style={{ fontFamily: "var(--font-sora)", fontWeight: 900, fontSize: 17, color: "white", lineHeight: 1 }}>A</span>
-        </div>
-        <span style={{ fontFamily: "var(--font-sora)", fontWeight: 700, fontSize: 16, letterSpacing: "0.02em", color: "var(--cream)" }}>Agisano</span>
+      <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+        <Image
+          src="/logo.png"
+          alt="Agisano"
+          width={140}
+          height={45}
+          priority
+          style={{ height: 34, width: "auto" }}
+        />
       </Link>
 
       {/* Desktop */}
