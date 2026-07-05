@@ -30,7 +30,7 @@ export default function Navbar() {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        height: 88,
+        height: 94,
         padding: "0 48px",
         transition: "background 0.4s",
         background: scrolled ? "rgba(7,9,12,0.95)" : "transparent",
@@ -44,7 +44,7 @@ export default function Navbar() {
           width={200}
           height={64}
           priority
-          style={{ height: 63, width: "auto" }}
+          style={{ height: 69, width: "auto" }}
         />
       </Link>
 

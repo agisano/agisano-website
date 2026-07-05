@@ -96,7 +96,7 @@ export default function Footer() {
             alt="Agisano"
             width={200}
             height={64}
-            style={{ height: 63, width: "auto" }}
+            style={{ height: 69, width: "auto" }}
           />
         </div>
         <p style={{ fontSize: 12, color: "rgba(242,237,230,0.25)" }}>© {new Date().getFullYear()} Agisano. Building Together.</p>
