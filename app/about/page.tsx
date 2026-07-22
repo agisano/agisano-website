@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { FOUNDERS } from "@/lib/content";
 import { CREDENTIALS } from "@/lib/credentials";
 
 export const metadata: Metadata = {
@@ -39,6 +40,22 @@ export default function AboutPage() {
               answers for it.
             </p>
 
+            <h2 className="t-h2">{FOUNDERS.eyebrow}</h2>
+            <p className="t-body pretty">{FOUNDERS.intro}</p>
+          </div>
+
+          <div className="founders">
+            {FOUNDERS.people.map((p) => (
+              <article key={p.id} className="founder">
+                <hr className="hairline" />
+                <h3 className="t-h3 founder-name">{p.name}</h3>
+                <p className="t-label founder-role">{p.title}</p>
+                <p className="t-body pretty founder-bio">{p.bio}</p>
+              </article>
+            ))}
+          </div>
+
+          <div className="prose">
             <h2 className="t-h2">How we work</h2>
             <p className="t-body pretty">
               On a deliberately limited intake. We would rather be genuinely present for a
@@ -69,12 +86,6 @@ export default function AboutPage() {
               ))}
             </ul>
           </div>
-
-          <p className="stub-note t-small">
-            <strong>Build note:</strong> team, founding story and any accreditation detail
-            beyond the above are not yet written — Kagiso to supply. Nothing here is
-            invented to fill the space.
-          </p>
 
           <div className="page-actions">
             <Link href="/assessment" className="btn btn-primary">
