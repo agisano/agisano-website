@@ -193,6 +193,7 @@ export const OGS = {
   // LOCKED — exact wording, build-spec §7 / platform §4.6. Do not edit.
   internetLine:
     "We're precise about what's ours: the school's internet connection came through a grant. Agisano built and runs the network and WiFi on top of it — the coverage across the school, and keeping it working every day.",
+  entryClauses: ["A school we've been the", "technology partner for", "since 2021."],
   link: { href: "/observatory-girls", label: "The full story" },
   photo: "Real, consented OGS photograph — the emotional anchor",
   // Testimonial ships EMPTY until real words arrive (§7). Do not fill.
@@ -229,6 +230,29 @@ export const FOUNDERS = {
         "Neo owns delivery — the schedule, the suppliers, the site, the budget, the handover. She has spent over a decade in campaign production at agencies including Leo Burnett and Publicis: more than fifty campaigns across more than twenty brands, nearly all of it delivered by suppliers who did not report to her, to dates that could not move. She ran Citroën's nationwide rollout for eleven months and Mercedes-Benz production end to end. She has also spent three years on the finance side of an agency, budgeting, paying suppliers and reconciling their invoices against a fixed number. She qualified in project management at the University of Cape Town in 2024.",
     },
   ],
+};
+
+/**
+ * The locked internet line, split for the line-by-line build on the proof page.
+ *
+ * BINDING: derived from OGS.internetLine, never re-typed. The locked wording
+ * must exist in exactly one place; a second copy would drift and the whole
+ * point of that sentence is that it is exact. If this split ever returns
+ * something odd, fall back to rendering OGS.internetLine whole — a lesser
+ * reveal is fine, a second copy of the words is not.
+ */
+export const OGS_INTERNET_CLAUSES: string[] = OGS.internetLine
+  .split(/(?<=\.)\s+/)
+  .map((s) => s.trim())
+  .filter(Boolean);
+
+/** About page — the entry statement, set as clauses. Same words as the h1. */
+export const ABOUT = {
+  eyebrow: "About",
+  entryClauses: ["Your technology", "shouldn't be", "your problem."],
+  lead:
+    "You did not take the job to chase a WiFi installer, wait on an equipment quote, or hope the thing that broke last term holds this one.",
+  footLabel: "One accountable partner",
 };
 
 export const CONSTRAINTS = {
