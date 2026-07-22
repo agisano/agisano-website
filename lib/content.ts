@@ -209,6 +209,11 @@ export const OGS = {
  * Every claim traces to a verified fact. Neo's copy carries no technology
  * specification language — her authority is delivery, and one blurred clause
  * costs the credibility of the page.
+ *
+ * First names only on the site. Full names still carry in the company profile
+ * and every tender response, where an evaluator needs a verifiable person.
+ * Personal bio pages and portraits are coming — when they land, both founders
+ * get them, with identical treatment. One without the other breaks the parity.
  */
 export const FOUNDERS = {
   eyebrow: "Who owns the whole",
@@ -217,14 +222,14 @@ export const FOUNDERS = {
   people: [
     {
       id: "kagiso",
-      name: "Kagiso Tjeane",
+      name: "Kagiso",
       title: "CEO",
       bio:
         "Kagiso decides what an institution should build, what it should cost, and what Agisano puts in writing. He has spent more than fifteen years in technology. He began as an engineer and technology manager at MTN and moved through operations. Today he works at executive level at Melon Mobile, a South African mobile network, on strategy and commercial decisions. It is an industry where the handling of personal information is regulated rather than optional, and where an outage is measured, not explained away. He founded Agisano to bring that standard of judgment to institutions that could not otherwise buy it, at a scale and a price they can actually use.",
     },
     {
       id: "neo",
-      name: "Neo Tjeane",
+      name: "Neo",
       title: "Project Director",
       bio:
         "Neo owns delivery — the schedule, the suppliers, the site, the budget, the handover. She has spent over a decade in campaign production at agencies including Leo Burnett and Publicis: more than fifty campaigns across more than twenty brands, nearly all of it delivered by suppliers who did not report to her, to dates that could not move. She ran Citroën's nationwide rollout for eleven months and Mercedes-Benz production end to end. She has also spent three years on the finance side of an agency, budgeting, paying suppliers and reconciling their invoices against a fixed number. She qualified in project management at the University of Cape Town in 2024.",
