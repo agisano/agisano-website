@@ -26,6 +26,15 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+        env:
+          # NEXT_PUBLIC_* values are baked into the static export at build time,
+          # so they must be present here, not just in .env.local.
+          # Set these as repository variables (Settings → Secrets and variables
+          # → Actions → Variables). None of them are secret: the lead endpoint is
+          # a POST-only inbox, and the contact details are published on the site.
+          NEXT_PUBLIC_LEAD_ENDPOINT: ${{ vars.NEXT_PUBLIC_LEAD_ENDPOINT }}
+          NEXT_PUBLIC_WHATSAPP: ${{ vars.NEXT_PUBLIC_WHATSAPP }}
+          NEXT_PUBLIC_EMAIL: ${{ vars.NEXT_PUBLIC_EMAIL }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
