@@ -40,7 +40,7 @@ export const METRICS: Metric[] = [
   {
     value: "4",
     unit: "services",
-    label: "Internet, equipment, support, presence — all live, all ours.",
+    label: "Internet, equipment, support, presence — all live under one partner.",
     source: "platform §4.6 — scope confirmed live",
   },
   {

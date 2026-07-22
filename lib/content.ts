@@ -50,7 +50,7 @@ export const ONE_PARTNER = {
   eyebrow: "One accountable partner",
   headline: "One number to call. One team that answers for it.",
   body:
-    "Most institutions end up assembling their own technology by hand — a WiFi installer here, an equipment supplier there, someone to phone when it breaks — and quietly become the person holding it all together. Agisano is the single line through that. We own the whole of it, so there is one relationship, and no gaps between vendors for a fault to fall into.",
+    "Most institutions end up assembling their own technology by hand — a WiFi installer here, an equipment supplier there, someone to phone when it breaks — and quietly become the person holding it all together. Agisano is the single line through that. We carry the whole of it, so there is one relationship, and no gaps between vendors for a fault to fall into.",
 };
 
 export const CHECK_INVITE = {
