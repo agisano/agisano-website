@@ -78,14 +78,6 @@ export default function PrivacyPage() {
               delete it.
             </p>
           </div>
-
-          <p className="stub-note t-small">
-            <strong>Build note (not for launch):</strong> this is honest, plain-language
-            drafting of what the site actually does. The enforceable legal wording,
-            Information Officer details, and the PAIA manual reference are Kagiso/Doug&rsquo;s
-            sign-off before this page ships. Retention periods above are deliberately
-            unspecified rather than invented.
-          </p>
         </div>
       </section>
     </div>

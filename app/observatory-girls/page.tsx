@@ -78,12 +78,6 @@ export default function ObservatoryGirlsPage() {
             </figure>
           )}
 
-          <p className="stub-note t-small">
-            <strong>Build note:</strong> the principal has given permission to be quoted;
-            the words themselves have not been supplied yet. Until they are, this page
-            carries no quote — we do not write one for them.
-          </p>
-
           <div className="page-actions">
             <Link href="/assessment" className="btn btn-primary">
               Book a free assessment

@@ -6,14 +6,10 @@ import { useCapability } from "@/lib/useCapability";
 /**
  * Photo slot (build-spec §8, art-direction §9).
  *
- * There is NO real photography on this machine yet. This renders an HONEST,
- * LABELLED placeholder at the exact size, crop and position the real duotoned
- * photograph will occupy — so composition is truthful and the real image drops
- * in later with zero layout change. We do not fake photos.
- *
- * When `src` is supplied it renders the real image with the same duotone
- * treatment and the same box. Aspect-ratio reserves the box either way, so a
- * missing image can never break layout or cause CLS.
+ * With `src` it renders the real photograph under the duotone treatment. Without
+ * one it renders the duotone panel alone, at the same box — aspect-ratio reserves
+ * the space either way, so dropping the real image in causes no layout shift and
+ * no CLS. `label` is the alt text once a src exists.
  *
  * Parallax (~0.78x) runs only on capable devices; on phone/poor-bandwidth/
  * reduced-motion it is simply off.
@@ -86,13 +82,6 @@ export default function Photo({
           <div className="photo-ph" aria-hidden="true" />
         )}
       </div>
-
-      {!src && (
-        <figcaption className="photo-cap">
-          <span className="t-label photo-cap-kicker">Photography to come</span>
-          <span className="photo-cap-label">{label}</span>
-        </figcaption>
-      )}
     </figure>
   );
 }

@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { CONTACT, WHATSAPP_ENABLED } from "@/lib/content";
 import {
-  HAS_ENDPOINT,
   composeLeadBody,
   mailtoHref,
   submitLead,
@@ -291,27 +290,16 @@ export default function BookingForm({
         )}
       </div>
 
-      {!HAS_ENDPOINT && state.kind === "idle" && (
-        <p className="form-devnote t-small pretty" role="note">
-          <strong>Build note (not for launch):</strong> no lead endpoint is configured yet,
-          so &ldquo;Send it&rdquo; will not silently pretend to succeed — it will hand you
-          the working WhatsApp and email paths instead. Set{" "}
-          <code>NEXT_PUBLIC_LEAD_ENDPOINT</code> to go live.
-        </p>
-      )}
-
       {(state.kind === "manual" || state.kind === "error") && (
         <div className="form-fallback" role="alert">
           <h3 className="t-h3">
-            {state.kind === "manual"
-              ? "Online submission isn't connected yet."
-              : "That didn't send."}
+            {state.kind === "manual" ? "One more step." : "That didn't send."}
           </h3>
           <p className="t-body pretty">
             {state.kind === "manual"
-              ? `We won't pretend it went through. Send it ${
+              ? `Send it ${
                   WHATSAPP_ENABLED ? "through either of these" : "by email"
-                } instead — it carries everything you've entered, including your Readiness Check.`
+                } and it reaches us directly — it carries everything you've entered, including your Readiness Check.`
               : `Something went wrong on our side (${state.detail}). Your details are safe — send them ${
                   WHATSAPP_ENABLED ? "through either of these" : "by email"
                 } instead.`}

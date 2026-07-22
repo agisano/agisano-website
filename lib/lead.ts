@@ -1,20 +1,10 @@
 /**
- * Lead delivery (build-spec §6). CTO owns this.
+ * Lead delivery (build-spec §6).
  *
- * ==========================================================================
- * INTEGRATION POINT — READ BEFORE LAUNCH
- * ==========================================================================
- * The form posts to NEXT_PUBLIC_LEAD_ENDPOINT (set in .env.local; see
- * .env.example). Any endpoint that accepts a JSON or form POST works —
- * Formspree, Basin, a Cloudflare/Vercel function, an n8n webhook.
- *
- * If NO endpoint is configured, the form does NOT pretend to succeed. It
- * reports honestly that online submission is not yet connected and hands the
- * user two REAL, working paths that need no backend: WhatsApp click-to-chat
- * and a mailto:, both pre-composed with the full lead + Readiness Check
- * readout. Nothing is ever silently swallowed. (The old site's
- * `setTimeout(1200) => setSubmitted(true)` is exactly the failure this avoids.)
- * ==========================================================================
+ * The form posts to NEXT_PUBLIC_LEAD_ENDPOINT (see .env.example). With no
+ * endpoint configured — or on any network or HTTP failure — it never fakes a
+ * success: it hands the user the WhatsApp and mailto paths, pre-composed with
+ * the full lead and Readiness Check readout, so a lead is never silently lost.
  */
 
 import { CONTACT } from "./content";
