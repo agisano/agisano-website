@@ -480,22 +480,46 @@ html.motion-off .build-line > span {
 /* ============================================================
    Nav
    ============================================================ */
+/* The nav is transparent until it lifts, so its colour must follow the ground
+   underneath it. It previously hard-coded --paper-on-ink, which put #efeee7 on
+   the #f7f5ef paper of every subpage — ~1.03:1, an invisible nav and wordmark
+   until the reader scrolled 24px. Default is now ink-safe; pages that open on a
+   full-bleed ink band opt back in below. */
 .nav {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 60;
-  color: var(--paper-on-ink);
+  color: var(--ink);
   transition: background 0.5s var(--ease-signal), color 0.4s var(--ease-signal),
     border-color 0.4s var(--ease-signal);
   border-bottom: 1px solid transparent;
 }
-.nav-lift {
+.nav .wordmark {
+  --mark-dot: var(--teal);
+}
+/* Ink-topped pages: the homepage hero and any subpage entry band. */
+body:has(.hero) .nav,
+body:has(.page-hero) .nav {
+  color: var(--paper-on-ink);
+}
+body:has(.hero) .nav .wordmark,
+body:has(.page-hero) .nav .wordmark {
+  --mark-dot: #ffffff;
+}
+/* Lifted, the nav carries its own ink background on every page — it must win
+   over the ground-derived colours above, so it is declared last. */
+.nav.nav-lift {
   background: rgba(12, 26, 24, 0.82);
   backdrop-filter: saturate(140%) blur(12px);
   border-bottom-color: var(--line-on-ink);
+  color: var(--paper-on-ink);
 }
+.nav.nav-lift .wordmark {
+  --mark-dot: #ffffff;
+}
+
 .nav-inner {
   display: flex;
   align-items: center;
