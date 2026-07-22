@@ -7,5 +7,6 @@
 .env*
 !.env.example
 next-env.d.ts
+tsconfig.tsbuildinfo
 .vercel
 .eslintcache
