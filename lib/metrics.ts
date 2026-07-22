@@ -13,7 +13,7 @@
  *
  * What each value traces to:
  *  4+ / Since 2021  → platform §4.6 track record (OGS, still current)
- *  End to end / 4   → platform §4.6 scope-of-services (all four lines live)
+ *  End to end / 6   → platform §4.6 scope-of-services (all six lines live)
  *  1 / 60 / 3       → the assessment commitments in the approved S7 copy
  */
 
@@ -38,9 +38,9 @@ export const METRICS: Metric[] = [
     source: "platform §4.6 — duration, still current",
   },
   {
-    value: "4",
-    unit: "services",
-    label: "Internet, equipment, support, presence — all live under one partner.",
+    value: "6",
+    unit: "service lines",
+    label: "Connectivity, security, equipment, power, support, presence — one partner.",
     source: "platform §4.6 — scope confirmed live",
   },
   {
@@ -64,9 +64,17 @@ export const SERVICE_FACTS: Record<string, { k: string; v: string }[]> = {
     { k: "Scope", v: "Network & WiFi, built and run" },
     { k: "Coverage", v: "Where people work, not just the office" },
   ],
+  security: [
+    { k: "Scope", v: "Managed firewall, filtering, cameras, access" },
+    { k: "Posture", v: "POPIA-aware, with the records to show it" },
+  ],
   equipment: [
     { k: "Scope", v: "Supplied, set up, ready to use" },
     { k: "Fit", v: "Chosen for the room, not the brochure" },
+  ],
+  power: [
+    { k: "Scope", v: "Backup power on what matters" },
+    { k: "Outcome", v: "The day carries on through an outage" },
   ],
   support: [
     { k: "Response", v: "1 business day" },

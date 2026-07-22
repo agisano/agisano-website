@@ -37,7 +37,7 @@ export default function AssessmentPage() {
                 </li>
               ))}
             </ol>
-            <p className="t-small stub-note">
+            <p className="t-small aside-note">
               <Link href="/assessment-terms" className="link-draw">
                 How the free assessment works
               </Link>{" "}

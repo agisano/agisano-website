@@ -1314,20 +1314,6 @@ html.motion-off .build-line > span {
   cursor: not-allowed;
   transform: none;
 }
-.form-devnote {
-  margin: var(--s4) 0 0;
-  padding: 12px 16px;
-  border: 1px dashed var(--attention);
-  color: var(--ink-soft);
-  max-width: 68ch;
-  border-radius: 2px;
-}
-.form-devnote code {
-  font-size: 0.85em;
-  background: var(--stone);
-  padding: 1px 5px;
-  border-radius: 2px;
-}
 .form-fallback {
   margin-top: var(--s5);
   padding: var(--s4);
@@ -1406,29 +1392,6 @@ html.motion-off .build-line > span {
       transparent 1px 9px
     ),
     linear-gradient(158deg, var(--ink) 0%, #234b45 46%, var(--stone) 100%);
-}
-.photo-cap {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 2;
-  padding: 14px 16px;
-  background: linear-gradient(transparent, rgba(12, 26, 24, 0.72));
-  color: var(--paper-on-ink);
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.photo-cap-kicker {
-  color: var(--teal-lift);
-  opacity: 0.9;
-  font-size: 0.66rem;
-}
-.photo-cap-label {
-  font-size: 0.86rem;
-  line-height: 1.35;
-  opacity: 0.92;
 }
 
 /* ============================================================
@@ -1510,7 +1473,7 @@ html.motion-off .build-line > span {
 }
 @media (min-width: 1100px) {
   .roof-cards {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--s4);
   }
 }
@@ -1679,9 +1642,6 @@ html.motion-off .build-line > span {
   height: 100%;
   border-radius: 0;
 }
-.final-cta-photo .photo-cap {
-  display: none;
-}
 .final-cta-inner {
   position: relative;
   z-index: 1;
@@ -1839,11 +1799,78 @@ html.motion-off .build-line > span {
   display: grid;
   gap: 8px;
 }
-.stub-note {
-  margin-top: var(--s5);
-  padding: var(--s3) var(--s4);
-  border: 1px dashed var(--line);
-  border-radius: 2px;
+/* Service catalogue — the full line list under each pillar. Quiet by design:
+   this is a scan-and-confirm list, not a sales pitch. */
+.roof-includes {
+  list-style: none;
+  padding: 0;
+  margin: var(--s3) 0 0;
+  display: grid;
+  gap: 6px;
+  border-top: 1px solid var(--line);
+  padding-top: var(--s3);
+}
+.roof-includes li {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  padding-left: 14px;
+  position: relative;
+}
+.roof-includes li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 6px;
+  height: 1px;
+  background: var(--teal);
+}
+
+/* The two commercial models — equal weight, neither is the upsell. */
+.sell-options {
+  display: grid;
+  gap: var(--s5);
+  margin: var(--s4) 0 var(--s6);
+}
+@media (min-width: 800px) {
+  .sell-options {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s6);
+  }
+}
+.sell-option h3 {
+  margin: var(--s3) 0 var(--s2);
+}
+.sell-option p {
+  margin: 0;
+}
+
+/* Founders — the two bios are deliberately identical in treatment. Equal
+   columns, equal type, no hierarchy between them. Do not restyle one. */
+.founders {
+  display: grid;
+  gap: var(--s5);
+  margin: var(--s5) 0 var(--s6);
+}
+@media (min-width: 800px) {
+  .founders {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s6);
+  }
+}
+.founder-name {
+  margin: var(--s3) 0 2px;
+}
+.founder-role {
+  color: var(--teal);
+  margin: 0 0 var(--s3);
+}
+.founder-bio {
+  margin: 0;
+}
+.aside-note {
+  margin-top: var(--s4);
   color: var(--muted);
   max-width: var(--measure);
 }
@@ -1995,7 +2022,7 @@ html.motion-off .build-line > span {
 }
 @media (min-width: 1150px) {
   .roof-cards {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--s4);
   }
 }
