@@ -9,11 +9,6 @@
  *  - Testimonial ships EMPTY until real words arrive.
  */
 
-/**
- * INTEGRATION POINT — both values are placeholders until Kagiso supplies the real
- * ones. Set NEXT_PUBLIC_WHATSAPP (digits only, e.g. 27821234567) and
- * NEXT_PUBLIC_EMAIL in .env.local. See .env.example.
- */
 export const CONTACT = {
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP || "",
   whatsappDisplay: "WhatsApp us",
@@ -22,12 +17,9 @@ export const CONTACT = {
 };
 
 /**
- * WhatsApp is shown ONLY when a real number is configured.
- *
- * It is currently OFF because there is no business number yet — and a dead
- * click-to-chat button is worse than no button. To switch it back on, set
- * NEXT_PUBLIC_WHATSAPP (digits only, e.g. 27821234567). No code change needed:
- * every WhatsApp path on the site keys off this flag.
+ * Every WhatsApp path on the site keys off this flag, so a dead click-to-chat
+ * button can never ship. Set NEXT_PUBLIC_WHATSAPP (digits only, e.g.
+ * 27821234567) to turn them all on — no code change.
  */
 export const WHATSAPP_ENABLED = Boolean(process.env.NEXT_PUBLIC_WHATSAPP);
 
@@ -40,10 +32,10 @@ export const HERO = {
     "its technology.",
   ],
   lead:
-    "One accountable partner takes the whole weight off your desk — the connection, the equipment, the support, and how you show up online — so the people running your institution can get back to the work only they can do.",
+    "One accountable partner takes the whole weight off your desk — the connection, the equipment, the power behind it, the security around it, the support, and how you show up online — so the people running your institution can get back to the work only they can do.",
   ctaPrimary: "Book a free assessment",
   ctaSecondary: "Take the 90-second check",
-  fragments: ["Internet", "Equipment", "Support", "Online presence"],
+  fragments: ["Internet", "Security", "Equipment", "Power", "Support", "Online presence"],
 };
 
 export const ONE_PARTNER = {
@@ -61,9 +53,19 @@ export const CHECK_INVITE = {
   cta: "Start the check",
 };
 
+/**
+ * The six service lines. This list is the site's spine — the hero fragments,
+ * the converging line's threads and the metrics grid all count off it, so
+ * adding or removing a line means updating HERO.fragments, ConvergingLine's
+ * FRAGMENTS and METRICS together.
+ *
+ * `includes` is the full catalogue and must stay in step with the company
+ * profile PDF (brand/collateral/company-profile). A service we sell in the
+ * profile and not here is a service the buyer cannot find.
+ */
 export const UNDER_ONE_ROOF = {
   eyebrow: "Under one roof",
-  headline: "Four things, one partner.",
+  headline: "Six lines, one partner.",
   lead:
     "Everything an institution's technology needs, owned end to end by one team — so nothing falls between the cracks.",
   services: [
@@ -73,13 +75,56 @@ export const UNDER_ONE_ROOF = {
       plain:
         "Coverage that reaches where people actually work — not just the office. We build the network and keep it working.",
       photo: "Network cabinet, neatly installed and labelled",
+      includes: [
+        "WiFi & network installation",
+        "Structured cabling",
+        "Internet connectivity setup",
+        "Telephony & VoIP",
+        "Multi-site & remote-site networking",
+      ],
+    },
+    {
+      key: "security",
+      title: "Security & safe internet",
+      plain:
+        "A managed line between your institution and the outside world — and, for a school, browsing that is safe for the children on it.",
+      photo: "A managed firewall appliance in a labelled cabinet",
+      includes: [
+        "Firewall & network security",
+        "Content filtering & child-safe internet",
+        "CCTV & surveillance",
+        "Access control",
+        "Cybersecurity awareness training",
+      ],
     },
     {
       key: "equipment",
-      title: "ICT equipment",
+      title: "ICT equipment & classroom AV",
       plain:
-        "The right computers, projectors and devices for the job — supplied, set up, and ready to use.",
+        "The right computers, screens and devices for the job — supplied, set up, and ready for the room they are going into.",
       photo: "A room of working, in-use equipment",
+      includes: [
+        "Device & hardware supply",
+        "Computer lab setup & management",
+        "Interactive whiteboards & smartboards",
+        "Projectors & classroom AV",
+        "Hall & assembly AV",
+        "Intercom, PA & bell systems",
+        "Printers, copiers & scanners",
+        "IT asset management",
+      ],
+    },
+    {
+      key: "power",
+      title: "Power & resilience",
+      plain:
+        "Keeping the internet, the network and the systems that matter alive through an outage — so the day carries on.",
+      photo: "UPS and battery backup, installed and labelled",
+      includes: [
+        "UPS & power backup",
+        "Load-shedding resilience",
+        "Server, NAS & on-prem storage",
+      ],
     },
     {
       key: "support",
@@ -87,6 +132,14 @@ export const UNDER_ONE_ROOF = {
       plain:
         "When something breaks, one team fixes it — quickly, without you chasing anyone or refereeing between vendors.",
       photo: "Hands on a keyboard in a real working room",
+      includes: [
+        "Monitoring, patching & backup",
+        "Microsoft 365 & Active Directory",
+        "Google Workspace for Education",
+        "Email & domain hosting",
+        "Email & data migration",
+        "One number to call, under a written SLA",
+      ],
     },
     {
       key: "presence",
@@ -94,6 +147,34 @@ export const UNDER_ONE_ROOF = {
       plain:
         "A proper website and the digital front door your institution deserves — so people find you and take you seriously.",
       photo: "A real administrative space / front desk",
+      includes: [
+        "Websites you own, built and maintained",
+        "Online admissions & digital forms",
+        "Parent and community communications",
+      ],
+    },
+  ],
+};
+
+/**
+ * The commercial model. This is stated in the company profile and was missing
+ * from the site entirely — a buyer could not tell whether we sell a monthly
+ * service, a project, or both.
+ */
+export const HOW_WE_SELL = {
+  headline: "Two ways to work with us, and you can use either or both.",
+  options: [
+    {
+      key: "managed",
+      title: "We run it for you, month to month.",
+      body:
+        "Our managed service keeps the internet up, email flowing, data backed up, and systems patched and monitored — for one predictable monthly fee, under a written SLA.",
+    },
+    {
+      key: "project",
+      title: "We build it once, and build it right.",
+      body:
+        "Networks and WiFi, security and surveillance, Microsoft 365, hardware, connectivity, power resilience — delivered as fixed-scope projects, with a clear scope and a clear price.",
     },
   ],
 };
@@ -112,10 +193,66 @@ export const OGS = {
   // LOCKED — exact wording, build-spec §7 / platform §4.6. Do not edit.
   internetLine:
     "We're precise about what's ours: the school's internet connection came through a grant. Agisano built and runs the network and WiFi on top of it — the coverage across the school, and keeping it working every day.",
+  entryClauses: ["A school we've been the", "technology partner for", "since 2021."],
   link: { href: "/observatory-girls", label: "The full story" },
   photo: "Real, consented OGS photograph — the emotional anchor",
   // Testimonial ships EMPTY until real words arrive (§7). Do not fill.
   testimonial: null as null | { quote: string; attribution: string },
+};
+
+/**
+ * The founding pair. Equal treatment is the argument, not decoration: the two
+ * bios are held to within a few words of each other and rendered identically.
+ * A long CEO paragraph followed by a short second one manufactures exactly the
+ * reading this section exists to defeat. Keep them level.
+ *
+ * Every claim traces to a verified fact. Neo's copy carries no technology
+ * specification language — her authority is delivery, and one blurred clause
+ * costs the credibility of the page.
+ */
+export const FOUNDERS = {
+  eyebrow: "Who owns the whole",
+  intro:
+    "Owning the whole only counts if someone's name is on it. Agisano was founded and is run by two people with separate remits: one decides what an institution should build and what it should cost, the other makes sure it lands.",
+  people: [
+    {
+      id: "kagiso",
+      name: "Kagiso Tjeane",
+      title: "CEO",
+      bio:
+        "Kagiso decides what an institution should build, what it should cost, and what Agisano puts in writing. He has spent more than fifteen years in technology. He began as an engineer and technology manager at MTN and moved through operations. Today he works at executive level at Melon Mobile, a South African mobile network, on strategy and commercial decisions. It is an industry where the handling of personal information is regulated rather than optional, and where an outage is measured, not explained away. He founded Agisano to bring that standard of judgment to institutions that could not otherwise buy it, at a scale and a price they can actually use.",
+    },
+    {
+      id: "neo",
+      name: "Neo Tjeane",
+      title: "Project Director",
+      bio:
+        "Neo owns delivery — the schedule, the suppliers, the site, the budget, the handover. She has spent over a decade in campaign production at agencies including Leo Burnett and Publicis: more than fifty campaigns across more than twenty brands, nearly all of it delivered by suppliers who did not report to her, to dates that could not move. She ran Citroën's nationwide rollout for eleven months and Mercedes-Benz production end to end. She has also spent three years on the finance side of an agency, budgeting, paying suppliers and reconciling their invoices against a fixed number. She qualified in project management at the University of Cape Town in 2024.",
+    },
+  ],
+};
+
+/**
+ * The locked internet line, split for the line-by-line build on the proof page.
+ *
+ * BINDING: derived from OGS.internetLine, never re-typed. The locked wording
+ * must exist in exactly one place; a second copy would drift and the whole
+ * point of that sentence is that it is exact. If this split ever returns
+ * something odd, fall back to rendering OGS.internetLine whole — a lesser
+ * reveal is fine, a second copy of the words is not.
+ */
+export const OGS_INTERNET_CLAUSES: string[] = OGS.internetLine
+  .split(/(?<=\.)\s+/)
+  .map((s) => s.trim())
+  .filter(Boolean);
+
+/** About page — the entry statement, set as clauses. Same words as the h1. */
+export const ABOUT = {
+  eyebrow: "About",
+  entryClauses: ["Your technology", "shouldn't be", "your problem."],
+  lead:
+    "You did not take the job to chase a WiFi installer, wait on an equipment quote, or hope the thing that broke last term holds this one.",
+  footLabel: "One accountable partner",
 };
 
 export const CONSTRAINTS = {

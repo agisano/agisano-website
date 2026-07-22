@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { UNDER_ONE_ROOF } from "@/lib/content";
+import { UNDER_ONE_ROOF, HOW_WE_SELL } from "@/lib/content";
 import { SERVICE_FACTS } from "@/lib/metrics";
 
 export const metadata: Metadata = {
   title: "Under one roof — Agisano",
   description:
-    "Internet and WiFi, ICT equipment, managed IT support, and digital presence — four lines, one accountable partner.",
+    "Internet and WiFi, security, ICT equipment and AV, power resilience, managed IT support, and digital presence — six lines, one accountable partner.",
 };
 
 export default function UnderOneRoofPage() {
@@ -36,7 +36,25 @@ export default function UnderOneRoofPage() {
                       </div>
                     ))}
                   </dl>
+                  <ul className="roof-includes">
+                    {s.includes.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
                 </div>
+              </article>
+            ))}
+          </div>
+
+          <div className="prose">
+            <h2 className="t-h2">{HOW_WE_SELL.headline}</h2>
+          </div>
+          <div className="sell-options">
+            {HOW_WE_SELL.options.map((o) => (
+              <article key={o.key} className="sell-option">
+                <hr className="hairline" />
+                <h3 className="t-h3">{o.title}</h3>
+                <p className="t-body pretty">{o.body}</p>
               </article>
             ))}
           </div>

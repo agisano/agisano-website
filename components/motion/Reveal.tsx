@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion, type Variants } from "motion/react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -64,11 +64,13 @@ export function Stagger({
 export function Rise({
   children,
   className,
+  style,
   y = 26,
   as = "div",
 }: {
   children: ReactNode;
   className?: string;
+  style?: CSSProperties;
   y?: number;
   as?: "div" | "li" | "span" | "p";
 }) {
@@ -85,7 +87,7 @@ export function Rise({
   };
 
   return (
-    <Comp className={className} variants={variants}>
+    <Comp className={className} style={style} variants={variants}>
       {children}
     </Comp>
   );

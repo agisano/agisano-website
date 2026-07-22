@@ -3,7 +3,7 @@
 /**
  * The converging line — the signature device (art-direction §3, §8.1).
  *
- * THE IDEA: four scattered concerns an institution juggles resolve into ONE
+ * THE IDEA: the scattered concerns an institution juggles resolve into ONE
  * accountable partner. The payoff is that they resolve into the Agisano mark
  * itself — the logo IS the resolved converging line, which is what makes the
  * device authored rather than decorative.
@@ -16,13 +16,15 @@
  */
 
 const FRAGMENTS = [
-  { x: 6, y: 20, label: "Internet" },
-  { x: 30, y: 8, label: "Equipment" },
-  { x: 70, y: 8, label: "Support" },
-  { x: 94, y: 20, label: "Online presence" },
+  { x: 3, y: 24, label: "Internet" },
+  { x: 21, y: 11, label: "Security" },
+  { x: 40, y: 4, label: "Equipment" },
+  { x: 60, y: 4, label: "Power" },
+  { x: 79, y: 11, label: "Support" },
+  { x: 97, y: 24, label: "Online presence" },
 ];
 
-/** Where the four threads land — and where the mark resolves. */
+/** Where the threads land — and where the mark resolves. */
 const APEX = { x: 50, y: 64 };
 
 /* Official mark geometry, verbatim from the logo pack (see Mark.tsx). */

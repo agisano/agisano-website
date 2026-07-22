@@ -480,21 +480,44 @@ html.motion-off .build-line > span {
 /* ============================================================
    Nav
    ============================================================ */
+/* The nav is transparent until it lifts, so its colour must follow the ground
+   underneath it. It previously hard-coded --paper-on-ink, which put #efeee7 on
+   the #f7f5ef paper of every subpage — ~1.03:1, an invisible nav and wordmark
+   until the reader scrolled 24px. Default is now ink-safe; pages that open on a
+   full-bleed ink band opt back in below. */
 .nav {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 60;
-  color: var(--paper-on-ink);
+  color: var(--ink);
   transition: background 0.5s var(--ease-signal), color 0.4s var(--ease-signal),
     border-color 0.4s var(--ease-signal);
   border-bottom: 1px solid transparent;
 }
-.nav-lift {
+.nav .wordmark {
+  --mark-dot: var(--teal);
+}
+/* Ink-topped pages: the homepage hero and any subpage entry band. */
+body:has(.hero) .nav,
+body:has(.page-hero) .nav {
+  color: var(--paper-on-ink);
+}
+body:has(.hero) .nav .wordmark,
+body:has(.page-hero) .nav .wordmark {
+  --mark-dot: #ffffff;
+}
+/* Lifted, the nav carries its own ink background on every page — it must win
+   over the ground-derived colours above, so it is declared last. */
+.nav.nav-lift {
   background: rgba(12, 26, 24, 0.82);
   backdrop-filter: saturate(140%) blur(12px);
   border-bottom-color: var(--line-on-ink);
+  color: var(--paper-on-ink);
+}
+.nav.nav-lift .wordmark {
+  --mark-dot: #ffffff;
 }
 .nav-inner {
   display: flex;
@@ -1314,20 +1337,6 @@ html.motion-off .build-line > span {
   cursor: not-allowed;
   transform: none;
 }
-.form-devnote {
-  margin: var(--s4) 0 0;
-  padding: 12px 16px;
-  border: 1px dashed var(--attention);
-  color: var(--ink-soft);
-  max-width: 68ch;
-  border-radius: 2px;
-}
-.form-devnote code {
-  font-size: 0.85em;
-  background: var(--stone);
-  padding: 1px 5px;
-  border-radius: 2px;
-}
 .form-fallback {
   margin-top: var(--s5);
   padding: var(--s4);
@@ -1406,29 +1415,6 @@ html.motion-off .build-line > span {
       transparent 1px 9px
     ),
     linear-gradient(158deg, var(--ink) 0%, #234b45 46%, var(--stone) 100%);
-}
-.photo-cap {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 2;
-  padding: 14px 16px;
-  background: linear-gradient(transparent, rgba(12, 26, 24, 0.72));
-  color: var(--paper-on-ink);
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.photo-cap-kicker {
-  color: var(--teal-lift);
-  opacity: 0.9;
-  font-size: 0.66rem;
-}
-.photo-cap-label {
-  font-size: 0.86rem;
-  line-height: 1.35;
-  opacity: 0.92;
 }
 
 /* ============================================================
@@ -1510,7 +1496,7 @@ html.motion-off .build-line > span {
 }
 @media (min-width: 1100px) {
   .roof-cards {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--s4);
   }
 }
@@ -1679,9 +1665,6 @@ html.motion-off .build-line > span {
   height: 100%;
   border-radius: 0;
 }
-.final-cta-photo .photo-cap {
-  display: none;
-}
 .final-cta-inner {
   position: relative;
   z-index: 1;
@@ -1807,8 +1790,14 @@ html.motion-off .build-line > span {
 /* ============================================================
    Simple content pages (stubs + assessment/privacy)
    ============================================================ */
+/* Subpages that open on a .page-hero ink band run UNDER the fixed nav — the
+   band carries its own top padding. Pages still opening on paper keep the
+   offset so their first line clears the nav. */
 .page {
   padding-top: calc(72px + clamp(56px, 9vh, 120px));
+}
+.page:has(.page-hero) {
+  padding-top: 0;
 }
 .page-head {
   max-width: 46ch;
@@ -1839,11 +1828,55 @@ html.motion-off .build-line > span {
   display: grid;
   gap: 8px;
 }
-.stub-note {
-  margin-top: var(--s5);
-  padding: var(--s3) var(--s4);
-  border: 1px dashed var(--line);
-  border-radius: 2px;
+/* Service catalogue — the full line list under each pillar. Quiet by design:
+   this is a scan-and-confirm list, not a sales pitch. */
+.roof-includes {
+  list-style: none;
+  padding: 0;
+  margin: var(--s3) 0 0;
+  display: grid;
+  gap: 6px;
+  border-top: 1px solid var(--line);
+  padding-top: var(--s3);
+}
+.roof-includes li {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  padding-left: 14px;
+  position: relative;
+}
+.roof-includes li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 6px;
+  height: 1px;
+  background: var(--teal);
+}
+
+/* The two commercial models — equal weight, neither is the upsell. */
+.sell-options {
+  display: grid;
+  gap: var(--s5);
+  margin: var(--s4) 0 var(--s6);
+}
+@media (min-width: 800px) {
+  .sell-options {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s6);
+  }
+}
+.sell-option h3 {
+  margin: var(--s3) 0 var(--s2);
+}
+.sell-option p {
+  margin: 0;
+}
+
+.aside-note {
+  margin-top: var(--s4);
   color: var(--muted);
   max-width: var(--measure);
 }
@@ -1995,7 +2028,7 @@ html.motion-off .build-line > span {
 }
 @media (min-width: 1150px) {
   .roof-cards {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--s4);
   }
 }
@@ -2250,48 +2283,6 @@ html.motion-off .build-line > span {
   padding-top: var(--s2);
 }
 
-.ogs-anchors {
-  display: grid;
-  gap: var(--s5);
-  margin-bottom: var(--s7);
-}
-@media (min-width: 780px) {
-  .ogs-anchors {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--s4);
-  }
-}
-.ogs-anchor hr {
-  margin-bottom: var(--s3);
-}
-.ogs-anchor-value {
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(2.4rem, 4.4vw, 3.8rem);
-  line-height: 1;
-  letter-spacing: -0.03em;
-  color: var(--teal);
-  margin: 0 0 var(--s2);
-}
-.ogs-anchor p:last-child {
-  margin: 0;
-  color: var(--muted);
-  max-width: 28ch;
-}
-.ogs-body {
-  margin-bottom: var(--s6);
-}
-.ogs-photo {
-  margin-bottom: var(--s6);
-}
-.proof-internet-light {
-  border-left-color: var(--teal);
-}
-.proof-internet-light p {
-  color: var(--ink);
-  opacity: 1;
-}
-
 .roof-page-list {
   display: grid;
   gap: var(--s6);
@@ -2378,4 +2369,396 @@ html.cinematic .proof-pin {
   html.cinematic .hero {
     min-height: 100svh;
   }
+}
+
+/* ============================================================
+   Subpage chapter grammar
+   The homepage changes ground five times; subpages used to open on paper and
+   stay there, which is what made them read as one undifferentiated block.
+   These classes give every subpage the same chapter instrument.
+   t-mega belongs to the homepage — a subpage opens at t-display.
+   ============================================================ */
+.page-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 78svh;
+  display: flex;
+  align-items: center;
+  padding-block: calc(72px + var(--s7)) var(--s7);
+}
+.page-hero-tall {
+  min-height: 100svh;
+}
+.page-hero-statement {
+  max-width: 16ch;
+  margin: var(--s4) 0 0;
+}
+.page-hero-lead {
+  max-width: 46ch;
+  margin-top: var(--s4);
+  color: var(--paper-on-ink);
+  opacity: 0.78;
+}
+.page-hero-foot {
+  margin-top: var(--s6);
+  color: var(--teal-lift);
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
+.page-hero-foot::after {
+  content: "";
+  width: 56px;
+  height: 1px;
+  background: var(--teal-lift);
+  opacity: 0.6;
+}
+.page-hero-divide {
+  margin: var(--s6) 0 var(--s5);
+}
+.page-hero-anchors {
+  display: grid;
+  gap: var(--s5);
+}
+@media (min-width: 780px) {
+  .page-hero-anchors {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s4);
+  }
+}
+
+/* The reusable asymmetric beat. .split-field is the ACTIVE right field — it
+   always carries something structural. An empty right field is an unresolved
+   composition, not restraint. */
+.split {
+  display: grid;
+  gap: var(--s6);
+  align-items: start;
+}
+@media (min-width: 1024px) {
+  .split {
+    gap: var(--s8);
+  }
+  .split-about {
+    grid-template-columns: 1.15fr 0.85fr;
+  }
+  .split-proof {
+    grid-template-columns: 1.05fr 0.95fr;
+  }
+  .split-work {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+}
+.split-main > * + * {
+  margin-top: var(--s4);
+}
+/* The right field escapes the shell to the viewport edge. Clamped rather than
+   relying on body overflow-x. */
+@media (min-width: 1024px) {
+  .split-field-bleed {
+    margin-inline-end: calc(var(--page-margin) * -1);
+  }
+}
+
+/* Display-scale statement beat on stone. */
+.pull-statement {
+  max-width: 20ch;
+  margin: 0;
+}
+.pull-label {
+  color: var(--teal);
+  margin: 0 0 var(--s3);
+}
+.pull-support {
+  max-width: 46ch;
+  color: var(--ink-soft);
+  margin: 0 0 var(--s3);
+}
+
+/* Numbered ledger — generalises the .constraints-list pattern. */
+.ledger-head {
+  margin: 0 0 var(--s5);
+}
+.ledger {
+  display: grid;
+  gap: var(--s5);
+}
+@media (min-width: 780px) {
+  .ledger {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s5) var(--s4);
+  }
+}
+@media (min-width: 1150px) {
+  .ledger {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.ledger-item {
+  align-self: start;
+}
+.ledger-n {
+  color: var(--teal);
+  margin: var(--s2) 0 var(--s2);
+  font-variant-numeric: tabular-nums;
+}
+.ledger-body {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+/* Close beat — replaces a naked button after a </ul>. */
+.page-close {
+  padding-block: var(--s7);
+}
+.page-close-inner {
+  margin-top: var(--s5);
+}
+.page-close-quiet {
+  color: var(--ink-soft);
+  font-size: 0.94rem;
+}
+
+/* ============================================================
+   ABOUT — the fragments field and the keystone diptych
+   ============================================================ */
+.fragments-field {
+  display: grid;
+  gap: var(--s3);
+}
+.fragment {
+  padding-inline-start: var(--fragment-inset, 0px);
+}
+.fragment-label {
+  display: block;
+  margin-top: 10px;
+  /* --muted on paper is 4.49:1 — under AA at label size. --ink-soft is the
+     quiet token that passes. Do not swap it back. */
+  color: var(--ink-soft);
+}
+
+/* THE KEYSTONE DIPTYCH — the only symmetrical composition on the site.
+   BINDING (Doug): the two founders get identical treatment. One rule governs
+   both columns; there is never a :first-child or :nth-child override here, and
+   neither column may gain a larger name, an earlier reveal, or an image the
+   other lacks. The symmetry IS the argument that there is no hierarchy. */
+.diptych-intro {
+  max-width: 52ch;
+  margin: 0;
+}
+.diptych-divide {
+  margin: var(--s6) 0 var(--s6);
+}
+.diptych-wrap {
+  position: relative;
+}
+.diptych {
+  display: grid;
+  gap: var(--s6);
+}
+@media (min-width: 900px) {
+  .diptych {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s8);
+  }
+  /* Subgrid so both names share a baseline and both bios begin on one, even if
+     a name wraps. Two names on different baselines would break the parity in a
+     way nobody could name but everybody would feel. Without subgrid support
+     this degrades to two equal columns, which is still correct — the bios are
+     held to equal length precisely so it does. */
+  .diptych {
+    grid-template-rows: auto auto 1fr;
+  }
+  .diptych-col {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 3;
+    align-content: start;
+  }
+}
+.diptych-name {
+  margin: 0;
+  color: var(--paper-on-ink);
+}
+.diptych-role {
+  color: var(--teal-lift);
+  margin: var(--s2) 0 var(--s3);
+}
+.diptych-bio {
+  max-width: 46ch;
+  margin: 0;
+  color: var(--paper-on-ink);
+  opacity: 0.78;
+}
+/* Pixel-exact centre rule. Hidden when the columns stack. */
+.diptych-rule {
+  display: none;
+}
+@media (min-width: 900px) {
+  .diptych-rule {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: var(--line-on-ink);
+    transform: translateX(-0.5px);
+  }
+}
+
+/* The keystone — two strokes descending to the mark, closing the converging
+   line at human scale. Resolved is the better image; the draw only lets you
+   watch it happen. */
+.keystone {
+  position: relative;
+  margin-top: var(--s6);
+  height: 96px;
+}
+.keystone-svg {
+  width: 100%;
+  height: 68px;
+  display: block;
+  overflow: visible;
+}
+.keystone-stroke {
+  fill: none;
+  stroke: var(--line-on-ink);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: keystone-draw 0.9s var(--ease-signal) 0.15s forwards;
+}
+@keyframes keystone-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.keystone-mark {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  opacity: 0;
+  animation: keystone-mark-in 0.6s var(--ease-signal) 0.8s forwards;
+}
+@keyframes keystone-mark-in {
+  to {
+    opacity: 1;
+  }
+}
+html.motion-off .keystone-stroke,
+html.motion-off .keystone-mark {
+  animation: none;
+  stroke-dashoffset: 0;
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .keystone-stroke,
+  .keystone-mark {
+    animation: none;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   OUR PROOF — the integrity field (the signature)
+   The page's peak is the sentence that limits our own claim. Do not reduce its
+   scale, do not dim either clause (de-emphasising "came through a grant" would
+   be typographically neat and strategically dishonest), and put nothing else
+   in this field.
+   ============================================================ */
+.integrity {
+  position: relative;
+  overflow: hidden;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-block: var(--s8);
+}
+.integrity-inner {
+  display: grid;
+  gap: var(--s6);
+  align-items: start;
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .integrity-inner {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: var(--s8);
+  }
+}
+.integrity-eyebrow {
+  color: var(--teal-lift);
+  margin: 0 0 var(--s5);
+}
+.integrity-block {
+  position: relative;
+  padding-inline-start: var(--s4);
+}
+.integrity-rule {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--teal-lift);
+  transform-origin: top;
+  animation: integrity-rule-draw 0.9s var(--ease-signal) 0.1s both;
+}
+@keyframes integrity-rule-draw {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+html.motion-off .integrity-rule {
+  animation: none;
+  transform: scaleY(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .integrity-rule {
+    animation: none;
+    transform: scaleY(1);
+  }
+}
+.integrity-line {
+  max-width: 28ch;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  color: var(--paper-on-ink);
+}
+.integrity-support {
+  align-self: end;
+}
+.integrity-support p {
+  max-width: 42ch;
+  margin: 0;
+  color: var(--paper-on-ink);
+  opacity: 0.72;
+}
+
+/* Testimonial — composed now, rendered only when real words arrive. */
+.testimonial-quote {
+  max-width: 22ch;
+  margin: 0;
+  text-indent: -0.42em;
+}
+.testimonial-attrib {
+  margin-top: var(--s4);
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
+.testimonial-attrib::before {
+  content: "";
+  width: 56px;
+  height: 1px;
+  background: var(--line);
 }

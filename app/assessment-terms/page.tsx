@@ -74,13 +74,6 @@ export default function AssessmentTermsPage() {
             </p>
           </div>
 
-          <p className="stub-note t-small">
-            <strong>Build note (not for launch):</strong> this is the plain-language
-            framing only. The enforceable terms — eligibility, geographic scope, the right
-            to decline, and any SLA figures — are Kagiso/Doug&rsquo;s commercial and legal
-            sign-off. No binding term has been invented here, and no SLA figure is stated.
-          </p>
-
           <div className="page-actions">
             <Link href="/assessment" className="btn btn-primary">
               Book a free assessment
