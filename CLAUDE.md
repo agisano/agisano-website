@@ -22,13 +22,40 @@ Agisano's own services will run on a **VPS** (not the homelab k3s cluster). Dock
 | `obsgirls-website/` | Astro | First client school site (case study) |
 | `business/` | Markdown | Business planning docs, relaunch checklist |
 
-## agisano-website stack
-- Next.js 16 App Router, TypeScript, Tailwind CSS v4, Framer Motion
-- Fonts: Sora (headings) + Inter (body)
-- Pure marketing site — no API routes, no backend
-- Pages: `/`, `/about`, `/services`, `/contact`, `/privacy`
-- Custom cursor, scroll animations via `AnimateIn` component
-- Touch: tap-to-reveal service images (`.svc-row.touch-open`)
+## agisano-website stack (v2 rebuild)
+- Next.js 16 App Router, TypeScript, Tailwind CSS v4, `motion` v12, Lenis smooth scroll
+- Static export (`output: "export"`) → GitHub Pages → agisano.com. No API routes, no backend.
+- Fonts, self-hosted woff2: **Fraunces** (display) + **Satoshi** (body). Poppins 600 is the
+  wordmark face ONLY — never running text.
+- Pages: `/`, `/about`, `/under-one-roof`, `/observatory-girls`, `/assessment`,
+  `/assessment-terms`, `/privacy`
+- Motion lives in `components/motion/Reveal.tsx` (`Fade`, `Rise`, `Stagger`,
+  `StatementBuild`); scroll-scrub via `lib/usePinProgress`, capability gating via
+  `lib/useCapability`. `ConvergingLine` is the signature device — the service threads
+  resolve into the Agisano mark.
+
+### Content is data, not markup
+Copy lives in `lib/content.ts`, numbers in `lib/metrics.ts`, credentials in
+`lib/credentials.ts`. Each carries binding rules in its header comment — read them before
+editing. The load-bearing ones:
+- **Never surface a client count.** Proof is duration/continuity/completeness.
+- **`CREDENTIALS` must be currently held and verifiable.** Nothing aspirational.
+- **The OGS internet line is locked wording.** Never paraphrase; never name the provider.
+- **`FOUNDERS` bios are held to equal length and equal treatment** — that parity is the
+  argument. Neo's copy carries no technology-specification language.
+
+### Service lines — six, and they must stay in step
+`UNDER_ONE_ROOF.services` is the site's spine. `HERO.fragments`, `ConvergingLine`'s
+`FRAGMENTS` and the `METRICS` count all key off it — change one, change all four. Each
+line's `includes` catalogue must match the company profile PDF
+(`../brand/collateral/company-profile`); a service sold there and missing here is a
+service the buyer cannot find.
+
+### Lead delivery
+The booking form POSTs to `NEXT_PUBLIC_LEAD_ENDPOINT`. With no endpoint, or on any
+failure, it never fakes success — it hands over pre-composed WhatsApp and mailto paths
+carrying the full lead. `NEXT_PUBLIC_*` values are baked in at build time and must be set
+as **repository variables** for the Pages workflow, not just in `.env.local`.
 
 ## Conventions
 - Client websites use **Astro** (fast, low maintenance, no JS overhead for static school sites)
