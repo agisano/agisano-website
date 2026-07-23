@@ -469,7 +469,7 @@ html.motion-off .build-line > span {
    Shared editorial primitives
    ============================================================ */
 .eyebrow {
-  color: var(--muted);
+  color: var(--ink-soft);
   margin: 0 0 var(--s3);
 }
 .eyebrow.on-ink {
@@ -1236,14 +1236,16 @@ body:has(.page-hero) .nav .wordmark {
 }
 .field label,
 .field legend {
-  color: var(--muted);
+  /* --muted fails AA on paper; these are the primary form labels, where
+     legibility matters most. --ink-soft passes. */
+  color: var(--ink-soft);
   padding: 0;
 }
 .field-opt {
   text-transform: none;
   letter-spacing: 0;
   font-weight: 400;
-  opacity: 0.7;
+  color: var(--ink-soft);
 }
 .field input[type="text"],
 .field input[type="email"],
@@ -1880,7 +1882,7 @@ body:has(.page-hero) .nav .wordmark {
 
 .aside-note {
   margin-top: var(--s4);
-  color: var(--muted);
+  color: var(--ink-soft);
   max-width: var(--measure);
 }
 
@@ -1892,7 +1894,10 @@ body:has(.page-hero) .nav .wordmark {
   align-items: center;
   gap: var(--s2);
   margin-bottom: var(--s5);
-  color: var(--muted);
+  /* --muted (#6a736e) fails AA on paper (4.48:1) and stone (3.89:1) at this
+     label size. --ink-soft is the quiet token that passes on both. On ink the
+     .sindex-ink override below takes over. */
+  color: var(--ink-soft);
 }
 .sindex-n {
   color: var(--teal);
@@ -2257,6 +2262,7 @@ body:has(.page-hero) .nav .wordmark {
 }
 .final-steps-light .final-step p {
   color: var(--ink-soft);
+  opacity: 1;
 }
 .final-steps-light .final-step-n {
   color: var(--teal);
