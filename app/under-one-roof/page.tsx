@@ -4,6 +4,7 @@ import { UNDER_ONE_ROOF, HOW_WE_SELL } from "@/lib/content";
 import { SERVICE_FACTS } from "@/lib/metrics";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/under-one-roof" },
   title: "Under one roof — Agisano",
   description:
     "Internet and WiFi, security, ICT equipment and AV, power resilience, managed IT support, and digital presence — six lines, one accountable partner.",

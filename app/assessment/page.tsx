@@ -4,6 +4,7 @@ import BookingForm from "@/components/BookingForm";
 import { FINAL_CTA } from "@/lib/content";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/assessment" },
   title: "Book a free assessment — Agisano",
   description:
     "A free 60-minute on-site visit and a written proposal within 3 business days. No cost, no obligation, no hard sell.",

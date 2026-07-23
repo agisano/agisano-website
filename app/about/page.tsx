@@ -8,6 +8,7 @@ import SectionIndex from "@/components/SectionIndex";
 import { Fade, Rise, Stagger, StatementBuild } from "@/components/motion/Reveal";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/about" },
   title: "About — Agisano",
   description:
     "Why an institution's technology shouldn't be the principal's problem — and who owns the whole.",

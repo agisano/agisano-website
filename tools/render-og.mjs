@@ -1,0 +1,11 @@
+import { chromium } from 'playwright';
+const SRC = 'http://localhost:4321/og-card.html';
+const b = await chromium.launch();
+const ctx = await b.newContext({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
+const p = await ctx.newPage();
+await p.goto(SRC, { waitUntil: 'networkidle' });
+await p.evaluate(() => document.fonts.ready);
+await p.waitForTimeout(1200);
+await p.screenshot({ path: 'public/og.png' });
+console.log('og.png written');
+await b.close();
