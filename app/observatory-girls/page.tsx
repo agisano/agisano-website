@@ -7,6 +7,7 @@ import SectionIndex from "@/components/SectionIndex";
 import { Fade, Rise, Stagger, StatementBuild } from "@/components/motion/Reveal";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/observatory-girls" },
   title: "Observatory Girls' Primary School — Agisano",
   description:
     "Our reference institution: the technology partner since 2021, end to end, still today.",

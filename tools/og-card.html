@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<style>
+  @font-face {
+    font-family: "Fraunces";
+    font-weight: 100 900;
+    src: url("/fonts/fraunces-var.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Satoshi";
+    font-weight: 500;
+    src: url("/fonts/satoshi-500.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Poppins";
+    font-weight: 600;
+    src: url("/fonts/poppins-600.woff2") format("woff2");
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { width: 1200px; height: 630px; overflow: hidden; }
+
+  .card {
+    position: relative;
+    width: 1200px;
+    height: 630px;
+    padding: 76px 84px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background:
+      radial-gradient(120% 100% at 72% 8%, rgba(63,191,166,0.07), transparent 46%),
+      radial-gradient(140% 120% at 12% 100%, rgba(0,0,0,0.5), transparent 60%),
+      linear-gradient(168deg, #10201d 0%, #0c1a18 52%, #081311 100%);
+    color: #efeee7;
+    overflow: hidden;
+  }
+
+  /* The converging line, resolved — the same device as the site, static. */
+  .lines { position: absolute; inset: 0; z-index: 0; opacity: 1; }
+
+  .top { position: relative; z-index: 1; display: flex; align-items: center; gap: 14px; }
+  .wordmark {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 30px;
+    letter-spacing: -0.01em;
+    text-transform: lowercase;
+  }
+
+  .statement {
+    position: relative;
+    z-index: 1;
+    font-family: "Fraunces", serif;
+    font-weight: 500;
+    font-size: 82px;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    max-width: 17ch;
+  }
+
+  .foot {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    font-family: "Satoshi", sans-serif;
+    font-weight: 500;
+    font-size: 17px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #3fbfa6;
+  }
+  .rule { width: 68px; height: 1px; background: #3fbfa6; opacity: 0.7; }
+  .url { margin-left: auto; color: #efeee7; opacity: 0.62; letter-spacing: 0.1em; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <svg class="lines" viewBox="0 0 1200 630" preserveAspectRatio="none">
+      <g stroke="#3fbfa6" stroke-opacity="0.34" stroke-width="1" fill="none">
+        <path d="M 40 96 L 690 470"/>
+        <path d="M 268 62 L 690 470"/>
+        <path d="M 498 48 L 690 470"/>
+        <path d="M 880 48 L 690 470"/>
+        <path d="M 1096 62 L 690 470"/>
+        <path d="M 1290 96 L 690 470"/>
+      </g>
+    </svg>
+
+    <div class="top">
+      <svg width="34" height="34" viewBox="560 540 570 530" fill="none">
+        <path fill="#ee4a36" d="M 752.476562 570.148438 C 767.027344 563.414062 783.652344 562.738281 798.703125 568.269531 C 813.75 573.796875 825.988281 585.078125 832.71875 599.625 L 996.519531 953.671875 C 1003.25 968.21875 1003.925781 984.847656 998.398438 999.898438 C 992.867188 1014.945312 981.589844 1027.183594 967.039062 1033.914062 C 952.488281 1040.644531 935.859375 1041.320312 920.8125 1035.792969 C 905.761719 1030.265625 893.527344 1018.984375 886.792969 1004.433594 L 722.996094 650.390625 C 716.265625 635.839844 715.589844 619.210938 721.117188 604.164062 C 726.644531 589.113281 737.925781 576.878906 752.476562 570.148438 Z"/>
+        <path fill="#ee4a36" d="M 734.804688 752.234375 C 748.832031 758.015625 759.988281 769.128906 765.824219 783.132812 C 771.65625 797.136719 771.6875 812.886719 765.90625 826.914062 L 691.964844 1006.410156 C 686.1875 1020.4375 675.070312 1031.59375 661.066406 1037.425781 C 647.0625 1043.257812 631.316406 1043.289062 617.289062 1037.511719 C 603.261719 1031.730469 592.105469 1020.617188 586.269531 1006.613281 C 580.4375 992.609375 580.40625 976.859375 586.1875 962.832031 L 660.128906 783.335938 C 665.90625 769.308594 677.023438 758.152344 691.027344 752.320312 C 705.03125 746.488281 720.777344 746.457031 734.804688 752.234375 Z"/>
+        <circle cx="1065.01" cy="981.27" r="55.84" fill="#ffffff"/>
+      </svg>
+      <span class="wordmark">agisano</span>
+    </div>
+
+    <h1 class="statement">One partner for your institution&rsquo;s technology.</h1>
+
+    <div class="foot">
+      <span class="rule"></span>
+      <span>One number to call</span>
+      <span class="url">agisano.com</span>
+    </div>
+  </div>
+</body>
+</html>

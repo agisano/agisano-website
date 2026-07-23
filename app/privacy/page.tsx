@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { CONTACT, WHATSAPP_ENABLED } from "@/lib/content";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/privacy" },
   title: "Privacy & POPIA — Agisano",
   description: "How Agisano handles your information, under South Africa's POPIA.",
 };

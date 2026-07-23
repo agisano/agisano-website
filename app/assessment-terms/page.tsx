@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/assessment-terms" },
   title: "How the free assessment works — Agisano",
   description: "What to expect from the free assessment, and what we ask of you.",
 };
