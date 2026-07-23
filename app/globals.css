@@ -118,6 +118,9 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* The nav is fixed at 72px; without this, any in-page anchor or programmatic
+     scroll lands with the nav sitting on top of the first lines of the target. */
+  scroll-padding-top: 72px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2444,6 +2447,7 @@ html.cinematic .proof-pin {
   }
   .split-proof {
     grid-template-columns: 1.05fr 0.95fr;
+    align-items: center;
   }
   .split-work {
     grid-template-columns: 1.1fr 0.9fr;
@@ -2495,7 +2499,12 @@ html.cinematic .proof-pin {
   }
 }
 .ledger-item {
-  align-self: start;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+}
+.ledger-item hr {
+  margin: 0;
 }
 .ledger-n {
   color: var(--teal);
@@ -2561,19 +2570,13 @@ html.cinematic .proof-pin {
     grid-template-columns: 1fr 1fr;
     gap: var(--s8);
   }
-  /* Subgrid so both names share a baseline and both bios begin on one, even if
-     a name wraps. Two names on different baselines would break the parity in a
-     way nobody could name but everybody would feel. Without subgrid support
-     this degrades to two equal columns, which is still correct — the bios are
-     held to equal length precisely so it does. */
+  /* Both columns start at the same top edge and their type is identical, so the
+     name and role baselines already align without a subgrid. Subgrid was worse
+     than useless here: it sized each row to the TALLEST column, which opened a
+     void under both names and stranded the bios at the bottom of the section.
+     Parity comes from identical treatment, not from stretched tracks. */
   .diptych {
-    grid-template-rows: auto auto 1fr;
-  }
-  .diptych-col {
-    display: grid;
-    grid-template-rows: subgrid;
-    grid-row: span 3;
-    align-content: start;
+    align-items: start;
   }
 }
 .diptych-name {
@@ -2582,7 +2585,8 @@ html.cinematic .proof-pin {
 }
 .diptych-role {
   color: var(--teal-lift);
-  margin: var(--s2) 0 var(--s3);
+  margin: var(--s2) 0 var(--s4);
+  align-self: start;
 }
 .diptych-bio {
   max-width: 46ch;
@@ -2626,13 +2630,17 @@ html.cinematic .proof-pin {
   stroke: var(--line-on-ink);
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
+}
+/* Wipe the whole SVG in from the top rather than dashing each path: with a
+   stretched viewBox (preserveAspectRatio: none) a dash pattern is computed in
+   distorted user units and the line renders as scattered fragments. */
+.keystone-svg {
+  clip-path: inset(0 0 100% 0);
   animation: keystone-draw 0.9s var(--ease-signal) 0.15s forwards;
 }
 @keyframes keystone-draw {
   to {
-    stroke-dashoffset: 0;
+    clip-path: inset(0 0 0 0);
   }
 }
 .keystone-mark {
@@ -2648,17 +2656,17 @@ html.cinematic .proof-pin {
     opacity: 1;
   }
 }
-html.motion-off .keystone-stroke,
+html.motion-off .keystone-svg,
 html.motion-off .keystone-mark {
   animation: none;
-  stroke-dashoffset: 0;
+  clip-path: none;
   opacity: 1;
 }
 @media (prefers-reduced-motion: reduce) {
-  .keystone-stroke,
+  .keystone-svg,
   .keystone-mark {
     animation: none;
-    stroke-dashoffset: 0;
+    clip-path: none;
     opacity: 1;
   }
 }

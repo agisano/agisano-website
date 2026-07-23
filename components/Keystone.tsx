@@ -21,8 +21,8 @@ export default function Keystone() {
         preserveAspectRatio="none"
         role="presentation"
       >
-        <path className="keystone-stroke" pathLength={1} d="M 0 0 L 50 30" />
-        <path className="keystone-stroke" pathLength={1} d="M 100 0 L 50 30" />
+        <path className="keystone-stroke" d="M 0 0 L 50 30" />
+        <path className="keystone-stroke" d="M 100 0 L 50 30" />
       </svg>
       <span className="keystone-mark">
         <Mark size={28} dot="#ffffff" />
