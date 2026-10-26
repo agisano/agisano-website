@@ -183,8 +183,10 @@ img {
   font-family: var(--font-display);
   font-weight: 500;
   /* Tuned so the longest approved clause sets on ONE line at content width.
-     A larger vw factor overflows the viewport and clips the statement. */
-  font-size: clamp(2.55rem, 7.1vw, 8.6rem);
+     A larger vw factor overflows the viewport and clips the statement. Mobile
+     floor lowered (2.55→2.05) so clauses stop orphaning a single word on a line
+     at 360–390px. */
+  font-size: clamp(2.05rem, 7.1vw, 8.6rem);
   line-height: 0.98;
   letter-spacing: -0.032em;
   font-optical-sizing: auto;
@@ -259,7 +261,9 @@ img {
 }
 
 .section {
-  padding-block: clamp(72px, 12vh, 176px);
+  /* Mobile floor lowered (72→48) to cut the ~17-screen scroll; the desktop
+     cap (176px) is unchanged, so the generous rhythm on large screens holds. */
+  padding-block: clamp(48px, 8vh, 176px);
   position: relative;
 }
 
@@ -799,16 +803,6 @@ body:has(.page-hero) .nav .wordmark {
   color: var(--muted);
   margin: 0;
   font-variant-numeric: tabular-nums;
-}
-.rc[data-stage="idle"] .rc-progress {
-  opacity: 0;
-}
-
-.rc-idle {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--s3);
 }
 .rc-note {
   color: var(--muted);
@@ -1425,23 +1419,13 @@ body:has(.page-hero) .nav .wordmark {
 /* ============================================================
    S3 — One-partner beat
    ============================================================ */
-.one-partner-grid {
-  display: grid;
-  gap: var(--s6);
-  align-items: center;
+.one-partner-headline {
+  margin: 0 0 var(--s4);
+  max-width: 24ch;
 }
-.one-partner-copy h2 {
-  margin: 0 0 var(--s3);
-}
-.one-partner-copy p {
+.one-partner-body {
   margin: 0;
   color: var(--ink-soft);
-}
-@media (min-width: 900px) {
-  .one-partner-grid {
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
-    gap: var(--s8);
-  }
 }
 
 /* ============================================================
@@ -1492,7 +1476,15 @@ body:has(.page-hero) .nav .wordmark {
 }
 .roof-cards {
   display: grid;
-  gap: var(--s5);
+  gap: var(--s4);
+}
+/* On phones the six stacked cards are the single biggest length driver. Hide the
+   per-card fact chips below 640px (number + title + description stay); the full
+   catalogue lives on /under-one-roof, where the "six fit together" link sends. */
+@media (max-width: 639px) {
+  .roof-facts {
+    display: none;
+  }
 }
 @media (min-width: 640px) {
   .roof-cards {
@@ -1622,23 +1614,20 @@ body:has(.page-hero) .nav .wordmark {
 }
 .constraints-head h2 {
   margin: 0 0 var(--s3);
+  max-width: 18ch;
 }
 .constraints-head p {
   margin: 0;
   color: var(--ink-soft);
 }
+/* Single column: the four constraints stack in the right field of the two-up,
+   so the section reads as a list beside a thesis — distinct from the grids. */
 .constraints-list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: grid;
   gap: var(--s5);
-}
-@media (min-width: 780px) {
-  .constraints-list {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--s5) var(--s7);
-  }
 }
 .constraint hr {
   margin-bottom: var(--s3);
@@ -2112,17 +2101,21 @@ body:has(.page-hero) .nav .wordmark {
 /* ============================================================
    06 — Credentials ("cleared to work with government")
    ============================================================ */
+/* Credentials now sits on STONE (not ink) — it breaks the three-ink-section
+   wall (04-05-06) and reads as calm, factual due-diligence rather than drama.
+   All on-ink tokens below are flipped to their light-ground equivalents; the
+   big serif names and B-BBEE "Level 1" still carry in ink/teal. --teal (not
+   --teal-lift) and --ink-soft (not --muted) are the pair that pass AA on stone. */
 .creds-head {
   margin-bottom: var(--s6);
 }
 .creds-head h2 {
   margin: 0 0 var(--s4);
-  max-width: 16ch;
+  max-width: 20ch;
 }
 .creds-lead {
   margin: 0;
-  color: var(--paper-on-ink);
-  opacity: 0.72;
+  color: var(--ink-soft);
   max-width: 60ch;
 }
 .creds-questions {
@@ -2130,7 +2123,7 @@ body:has(.page-hero) .nav .wordmark {
   gap: var(--s5);
   margin-bottom: var(--s7);
   padding-bottom: var(--s6);
-  border-bottom: 1px solid var(--line-on-ink);
+  border-bottom: 1px solid var(--line);
 }
 @media (min-width: 880px) {
   .creds-questions {
@@ -2140,16 +2133,15 @@ body:has(.page-hero) .nav .wordmark {
 }
 .creds-q-label {
   margin: 0 0 var(--s2);
-  color: var(--teal-lift);
+  color: var(--teal);
 }
 .creds-q-body {
   margin: 0;
-  color: var(--paper-on-ink);
-  opacity: 0.75;
+  color: var(--ink-soft);
   max-width: 44ch;
 }
 
-/* The hero credential — B-BBEE Level 1, monumental */
+/* The hero credential — B-BBEE Level 1, monumental (on stone) */
 .cred-hero {
   display: grid;
   gap: var(--s4);
@@ -2168,7 +2160,7 @@ body:has(.page-hero) .nav .wordmark {
   gap: var(--s2);
 }
 .cred-hero-name {
-  color: var(--teal-lift);
+  color: var(--teal);
 }
 .cred-hero-level {
   font-family: var(--font-display);
@@ -2176,12 +2168,11 @@ body:has(.page-hero) .nav .wordmark {
   font-size: clamp(3.4rem, 8.5vw, 8rem);
   line-height: 0.94;
   letter-spacing: -0.03em;
-  color: var(--paper-on-ink);
+  color: var(--ink);
 }
 .cred-hero-plain {
   margin: 0;
-  color: var(--paper-on-ink);
-  opacity: 0.78;
+  color: var(--ink-soft);
   max-width: 48ch;
   padding-bottom: 0.4em;
 }
@@ -2213,22 +2204,19 @@ body:has(.page-hero) .nav .wordmark {
 }
 .cred-row-name {
   margin: 0;
-  color: var(--paper-on-ink);
+  color: var(--ink);
 }
 .cred-row-status {
-  color: var(--teal-lift);
-  opacity: 0.9;
+  color: var(--teal);
 }
 .cred-row-plain {
   margin: 0;
-  color: var(--paper-on-ink);
-  opacity: 0.7;
+  color: var(--ink-soft);
   max-width: 62ch;
 }
 .creds-note {
   margin: var(--s6) 0 0;
-  color: var(--paper-on-ink);
-  opacity: 0.5;
+  color: var(--ink-soft);
   max-width: 60ch;
 }
 
@@ -2457,6 +2445,16 @@ html.cinematic .proof-pin {
   }
   .split-work {
     grid-template-columns: 1.1fr 0.9fr;
+  }
+  /* Check: copy left, the live question-card right (weighted to the panel so
+     the question legend has room). */
+  .check-split {
+    grid-template-columns: 0.85fr 1.15fr;
+    align-items: start;
+  }
+  /* Constraints: thesis left, the numbered list fills the right field. */
+  .constraints-split {
+    grid-template-columns: 0.95fr 1.05fr;
   }
 }
 .split-main > * + * {

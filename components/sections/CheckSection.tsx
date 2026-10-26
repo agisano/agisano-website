@@ -10,16 +10,17 @@ export default function CheckSection() {
   return (
     <section id="readiness-check" className="section field-stone check-section">
       <div className="shell">
-        <SectionIndex n="02" label="The 90-second check" />
+        <div className="split check-split">
+          <Fade className="check-head split-main">
+            <SectionIndex label="The 90-second check" />
+            <h2 className="t-h2 balance">{CHECK_INVITE.headline}</h2>
+            <p className="t-lead pretty measure">{CHECK_INVITE.body}</p>
+          </Fade>
 
-        <Fade className="check-head">
-          <h2 className="t-display balance">{CHECK_INVITE.headline}</h2>
-          <p className="t-lead pretty measure">{CHECK_INVITE.body}</p>
-        </Fade>
-
-        <Fade className="check-panel" delay={0.1} amount={0.1}>
-          <ReadinessCheck />
-        </Fade>
+          <Fade className="check-panel split-field" delay={0.1} amount={0.1}>
+            <ReadinessCheck />
+          </Fade>
+        </div>
       </div>
     </section>
   );

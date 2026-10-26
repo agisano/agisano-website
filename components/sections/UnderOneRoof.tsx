@@ -71,7 +71,7 @@ export default function UnderOneRoof() {
 
           <Fade className="roof-more" delay={0.1}>
             <Link href="/under-one-roof" className="btn btn-quiet on-ink">
-              How the four fit together
+              How the six fit together
               <span aria-hidden="true">→</span>
             </Link>
           </Fade>

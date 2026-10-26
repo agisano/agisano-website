@@ -1,7 +1,7 @@
 "use client";
 
 import { CREDENTIALS, CREDENTIALS_COPY } from "@/lib/credentials";
-import { Stagger, Rise, StatementBuild, Fade } from "@/components/motion/Reveal";
+import { Stagger, Rise, Fade } from "@/components/motion/Reveal";
 import SectionIndex from "@/components/SectionIndex";
 
 /**
@@ -25,14 +25,12 @@ export default function Credentials() {
   const rest = CREDENTIALS.filter((c) => !c.hero);
 
   return (
-    <section className="section field-ink ink-graded creds" id="credentials">
+    <section className="section field-stone creds" id="credentials">
       <div className="shell">
-        <SectionIndex n={CREDENTIALS_COPY.index} label={CREDENTIALS_COPY.eyebrow} onInk />
+        <SectionIndex label={CREDENTIALS_COPY.eyebrow} />
 
         <div className="creds-head">
-          <h2 className="t-display balance">
-            <StatementBuild lines={[CREDENTIALS_COPY.headline]} />
-          </h2>
+          <h2 className="t-h2 balance">{CREDENTIALS_COPY.headline}</h2>
           <Fade delay={0.18}>
             <p className="t-lead pretty measure creds-lead">{CREDENTIALS_COPY.lead}</p>
           </Fade>
@@ -63,7 +61,7 @@ export default function Credentials() {
         <Stagger className="cred-rows" gap={0.07} amount={0.15}>
           {rest.map((c) => (
             <Rise key={c.id} className="cred-row" as="div">
-              <hr className="hairline hairline-ink" />
+              <hr className="hairline" />
               <div className="cred-row-inner">
                 <div className="cred-row-id">
                   <h3 className="t-h2 cred-row-name">{c.name}</h3>

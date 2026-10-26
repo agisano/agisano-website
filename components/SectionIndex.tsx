@@ -1,20 +1,23 @@
 /**
- * Numbered chapter marker (the andrewcunliffe device, in Agisano's language).
- * Lives in the active right/left field with a hairline — the editorial
- * asymmetry the art direction asks for. Purely structural, never decorative.
+ * Chapter eyebrow — a hairline rule and the section label.
+ *
+ * The running section NUMBER was dropped deliberately: a numbered "NN — LABEL"
+ * marker on every section was the single most repetitive element on the page
+ * (and had drifted out of sequence). The quiet rule + teal label still give the
+ * editorial asymmetry; real counts that count something stay on the items that
+ * carry them (service cards, constraints, steps). `n` is accepted and ignored
+ * so callers need not change.
  */
 export default function SectionIndex({
-  n,
   label,
   onInk = false,
 }: {
-  n: string;
+  n?: string;
   label: string;
   onInk?: boolean;
 }) {
   return (
     <div className={`sindex ${onInk ? "sindex-ink" : ""}`}>
-      <span className="t-label sindex-n">{n}</span>
       <span className="sindex-rule" aria-hidden="true" />
       <span className="t-label sindex-label">{label}</span>
     </div>

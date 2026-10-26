@@ -54,10 +54,9 @@ export const CHECK_INVITE = {
 };
 
 /**
- * The six service lines. This list is the site's spine — the hero fragments,
- * the converging line's threads and the metrics grid all count off it, so
- * adding or removing a line means updating HERO.fragments, ConvergingLine's
- * FRAGMENTS and METRICS together.
+ * The six service lines. This list is the site's spine — the hero fragments
+ * and the converging line's threads both count off it, so adding or removing a
+ * line means updating HERO.fragments and ConvergingLine's FRAGMENTS together.
  *
  * `includes` is the full catalogue and must stay in step with the company
  * profile PDF (brand/collateral/company-profile). A service we sell in the

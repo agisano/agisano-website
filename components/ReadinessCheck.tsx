@@ -12,10 +12,13 @@ import {
 import BookingForm from "./BookingForm";
 import Mark from "./Mark";
 
-type Stage = "idle" | "asking" | "settling" | "readout" | "booking";
+type Stage = "asking" | "settling" | "readout" | "booking";
 
 export default function ReadinessCheck() {
-  const [stage, setStage] = useState<Stage>("idle");
+  // Starts in "asking" at Q1: the resting panel IS the first question, not a
+  // "Start" button over an empty box. The first tap is the start. No autofocus
+  // on mount (that would scroll the page to the check on load).
+  const [stage, setStage] = useState<Stage>("asking");
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [readout, setReadout] = useState<Readout | null>(null);
@@ -37,18 +40,6 @@ export default function ReadinessCheck() {
     },
     []
   );
-
-  const start = useCallback(() => {
-    setStage("asking");
-    setIndex(0);
-    setAnswers({});
-    setReadout(null);
-    setDir("fwd");
-    requestAnimationFrame(() => {
-      panelRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
-      questionRef.current?.focus();
-    });
-  }, []);
 
   const finish = useCallback((final: Record<string, number>) => {
     setStage("settling");
@@ -76,10 +67,7 @@ export default function ReadinessCheck() {
   );
 
   const back = useCallback(() => {
-    if (index === 0) {
-      setStage("idle");
-      return;
-    }
+    if (index === 0) return; // Q1 is the start — nothing to go back to
     setDir("back");
     setIndex((i) => i - 1);
     requestAnimationFrame(() => questionRef.current?.focus());
@@ -103,7 +91,7 @@ export default function ReadinessCheck() {
   return (
     <div className="rc" ref={panelRef} data-stage={stage}>
       {/* Progress — the converging line filling toward its apex */}
-      <div className="rc-progress" aria-hidden={stage === "idle"}>
+      <div className="rc-progress">
         <div className="rc-progress-track">
           <div
             className="rc-progress-fill"
@@ -130,19 +118,6 @@ export default function ReadinessCheck() {
               : ""}
       </p>
 
-      {stage === "idle" && (
-        <div className="rc-idle">
-          <button type="button" className="btn btn-primary" onClick={start}>
-            Start the check
-            <span aria-hidden="true">→</span>
-          </button>
-          <p className="t-small rc-note">
-            About 90 seconds. Seven questions, all taps. Nothing is sent anywhere until
-            you choose to send it.
-          </p>
-        </div>
-      )}
-
       {stage === "asking" && (
         <div
           className="rc-stage"
@@ -152,7 +127,7 @@ export default function ReadinessCheck() {
           tabIndex={-1}
         >
           <fieldset className="rc-fieldset">
-            <legend className="rc-question t-h1 balance">{q.text}</legend>
+            <legend className="rc-question t-h2 balance">{q.text}</legend>
             <div className="rc-options">
               {q.options.map((opt, i) => {
                 const id = `${q.id}-${i}`;
@@ -179,10 +154,16 @@ export default function ReadinessCheck() {
           </fieldset>
 
           <div className="rc-controls">
-            <button type="button" className="rc-back link-draw" onClick={back}>
-              <span aria-hidden="true">←</span>{" "}
-              {index === 0 ? "Leave the check" : "Back"}
-            </button>
+            {index === 0 ? (
+              <p className="t-small rc-note rc-reassure">
+                About 90 seconds. Seven questions, all taps. Nothing is sent anywhere
+                until you choose to send it.
+              </p>
+            ) : (
+              <button type="button" className="rc-back link-draw" onClick={back}>
+                <span aria-hidden="true">←</span> Back
+              </button>
+            )}
           </div>
         </div>
       )}
