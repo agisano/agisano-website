@@ -1,55 +1,19 @@
 /**
- * The metrics grid (Tresmares' "About + stat grid" beat, honestly filled).
+ * Proof anchors and per-service facts — the honest, concrete numbers.
+ *
+ * (The homepage metrics grid that used to live here was removed in the density
+ * pass: every value in it — 2021, 4+ years, six lines, one business day — was
+ * restated downstream with more context, so it only manufactured repetition.)
  *
  * ==========================================================================
  * BINDING (build-spec §4.9 / platform §4.6):
  *  - NEVER surface a COUNT that exposes limited scale. No client count, no
  *    "1 school", no institutions-served number. Ever.
- *  - NO INVENTED NUMBERS. Armory's reference stats (0ms, 99.99% uptime) are
- *    fabricated; ours are not. Every value below is either a fact from the
- *    ratified platform or a commitment Agisano actually makes and keeps.
+ *  - NO INVENTED NUMBERS. Every value here is either a fact from the ratified
+ *    platform or a commitment Agisano actually makes and keeps.
  *  - If we do not have a real number for something, it does not go here.
  * ==========================================================================
- *
- * What each value traces to:
- *  4+ / Since 2021  → platform §4.6 track record (OGS, still current)
- *  End to end / 6   → platform §4.6 scope-of-services (all six lines live)
- *  1 / 60 / 3       → the assessment commitments in the approved S7 copy
  */
-
-export type Metric = {
-  value: string;
-  unit?: string;
-  label: string;
-  /** Where the claim comes from — kept in code so it can't drift. */
-  source: string;
-};
-
-export const METRICS: Metric[] = [
-  {
-    value: "2021",
-    label: "Partnering our reference institution — and still today.",
-    source: "platform §4.6 — track record",
-  },
-  {
-    value: "4",
-    unit: "+ years",
-    label: "A relationship that stayed, not a one-off job.",
-    source: "platform §4.6 — duration, still current",
-  },
-  {
-    value: "6",
-    unit: "service lines",
-    label: "Connectivity, security, equipment, power, support, presence — one partner.",
-    source: "platform §4.6 — scope confirmed live",
-  },
-  {
-    value: "1",
-    unit: "business day",
-    label: "To reply to you. From a person, not an auto-responder.",
-    source: "approved S7 copy — commitment",
-  },
-];
 
 /** The scrubbed proof anchors on the OGS section — duration/continuity/completeness. */
 export const PROOF_ANCHORS = [
