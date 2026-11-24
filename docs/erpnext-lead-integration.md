@@ -1,5 +1,39 @@
 # Booking form → ERPNext Lead (Route A)
 
+## Status — 24 Nov 2026
+
+Done, on the ERPNext instance at `10.2.59.11:8080` (internal network only):
+
+- [x] Lead custom fields: `custom_enquiry_type` (Select: Assessment / Media Quote / General) and `custom_enquiry_detail` (Long Text)
+- [x] Lead Source `Website`
+- [x] Web Form `website-lead` (guest, published). Fields: `first_name`, `company_name`, `email_id`, `mobile_no`, `source`, `custom_enquiry_type`, `custom_enquiry_detail`. Note: a Web Form field cannot be typed Long Text, so the detail field is declared as `Text` on the form; it still writes the Long Text field.
+- [x] Guest submission verified: creates the Lead; undeclared fields (`status`, `lead_owner`, …) are dropped server-side
+- [x] Notification `New website enquiry`: email to kagiso@agisano.com plus an in-app alert on every guest-created Lead. Verified sent.
+- [x] `lib/lead.ts` sends the Frappe envelope; `/media` quote form uses the same path
+
+Still to do:
+
+- [ ] **Make the endpoint reachable from the internet** (`erp.agisano.com` does not resolve yet). Expose only the accept path, not the whole desk; see "Exposure" below.
+- [ ] Step 4: `allow_cors` for `https://agisano.com` and `https://www.agisano.com`
+- [ ] Step 6: set the `NEXT_PUBLIC_LEAD_ENDPOINT` repository variable and redeploy
+- [ ] Step 7: live test from agisano.com
+
+### Exposure
+
+ERPNext currently sits on an internal address. The safest shape is a tunnel
+(e.g. Cloudflare Tunnel) or a reverse proxy rule that publishes a single path:
+
+```
+POST /api/method/frappe.website.doctype.web_form.web_form.accept   → allowed
+OPTIONS (CORS preflight) on the same path                            → allowed
+everything else                                                       → 403
+```
+
+plus a rate limit on that path. The desk, the REST API and `/website-lead`
+stay unreachable from outside.
+
+---
+
 A submission on agisano.com creates a Lead in ERPNext (`erp.agisano.com`).
 
 **The site's form does not change.** `BookingForm.tsx` keeps its design, its
