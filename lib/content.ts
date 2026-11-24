@@ -305,14 +305,15 @@ export const FINAL_CTA = {
 };
 
 /**
- * Media — photography, video and headshots. A separate offer from the six
+ * Media — event photography and video. A separate offer from the six
  * service lines: it is NOT a seventh line, so it never feeds HERO.fragments,
  * ConvergingLine or METRICS.
  *
  * BINDING:
- *  - Prices mirror the ERPNext "Standard Selling" price list (item codes in
- *    `code`). Change a price there and here together — a quote that disagrees
- *    with the published rate card is a broken promise.
+ *  - No prices on the site. Prices live only in the ERPNext "Standard Selling"
+ *    price list and reach the client in a written quote. `code` maps each
+ *    package to its ERPNext item; it is never displayed.
+ *  - Headshots are not offered on the site.
  *  - The media side is new. No portfolio claims, no client counts, no
  *    "years of experience" for media. Say what the client gets, not what we've done.
  */
@@ -320,49 +321,38 @@ export const MEDIA = {
   eyebrow: "Media",
   entryClauses: ["Your institution,", "photographed and filmed", "properly."],
   lead:
-    "Event photography, video and staff headshots — booked at a fixed price, delivered on a fixed date, by the team that already answers for your technology.",
-  footLabel: "Fixed prices, published",
-  ratesHeadline: "The rate card.",
+    "Event photography and video — quoted at a fixed price, delivered on a fixed date, by the team that already answers for your technology.",
+  footLabel: "What you can book",
+  ratesHeadline: "What you can book.",
   ratesLead:
-    "What you see is what you pay. Every package is a fixed price for a fixed amount of time — no hourly meter running while we work.",
+    "Every package is a fixed amount of time at a fixed price, quoted in writing before you commit — no hourly meter running while we work.",
   groups: [
     {
       key: "photo",
       title: "Event photography",
       note: "Edited, high-resolution images delivered online within 5 working days.",
       items: [
-        { code: "MED-PHOTO-2H", name: "Short", detail: "Up to 2 hours", price: 3500 },
-        { code: "MED-PHOTO-HALF", name: "Half day", detail: "Up to 4 hours", price: 6000 },
-        { code: "MED-PHOTO-FULL", name: "Full day", detail: "Up to 8 hours", price: 11000 },
-        { code: "MED-PHOTO-XHR", name: "Extra hour", detail: "Beyond the booked package", price: 1200, unit: "per hour" },
+        { code: "MED-PHOTO-2H", name: "Short", detail: "Up to 2 hours" },
+        { code: "MED-PHOTO-HALF", name: "Half day", detail: "Up to 4 hours" },
+        { code: "MED-PHOTO-FULL", name: "Full day", detail: "Up to 8 hours" },
       ],
     },
     {
       key: "video",
       title: "Video",
-      note: "Filming and editing are priced separately, so you only pay for what you need.",
+      note: "Filming and editing are quoted separately, so you only pay for what you need.",
       items: [
-        { code: "MED-VIDEO-HALF", name: "Filming, half day", detail: "Up to 4 hours", price: 8500 },
-        { code: "MED-VIDEO-FULL", name: "Filming, full day", detail: "Up to 8 hours", price: 15000 },
-        { code: "MED-EDIT-HIGHLIGHT", name: "Highlight video", detail: "1 to 3 minutes, edited", price: 4500 },
-        { code: "MED-EDIT-SOCIAL", name: "Social media clip", detail: "Up to 60 seconds, edited", price: 1500, unit: "each" },
-        { code: "MED-EDIT-HR", name: "Editing", detail: "Your footage or ours", price: 650, unit: "per hour" },
-      ],
-    },
-    {
-      key: "headshots",
-      title: "Staff headshots",
-      note: "On site, at your premises. Retouched final images for every person.",
-      items: [
-        { code: "MED-HEADSHOTS", name: "Headshot session", detail: "Up to 5 people", price: 2500 },
-        { code: "MED-HEADSHOT-XP", name: "Each extra person", detail: "Beyond the first 5", price: 350, unit: "each" },
+        { code: "MED-VIDEO-HALF", name: "Filming, half day", detail: "Up to 4 hours" },
+        { code: "MED-VIDEO-FULL", name: "Filming, full day", detail: "Up to 8 hours" },
+        { code: "MED-EDIT-HIGHLIGHT", name: "Highlight video", detail: "1 to 3 minutes, edited" },
+        { code: "MED-EDIT-SOCIAL", name: "Social media clips", detail: "Up to 60 seconds each, edited" },
+        { code: "MED-EDIT-HR", name: "Editing", detail: "Your footage or ours" },
       ],
     },
   ],
-  travelNote: "Within 30 km at no charge. Beyond that, travel is R6 per km.",
   steps: [
     { n: "01", title: "Tell us the date", body: "What it is, where it is, and what you need from it." },
-    { n: "02", title: "A fixed quote within 1 business day", body: "From the rate card above — written, itemised, nothing added later." },
+    { n: "02", title: "A fixed quote within 1 business day", body: "Written and itemised, travel included, so you know the full cost before you commit. Nothing added later." },
     { n: "03", title: "We plan it with you", body: "The moments that matter, the people to capture, where we should and shouldn't be." },
     { n: "04", title: "Delivered on the date we gave you", body: "Photographs within 5 working days. Video on the date in your quote." },
   ],

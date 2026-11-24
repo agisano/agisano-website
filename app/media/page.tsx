@@ -6,22 +6,18 @@ import { Fade, Rise, Stagger, StatementBuild } from "@/components/motion/Reveal"
 
 export const metadata: Metadata = {
   alternates: { canonical: "/media" },
-  title: "Media — photography, video and headshots — Agisano",
+  title: "Media — event photography and video — Agisano",
   description:
-    "Event photography, video and staff headshots in Gauteng, at fixed published prices. Request a quote and get a fixed price within one business day.",
+    "Event photography and video in Gauteng. Tell us about the day and get a fixed, written quote within one business day.",
 };
-
-// Comma grouping, not en-ZA's narrow space: the subset display font has no
-// U+202F glyph, so the space collapses and "R11000" reads as one number.
-const rand = (n: number) => `R${n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
 
 /**
  * Media — four chapters over three grounds (ink → paper → stone → paper).
  *
- * The signature here is the RATE CARD: prices set at display scale in the
- * serif, on hairlines, like a printed tariff. Publishing them is the argument
- * — the rest of the site says "honest, in writing", and this page proves it
- * with numbers. Stays a server component; the form is the only client island.
+ * Chapter 02 lists what can be booked, set on hairlines like a printed
+ * catalogue. No prices: they reach the client in a written quote (see the
+ * MEDIA header in lib/content.ts). Stays a server component; the form is
+ * the only client island.
  */
 export default function MediaPage() {
   return (
@@ -38,16 +34,16 @@ export default function MediaPage() {
           </Fade>
           <Fade delay={0.8}>
             <p className="page-hero-foot">
-              <a href="#rates" className="t-label media-jump">{MEDIA.footLabel}</a>
+              <a href="#book" className="t-label media-jump">{MEDIA.footLabel}</a>
             </p>
           </Fade>
         </div>
       </section>
 
-      {/* 02 — The rate card */}
-      <section className="section field-paper" id="rates">
+      {/* 02 — What you can book */}
+      <section className="section field-paper" id="book">
         <div className="shell">
-          <SectionIndex n="02" label="Rates" />
+          <SectionIndex n="02" label="What you can book" />
           <div className="page-head media-rates-head">
             <h2 className="t-h1 balance">{MEDIA.ratesHeadline}</h2>
             <p className="t-lead pretty">{MEDIA.ratesLead}</p>
@@ -63,22 +59,14 @@ export default function MediaPage() {
                 <Stagger as="ul" className="rate-list" gap={0.06} amount={0.15}>
                   {g.items.map((i) => (
                     <Rise key={i.code} as="li" className="rate-row">
-                      <span className="rate-name">
-                        <span className="rate-title">{i.name}</span>
-                        <span className="rate-detail">{i.detail}</span>
-                      </span>
-                      <span className="rate-price">
-                        {rand(i.price)}
-                        {"unit" in i && i.unit && <span className="rate-unit">{i.unit}</span>}
-                      </span>
+                      <span className="rate-title">{i.name}</span>
+                      <span className="rate-detail">{i.detail}</span>
                     </Rise>
                   ))}
                 </Stagger>
               </section>
             ))}
           </div>
-
-          <p className="t-small rate-foot">{MEDIA.travelNote}</p>
         </div>
       </section>
 
@@ -109,9 +97,9 @@ export default function MediaPage() {
               <h2 className="t-label eyebrow">Good to know</h2>
               <ul className="roof-includes">
                 <li>Every package is a fixed price for a fixed amount of time.</li>
+                <li>Your quote is written and itemised, travel included.</li>
                 <li>Photographs arrive edited, within 5 working days.</li>
                 <li>Filming and editing are separate, so you choose how much you need.</li>
-                <li>{MEDIA.travelNote}</li>
               </ul>
             </aside>
           </div>

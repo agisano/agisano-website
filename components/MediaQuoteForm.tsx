@@ -20,11 +20,7 @@ type State =
   | { kind: "error"; lead: Lead; detail: string };
 
 const SERVICE_OPTIONS = [
-  ...MEDIA.groups.flatMap((g) =>
-    g.items
-      .filter((i) => !("unit" in i && i.unit === "per hour"))
-      .map((i) => `${g.title}: ${i.name}`)
-  ),
+  ...MEDIA.groups.flatMap((g) => g.items.map((i) => `${g.title}: ${i.name}`)),
   "Not sure yet: help me choose",
 ];
 
