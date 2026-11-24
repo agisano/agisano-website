@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: base, lastModified: now, changeFrequency: "monthly", priority: 1 },
     { url: `${base}/assessment`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${base}/under-one-roof`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${base}/media`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/observatory-girls`, lastModified: now, changeFrequency: "monthly", priority: 0.8 },
     { url: `${base}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/assessment-terms`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },

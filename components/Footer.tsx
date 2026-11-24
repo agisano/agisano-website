@@ -29,6 +29,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/media" className="link-draw">
+                  Media
+                </Link>
+              </li>
+              <li>
                 <Link href="/observatory-girls" className="link-draw">
                   Observatory Girls&rsquo;
                 </Link>
