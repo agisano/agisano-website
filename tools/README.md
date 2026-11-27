@@ -29,3 +29,9 @@ Poppins for the wordmark, the ink gradient from `.ink-graded`, and the
 converging line resolved into the mark. It should look like the site it links
 to. If the homepage statement or the brand colours change, change this too —
 nothing enforces that automatically.
+
+## Project case studies
+
+`project-images.mjs` prepares a project's photographs and `render-project.mjs`
+exports its A4 case study PDF and its A4 project sheet (PDF and JPEG). Usage and the full
+workflow are in `docs/projects.md`.

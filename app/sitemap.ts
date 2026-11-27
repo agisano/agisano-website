@@ -1,4 +1,5 @@
 import { MetadataRoute } from "next";
+import { PROJECTS } from "@/lib/projects";
 
 export const dynamic = "force-static";
 
@@ -15,5 +16,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${base}/assessment-terms`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${base}/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    // Drafts are built but never listed: they still carry placeholders.
+    ...PROJECTS.filter((p) => p.status === "published").map((p) => ({
+      url: `${base}/projects/${p.slug}`,
+      lastModified: now,
+      changeFrequency: "yearly" as const,
+      priority: 0.6,
+    })),
   ];
 }

@@ -1,0 +1,34 @@
+{
+  "engen-22.jpg": {
+    "w": 1600,
+    "h": 1067,
+    "sizes": {
+      "1200": "/projects/engen/engen-22-1200.jpg",
+      "1600": "/projects/engen/engen-22-2400.jpg"
+    }
+  },
+  "engen-55.jpg": {
+    "w": 1600,
+    "h": 1067,
+    "sizes": {
+      "1200": "/projects/engen/engen-55-1200.jpg",
+      "1600": "/projects/engen/engen-55-2400.jpg"
+    }
+  },
+  "engen-68.jpg": {
+    "w": 1600,
+    "h": 1067,
+    "sizes": {
+      "1200": "/projects/engen/engen-68-1200.jpg",
+      "1600": "/projects/engen/engen-68-2400.jpg"
+    }
+  },
+  "engen-95.jpg": {
+    "w": 1600,
+    "h": 900,
+    "sizes": {
+      "1200": "/projects/engen/engen-95-1200.jpg",
+      "1600": "/projects/engen/engen-95-2400.jpg"
+    }
+  }
+}

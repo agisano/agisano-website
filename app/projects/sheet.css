@@ -1,0 +1,536 @@
+/* ============================================================
+   Project print documents — A4 case study (/sheet) and A4 project sheet (/project-sheet)
+   Geometry mirrors lib/projects/sheet.ts (A4, M, CONTENT). Change both together.
+   ============================================================ */
+
+/* Named page: scoped to these documents, so it never changes how any other
+   page of the site prints (the Readiness Check has its own print styles). */
+@page sheet {
+  size: A4;
+  margin: 0;
+}
+.sheet-doc {
+  page: sheet;
+}
+
+/* The print routes sit inside the site layout; take the site chrome away. */
+body:has(.sheet-doc) .nav,
+body:has(.sheet-doc) .footer,
+body:has(.sheet-doc) .skip-link {
+  display: none !important;
+}
+body:has(.sheet-doc)::before {
+  display: none;
+}
+body:has(.sheet-doc) {
+  background: #d8d4c9; /* screen preview only: the desk the pages sit on */
+}
+
+.sheet-doc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10mm;
+  padding: 10mm 0;
+}
+
+@media print {
+  body:has(.sheet-doc) {
+    background: none;
+  }
+  .sheet-doc {
+    gap: 0;
+    padding: 0;
+  }
+}
+
+.sh-page {
+  position: relative;
+  width: 210mm;
+  height: 297mm;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 10pt;
+  line-height: 1.5;
+  break-after: page;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.sh-page:last-child {
+  break-after: auto;
+}
+
+/* ---- Labels ---- */
+.sh-folio,
+.sh-kicker,
+.sh-index,
+.sh-meta dt,
+.sh-details dt,
+.sh-label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 7.5pt;
+  line-height: 1.3;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.sh-folio {
+  position: absolute;
+  top: 11mm;
+  left: 16mm;
+  right: 16mm;
+  display: flex;
+  justify-content: space-between;
+}
+.sh-folio-n {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.sh-folio-of {
+  color: var(--ink-soft);
+}
+.sh-kicker {
+  display: flex;
+  align-items: center;
+  margin: 0 0 6mm;
+}
+.sh-kicker > span {
+  display: inline-flex;
+  align-items: center;
+}
+.sh-kicker-rule,
+.sh-index-rule {
+  display: inline-block;
+  width: 10mm;
+  height: 0.25mm;
+  background: var(--line);
+}
+.sh-kicker-rule {
+  margin: 0 4mm;
+}
+.sh-index {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  margin: 0 0 5mm;
+}
+.sh-index-n {
+  color: var(--teal);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Type ---- */
+.sh-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 76pt;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  margin: 0;
+  text-wrap: balance;
+}
+.sh-subtitle {
+  font-size: 12pt;
+  line-height: 1.45;
+  margin: 0;
+  max-width: 96mm;
+  text-wrap: pretty;
+}
+.sh-lead {
+  font-family: var(--font-display);
+  font-size: 14pt;
+  line-height: 1.36;
+  letter-spacing: -0.01em;
+  margin: 0 0 4mm;
+  text-wrap: pretty;
+}
+.sh-body {
+  font-size: 10pt;
+  line-height: 1.55;
+  margin: 0 0 3mm;
+  max-width: 112mm;
+  text-wrap: pretty;
+}
+
+/* ---- Meta + details ---- */
+.sh-meta {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0 9mm;
+  margin: 0;
+}
+.sh-meta dt {
+  margin-bottom: 1.5mm;
+}
+.sh-meta dd,
+.sh-details dd {
+  margin: 0;
+  font-size: 10pt;
+  font-weight: 500;
+}
+.sh-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 8mm;
+  margin: 0;
+  border-top: 0.25mm solid var(--line);
+}
+.sh-details > div {
+  padding: 3.2mm 0 3.6mm;
+  border-bottom: 0.25mm solid var(--line);
+}
+.sh-details dt {
+  margin-bottom: 1.2mm;
+}
+.sh-rights {
+  font-size: 8pt;
+  color: var(--ink-soft);
+  margin: 5mm 0 0;
+}
+
+/* ---- Photographs in print ---- */
+.sh-page .pimg-ph {
+  padding: 5mm;
+  gap: 1.5mm;
+}
+.sh-page .pimg-ph-tag {
+  font-size: 6.5pt;
+}
+.sh-page .pimg-ph-label {
+  font-size: 11pt;
+}
+.sh-page .pimg-ph-ratio {
+  font-size: 7.5pt;
+}
+.sh-page .pimg-cap {
+  font-size: 8pt;
+  margin-top: 2mm;
+  line-height: 1.4;
+}
+
+/* ---- Page bodies ---- */
+.sh-content {
+  position: absolute;
+  top: 24mm;
+  left: 16mm;
+  width: 178mm;
+  display: flex;
+  flex-direction: column;
+}
+.sh-row {
+  display: flex;
+}
+.sh-split,
+.sh-overview {
+  display: grid;
+  grid-template-columns: 52mm 1fr;
+  column-gap: 8mm;
+  align-items: start;
+}
+.sh-split > .sh-index,
+.sh-overview > .sh-index {
+  white-space: nowrap;
+  margin-top: 1.2mm;
+}
+/* Approach reads from the top; the details settle on the foot of the page. */
+.sh-text .sh-content {
+  justify-content: space-between;
+}
+.sh-video-meta {
+  margin: 3mm 0 0;
+  font-size: 9pt;
+}
+.sh-video-url {
+  color: var(--ink-soft);
+}
+
+/* ---- Cover ---- */
+.sh-cover-hero {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 210mm;
+  height: 178mm;
+}
+.sh-cover-body {
+  position: absolute;
+  top: 192mm;
+  left: 16mm;
+  right: 16mm;
+  bottom: 16mm;
+  display: flex;
+  flex-direction: column;
+}
+.sh-cover-foot {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10mm;
+  align-items: end;
+}
+
+/* ---- A4 editorial project sheet (one page) ----
+   Rows on a grid; the hero row is 1fr, so it gives way before anything overlaps. */
+.ops {
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto auto auto;
+  padding: 13mm 16mm 11mm;
+}
+.ops-label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 7.5pt;
+  line-height: 1.3;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.ops-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 2mm;
+}
+.ops-brand .wordmark {
+  font-size: 11pt;
+  line-height: 1;
+  color: var(--ink);
+}
+.ops-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 4.5mm;
+  border-bottom: 0.25mm solid var(--line);
+}
+.ops-head {
+  padding-top: 9mm;
+}
+.ops-kicker {
+  margin-bottom: 3mm;
+}
+.ops-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 40pt;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  margin: 0;
+  color: var(--ink);
+}
+.ops-head-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8mm;
+  margin-top: 2.5mm;
+}
+.ops-category {
+  font-size: 13pt;
+  line-height: 1.3;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.ops-place {
+  white-space: nowrap;
+}
+.ops-round .pimg-box {
+  border-radius: 1.6mm; /* brand radius 6px */
+}
+.ops-hero {
+  margin-top: 8mm;
+  min-height: 0;
+}
+.ops-project {
+  display: grid;
+  grid-template-columns: 1fr 52mm;
+  column-gap: 12mm;
+  margin-top: 8mm;
+}
+.ops-section {
+  margin-bottom: 2.5mm;
+}
+.ops-heading {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 15pt;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  margin: 0 0 3mm;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.ops-summary {
+  font-size: 9.5pt;
+  line-height: 1.55;
+  margin: 0;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+.ops-details {
+  margin: 0;
+  align-self: start;
+  border-top: 0.25mm solid var(--line);
+}
+.ops-details > div {
+  padding: 2.4mm 0 2.6mm;
+  border-bottom: 0.25mm solid var(--line);
+}
+.ops-details dt {
+  margin-bottom: 0.8mm;
+}
+.ops-details dd {
+  margin: 0;
+  font-size: 9.5pt;
+  font-weight: 500;
+  line-height: 1.35;
+}
+.ops-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5mm;
+  margin-top: 8mm;
+}
+.ops-tile {
+  aspect-ratio: 3 / 2;
+}
+.ops-tile .pimg-ph,
+.ops-hero .pimg-ph {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.ops-tile .pimg-ph {
+  padding: 3mm;
+}
+.ops-tile .pimg-ph-label {
+  font-size: 8.5pt;
+}
+.ops-foot {
+  margin-top: 8mm;
+  padding-top: 4mm;
+  border-top: 0.25mm solid var(--line);
+}
+.ops-foot-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.ops-url {
+  font-size: 8.5pt;
+  color: var(--ink-soft);
+}
+.ops-rights {
+  font-size: 7pt;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  margin: 2.5mm 0 0;
+}
+.ops .pimg-ph-label {
+  font-family: var(--font-body);
+  font-weight: 500;
+}
+
+/* ---- Client delivery summary (private) — shares the project sheet's rows ---- */
+.dlv {
+  grid-template-rows: auto auto minmax(0, 1fr) auto auto auto;
+}
+.dlv-items {
+  margin-top: 8mm;
+}
+.dlv-items-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 12mm;
+  border-top: 0.25mm solid var(--line);
+}
+.dlv-item {
+  padding-top: 4mm;
+}
+.dlv-count {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 40pt;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.dlv-item-label {
+  font-weight: 700;
+  font-size: 11pt;
+  margin: 2mm 0 1mm;
+}
+.dlv-item-note {
+  font-size: 9pt;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  margin: 0;
+}
+.dlv-cols {
+  grid-template-columns: 1fr 64mm;
+}
+.dlv-brief {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 0.25mm solid var(--line);
+}
+.dlv-brief li {
+  display: grid;
+  grid-template-columns: 9mm 1fr;
+  padding: 2.6mm 0 2.8mm;
+  border-bottom: 0.25mm solid var(--line);
+  font-size: 9.5pt;
+  line-height: 1.5;
+}
+.dlv-brief-n {
+  font-weight: 600;
+  font-size: 7.5pt;
+  letter-spacing: 0.14em;
+  color: var(--teal);
+  padding-top: 0.6mm;
+}
+.dlv-contact {
+  font-size: 9.5pt;
+  margin: 0 0 4mm;
+}
+.dlv-download {
+  display: grid;
+  grid-template-columns: 24mm 1fr;
+  column-gap: 6mm;
+  align-items: center;
+  margin-top: 6mm;
+}
+.dlv-link {
+  font-size: 10pt;
+  font-weight: 500;
+  margin: 0 0 1.5mm;
+}
+.dlv-link a {
+  color: var(--ink);
+  text-decoration: none;
+}
+.dlv-pin {
+  margin: 0 0 1.5mm;
+  font-size: 10pt;
+}
+.dlv-pin strong {
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.dlv-qr-code svg {
+  display: block;
+  width: 24mm;
+  height: 24mm;
+}
+.dlv-qr-note {
+  font-size: 8pt;
+  line-height: 1.4;
+  color: var(--ink-soft);
+  margin: 0;
+}

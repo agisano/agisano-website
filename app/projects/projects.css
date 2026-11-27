@@ -1,0 +1,322 @@
+/* ============================================================
+   Project case studies — web (/projects/<slug>)
+   Paper throughout: the photographs carry the colour. Teal is the
+   only accent (section numbers); signal stays the one thing to click.
+   ============================================================ */
+
+/* ---- Photograph (shared with the print documents) ---- */
+.pimg {
+  margin: 0;
+}
+.pimg-box {
+  position: relative;
+  overflow: hidden;
+  background: var(--stone);
+}
+/* Original colour: no filter, no blend, no overlay. */
+.pimg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.pimg-cover,
+.pimg-cover .pimg-box {
+  width: 100%;
+  height: 100%;
+}
+.pimg-ph {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: clamp(14px, 2.4vw, 28px);
+  background:
+    repeating-linear-gradient(-45deg, rgba(12, 26, 24, 0.05) 0 1px, transparent 1px 10px),
+    var(--stone);
+  outline: 1px dashed rgba(12, 26, 24, 0.3);
+  outline-offset: -1px;
+  color: var(--ink-soft);
+}
+.pimg-ph-tag {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+.pimg-ph-label {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 1.6vw, 1.35rem);
+  line-height: 1.2;
+  color: var(--ink);
+  max-width: 30ch;
+  text-wrap: balance;
+}
+.pimg-ph-ratio {
+  font-size: 0.82rem;
+}
+.pimg-cap {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 60ch;
+}
+
+/* An unconfirmed fact. Visible on screen and in print, by design. */
+.tbc {
+  background: rgba(14, 79, 85, 0.1);
+  color: inherit;
+  border-bottom: 1px dashed var(--teal);
+  padding: 0 0.15em;
+  border-radius: 2px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ---- Title ---- */
+.pj-head {
+  padding-bottom: clamp(40px, 7vh, 88px);
+}
+.pj-kicker {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  margin: 0 0 clamp(20px, 4vh, 44px);
+  color: var(--ink-soft);
+}
+.pj-kicker-rule {
+  display: block;
+  width: clamp(28px, 5vw, 72px);
+  height: 1px;
+  background: var(--line);
+}
+.pj-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(4.2rem, 15vw, 14.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.045em;
+  margin: 0 0 clamp(28px, 5vh, 60px);
+  text-wrap: balance;
+  font-optical-sizing: auto;
+}
+.pj-head-foot {
+  display: grid;
+  gap: var(--s4);
+}
+.pj-subtitle {
+  margin: 0;
+  max-width: 34ch;
+}
+.pj-meta {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: start;
+  gap: var(--s2) var(--s5);
+  margin: 0;
+}
+.pj-meta dt {
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+.pj-meta dd {
+  margin: 0;
+  font-weight: 500;
+}
+@media (min-width: 900px) {
+  .pj-head-foot {
+    grid-template-columns: 7fr 5fr;
+    align-items: end;
+  }
+  .pj-meta {
+    justify-content: end;
+  }
+}
+
+/* ---- Hero: full-bleed, the only crop on the page (from its focus point) ---- */
+.pj-hero .pimg-box {
+  width: 100%;
+  max-height: 92svh;
+}
+
+/* ---- Text sections ---- */
+.pj-split {
+  display: grid;
+  gap: var(--s3);
+}
+@media (min-width: 900px) {
+  .pj-split {
+    grid-template-columns: 4fr 8fr;
+    gap: 0 var(--s5);
+  }
+}
+.pj-prose p {
+  margin: 0 0 1.1em;
+  max-width: var(--measure);
+}
+.pj-prose-lead .t-lead {
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 2.6vw, 2.15rem);
+  line-height: 1.28;
+  letter-spacing: -0.012em;
+  max-width: 30ch;
+  margin-bottom: 0.9em;
+}
+
+/* ---- Gallery ---- */
+.pj-gallery-section {
+  padding-top: clamp(8px, 2vh, 24px);
+}
+.pg {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(64px, 12vh, 168px);
+}
+.pg-full .pimg-cap {
+  padding-inline: var(--page-margin);
+}
+/* Pairs: equal height, widths from each photo's ratio — no crop. */
+.pg-row {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(12px, 1.6vw, 24px);
+}
+.pg-cell {
+  flex-basis: 0;
+  min-width: 0;
+}
+.pg-inset-wrap {
+  display: flex;
+}
+.pg-inset-wrap.align-right {
+  justify-content: flex-end;
+}
+.pg-inset-wrap > .pimg {
+  width: 100%;
+}
+.pg-feature-grid {
+  display: grid;
+  gap: var(--s3);
+}
+.pg-video-link {
+  display: block;
+}
+.pg-video-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s1) var(--s3);
+  margin: var(--s2) 0 0;
+}
+.pg-video-meta .t-label {
+  color: var(--teal);
+}
+.pg-video-title {
+  font-weight: 500;
+}
+.pg-video-dur {
+  color: var(--ink-soft);
+}
+@media (max-width: 759px) {
+  .pg-row {
+    flex-direction: column;
+  }
+  .pg-cell {
+    flex-grow: 1 !important;
+    width: 100%;
+  }
+}
+@media (min-width: 760px) {
+  .pg-inset-wrap > .pimg {
+    width: 66%;
+  }
+  .pg-feature-grid {
+    grid-template-columns: repeat(12, 1fr);
+    align-items: end;
+    gap: 0 clamp(16px, 2vw, 32px);
+  }
+  .pg-feature-lead,
+  .pg-feature-support {
+    grid-row: 1;
+  }
+  .side-left .pg-feature-lead {
+    grid-column: 1 / 8;
+  }
+  .side-left .pg-feature-support {
+    grid-column: 9 / 13;
+  }
+  .side-right .pg-feature-lead {
+    grid-column: 6 / 13;
+  }
+  .side-right .pg-feature-support {
+    grid-column: 1 / 5;
+  }
+}
+
+/* ---- Details ---- */
+.pj-details-section {
+  padding-top: clamp(32px, 6vh, 96px);
+}
+.pj-details {
+  display: grid;
+  margin: 0;
+  border-top: 1px solid var(--line);
+}
+@media (min-width: 640px) {
+  .pj-details {
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--s5);
+  }
+}
+.pj-detail {
+  padding: 18px 0 20px;
+  border-bottom: 1px solid var(--line);
+}
+.pj-detail dt {
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+.pj-detail dd {
+  margin: 0;
+  font-weight: 500;
+}
+.pj-rights {
+  margin: var(--s3) 0 0;
+  color: var(--ink-soft);
+}
+
+/* ---- Closing image: room around it, nothing on it ---- */
+.pj-closing {
+  display: flex;
+  justify-content: center;
+  padding-block: clamp(48px, 10vh, 160px) clamp(80px, 14vh, 200px);
+}
+.pj-closing > .pimg {
+  width: 100%;
+}
+@media (min-width: 760px) {
+  .pj-closing > .pimg {
+    width: 84%;
+  }
+}
+
+/* ---- Next step (web only) ---- */
+.pj-next {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+  padding-bottom: clamp(96px, 14vh, 176px);
+}
+.pj-next p {
+  margin: 0;
+  max-width: 22ch;
+}
