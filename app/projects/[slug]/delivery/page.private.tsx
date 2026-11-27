@@ -66,7 +66,20 @@ export default async function DeliveryPage({ params }: { params: Promise<{ slug:
               <Txt>{projectName}</Txt>
             </p>
           ) : null}
-          <h1 className="ops-title">{p.title}</h1>
+          {p.clientLogo ? (
+            // The client's logo stands in for the typed title, as on the project sheet.
+            <h1 className="ops-title ops-title-logo">
+              {/* eslint-disable-next-line @next/next/no-img-element -- static export; print source */}
+              <img
+                className="ops-client-logo"
+                src={p.clientLogo.src}
+                alt={p.clientLogo.alt}
+                style={{ aspectRatio: p.clientLogo.ratio }}
+              />
+            </h1>
+          ) : (
+            <h1 className="ops-title">{p.title}</h1>
+          )}
           <div className="ops-head-row">
             <p className="ops-category">{p.category}</p>
             <p className="ops-label ops-place">

@@ -21,7 +21,7 @@ export function getProject(slug: string): Project | undefined {
 function assertFinished(p: Project) {
   const open = JSON.stringify(p).match(/\[[^\]"]+\]/g);
   if (open) throw new Error(`Project "${p.slug}" is published but still has placeholders: ${open.join(", ")}`);
-  const slots = [...caseStudySlots(p), ...p.onePager.picks];
+  const slots = [...caseStudySlots(p), ...p.onePager.picks, ...(p.onePager.hero ? [p.onePager.hero] : [])];
   const missing = slots.filter((s) => resolveImage(p.slug, s).placeholder).map((s) => s.label);
   if (missing.length) throw new Error(`Project "${p.slug}" is published but has no photo for: ${missing.join("; ")}`);
 }

@@ -34,8 +34,14 @@ export type SheetBlock = Labelled &
 export type SheetPage =
   | { kind: "cover" }
   | { kind: "flow"; blocks: SheetBlock[]; justify: "start" | "center" | "space-between"; gap: number }
-  | { kind: "text" }
+  /** Approach and details; the closing photograph sits at its foot when there's room. */
+  | { kind: "text"; closing?: Placed }
   | { kind: "closing"; image: Placed };
+
+/** The right-hand column of a split (index | content) layout: 178 − 52 − 8. */
+export const SPLIT_COL = CONTENT.w - 52 - 8;
+/** Minimum space between the sections of the text page. */
+export const TEXT_GAP = 12;
 
 function capH(items: Placed[], max: number) {
   const h = Math.max(...items.map((i) => i.h));
@@ -127,6 +133,7 @@ function scaleBlock(b: SheetBlock, k: number): SheetBlock {
 function arrange(blocks: SheetBlock[]): { justify: "start" | "center" | "space-between"; gap: number } {
   if (blocks.length === 1) return { justify: "center", gap: 0 };
   const spare = CONTENT.h - blocks.reduce((a, b) => a + b.h, 0) - BLOCK_GAP * (blocks.length - 1);
+  // The overview reads from the top, and the photographs follow straight after it.
   if (blocks[0].kind === "overview") return { justify: "start", gap: spare > SPREAD_MAX ? OPEN_GAP : BLOCK_GAP };
   if (spare <= SPREAD_MAX) return { justify: "space-between", gap: BLOCK_GAP };
   return { justify: "center", gap: OPEN_GAP };
@@ -177,14 +184,46 @@ export function composeSheet(p: Project): SheetPage[] {
   });
   flush();
 
-  if (p.approach?.length || p.details.length) pages.push({ kind: "text" });
+  const hasText = Boolean(p.approach?.length || p.details.length);
+  const closing = p.closing ? resolveImage(p.slug, p.closing) : undefined;
 
-  if (p.closing) {
-    const r = resolveImage(p.slug, p.closing);
+  // The closing photograph shares the text page, aligned to the text column, when it
+  // can be shown at a decent size. Otherwise it gets a page of its own.
+  if (hasText && closing) {
+    const free = CONTENT.h - textHeight(p) - TEXT_GAP;
+    const w = Math.min(SPLIT_COL, free * closing.ratio);
+    if (w >= SPLIT_COL * 0.75) {
+      pages.push({ kind: "text", closing: { r: closing, w, h: w / closing.ratio } });
+      return pages;
+    }
+  }
+  if (hasText) pages.push({ kind: "text" });
+  if (closing) {
     const w = CONTENT.w * 0.86;
-    const [image] = capH([{ r, w, h: w / r.ratio }], CONTENT.h * 0.8);
+    const [image] = capH([{ r: closing, w, h: w / closing.ratio }], CONTENT.h * 0.8);
     pages.push({ kind: "closing", image });
   }
   return pages;
+}
+
+/** Generous estimate of the approach and details height, so the photo below never collides. */
+function textHeight(p: Project) {
+  const line = 5.5; // 10pt at 1.55
+  let h = 0;
+  if (p.approach?.length) {
+    for (const t of p.approach) h += Math.ceil((t.length * 1.12) / 60) * line + 3;
+    h += TEXT_GAP;
+  }
+  if (p.details.length) {
+    const colChars = 28; // each of the two detail columns, at 10pt
+    for (let i = 0; i < p.details.length; i += 2) {
+      const lines = Math.max(
+        ...p.details.slice(i, i + 2).map((d) => Math.ceil((d.value.length * 1.1) / colChars)),
+      );
+      h += 9.5 + lines * 5.3; // padding, label and its gap, value lines
+    }
+    if (p.rightsNote) h += 9;
+  }
+  return h;
 }
 

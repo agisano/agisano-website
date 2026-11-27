@@ -119,7 +119,13 @@ Both print documents also render in the browser at `/projects/<slug>/sheet` and
 5. Leave out what doesn't apply: `overview`, `approach`, `closing`, `next` (the web-only
    "Request a quote" line) and `rightsNote` are all optional, and section numbers close up
    behind them. Keep only the `details` rows that apply.
-6. Follow "Add the photographs" from step 2.
+6. **Client logo (optional).** Put the client's logo, unaltered and on a transparent
+   background, in `public/clients/<slug>.png` (not `public/projects/<slug>/`, which
+   `project:images` replaces), and set
+   `clientLogo: { src: "/clients/<slug>.png", alt: "<Client>", ratio: <width / height> }`.
+   On the project sheet and the delivery summary the logo replaces the typed title, so the
+   name isn't set twice.
+7. Follow "Add the photographs" from step 2.
 
 ## Client delivery summary (private)
 

@@ -77,6 +77,8 @@ export type Project = {
     heading?: string;
     /** 40–70 words. Defaults to the first overview paragraph. */
     summary?: string;
+    /** The project sheet's own hero, when it should differ from the case study cover. */
+    hero?: ImageSlot;
     /**
      * Exactly three supporting photographs. They sit in equal 3:2 tiles, so each is
      * cropped from its `focus` — landscape frames lose least.
@@ -90,6 +92,12 @@ export type Project = {
   next?: { line: string; label: string; href: string };
   /** Web only: rights note under the details. */
   rightsNote?: string;
+  /**
+   * The client's logo, set in place of the typed title on the project sheet. Kept in public/clients/
+   * (not public/projects/<slug>/, which `project:images` replaces on every run). Use the
+   * client's own artwork unaltered, on a transparent background.
+   */
+  clientLogo?: { src: string; alt: string; /** width / height */ ratio: number };
 };
 
 /**

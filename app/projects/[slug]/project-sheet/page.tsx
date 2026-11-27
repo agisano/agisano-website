@@ -36,7 +36,7 @@ export default async function ProjectSheetPage({ params }: { params: Promise<{ s
   const p = getProject(slug);
   if (!p) notFound();
 
-  const hero = resolveImage(p.slug, p.hero);
+  const hero = resolveImage(p.slug, p.onePager.hero ?? p.hero);
   const picks = p.onePager.picks.map((s) => resolveImage(p.slug, s));
   const summary = p.onePager.summary ?? p.overview?.[0] ?? "";
   const wanted = p.onePager.details ?? p.details.slice(0, 4).map((d) => d.label);
@@ -62,7 +62,20 @@ export default async function ProjectSheetPage({ params }: { params: Promise<{ s
               <Txt>{projectName}</Txt>
             </p>
           ) : null}
-          <h1 className="ops-title">{p.title}</h1>
+          {p.clientLogo ? (
+            // The client's logo stands in for the typed title, so the name isn't said twice.
+            <h1 className="ops-title ops-title-logo">
+              {/* eslint-disable-next-line @next/next/no-img-element -- static export; print source */}
+              <img
+                className="ops-client-logo"
+                src={p.clientLogo.src}
+                alt={p.clientLogo.alt}
+                style={{ aspectRatio: p.clientLogo.ratio }}
+              />
+            </h1>
+          ) : (
+            <h1 className="ops-title">{p.title}</h1>
+          )}
           <div className="ops-head-row">
             <p className="ops-category">{p.category}</p>
             <p className="ops-label ops-place">

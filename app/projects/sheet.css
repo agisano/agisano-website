@@ -237,6 +237,7 @@ body:has(.sheet-doc) {
 /* Approach reads from the top; the details settle on the foot of the page. */
 .sh-text .sh-content {
   justify-content: space-between;
+  gap: 12mm; /* TEXT_GAP in lib/projects/sheet.ts */
 }
 .sh-video-meta {
   margin: 3mm 0 0;
@@ -320,6 +321,15 @@ body:has(.sheet-doc) {
   text-transform: uppercase;
   margin: 0;
   color: var(--ink);
+}
+/* The client's logo in place of the typed title: their artwork as supplied. */
+.ops-title-logo {
+  line-height: 0;
+}
+.ops-client-logo {
+  display: block;
+  height: 20mm;
+  width: auto;
 }
 .ops-head-row {
   display: flex;

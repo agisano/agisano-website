@@ -144,6 +144,12 @@ export default async function SheetPage({ params }: { params: Promise<{ slug: st
                     </div>
                   </div>
                 ) : null}
+                {page.closing ? (
+                  <div className="sh-split">
+                    <div />
+                    <PlacedImage p={page.closing} />
+                  </div>
+                ) : null}
               </div>
             </section>
           );
