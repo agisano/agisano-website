@@ -22,5 +22,18 @@ export default tseslint.config(
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
     },
+  },
+  {
+    // Node scripts that also pass callbacks into a Playwright page.
+    files: ["tools/**/*.mjs"],
+    languageOptions: {
+      globals: {
+        process: "readonly",
+        console: "readonly",
+        URL: "readonly",
+        document: "readonly",
+        window: "readonly",
+      },
+    },
   }
 );

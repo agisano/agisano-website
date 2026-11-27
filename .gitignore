@@ -10,3 +10,13 @@ next-env.d.ts
 tsconfig.tsbuildinfo
 .vercel
 .eslintcache
+
+# Project case studies: original photographs stay local (large, unprocessed);
+# exported PDFs/JPEGs are build output. See docs/projects.md.
+/assets/projects/*/*
+!/assets/projects/*/.gitkeep
+/exports
+
+# Private client data (delivery recipients, download links, PINs). This repo is
+# public: never commit it. See docs/projects.md.
+/private/

@@ -28,7 +28,9 @@ Agisano's own services will run on a **VPS** (not the homelab k3s cluster). Dock
 - Fonts, self-hosted woff2: **Fraunces** (display) + **Satoshi** (body). Poppins 600 is the
   wordmark face ONLY — never running text.
 - Pages: `/`, `/about`, `/under-one-roof`, `/observatory-girls`, `/assessment`,
-  `/assessment-terms`, `/privacy`
+  `/assessment-terms`, `/privacy`, and media case studies at `/projects/<slug>` (plus
+  `/sheet` and `/project-sheet` print sources). Case studies are data in `lib/projects/`; how to
+  add photos, publish and export PDFs is in `docs/projects.md`.
 - Motion lives in `components/motion/Reveal.tsx` (`Fade`, `Rise`, `Stagger`,
   `StatementBuild`); scroll-scrub via `lib/usePinProgress`, capability gating via
   `lib/useCapability`. `ConvergingLine` is the signature device — the service threads
