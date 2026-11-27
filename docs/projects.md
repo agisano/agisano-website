@@ -5,8 +5,8 @@ Each media project is one data file. The same data renders three things:
 | Output | Where | Use it for |
 |---|---|---|
 | Web case study | `agisano.com/projects/<slug>` | Work completed, on the site |
-| A4 case study (PDF) | `exports/projects/<slug>/<slug>-case-study.pdf` | Email, client presentations |
-| A4 project sheet, one page (PDF and JPEG) | `exports/projects/<slug>/<slug>-project-sheet.pdf` and `.jpg` | Email, Behance, the portfolio |
+| A4 case study (PDF) | `<slug>-case-study.pdf` in the job's docs folder (or `exports/projects/<slug>/`) | Email, client presentations |
+| A4 project sheet, one page (PDF and JPEG) | `<slug>-project-sheet.pdf` and `.jpg`, same place | Email, Behance, the portfolio |
 
 Both print documents also render in the browser at `/projects/<slug>/sheet` and
 `/projects/<slug>/project-sheet` for previews. Both are marked noindex.
@@ -38,10 +38,26 @@ Both print documents also render in the browser at `/projects/<slug>/sheet` and
 
   ```sh
   cd /mnt/c/Users/ktjea/repos/agisano-website
-  docker run --rm -it -p 3000:3000 -v "$PWD":/app -w /app mcr.microsoft.com/playwright:v1.61.1-noble bash
+  docker run --rm -it -p 3000:3000 -v "$PWD":/app -v /mnt/d/docs/agisano/clients:/clients -w /app mcr.microsoft.com/playwright:v1.61.1-noble bash
   ```
 
-  The image tag must match the `playwright` version in `package-lock.json`.
+  The image tag must match the `playwright` version in `package-lock.json`. The second `-v`
+  makes the Agisano client docs folders (`D:\docs\agisano\clients`, synced by Nextcloud)
+  visible inside the container as `/clients`, so the export can write straight into the job.
+
+## Where the files live
+
+Each shoot is a job created with `studio new` (repo `studio`). One job id, such as
+`2026-11_engen_01-lydenburg`, names both of its homes:
+
+| What | Where |
+|---|---|
+| RAW files, catalog, delivered photos | `D:\studio\agisano\<year>\<job-id>\` (`05_delivery` holds what the client got) |
+| Contract, delivery summary, case study, project sheet | `D:\docs\agisano\clients\<client>\<job-id>\` |
+
+`npm run project:export -- <slug> --out /clients/<client>/<job-id>` writes the case study,
+the project sheet and (in a client build) the delivery summary into the job's docs folder.
+Without `--out` they go to `exports/projects/<slug>/` (git-ignored), as before.
 
 ## Add the photographs to a project (Engen as the example)
 
@@ -50,8 +66,9 @@ Both print documents also render in the browser at `/projects/<slug>/sheet` and
    and three project-sheet supporting photos (they may repeat gallery photos). The project
    sheet sets those three in equal 3:2 landscape tiles, so landscape frames lose least.
 2. **Copy the originals** into `assets/projects/engen/`, as the final edited, full-resolution
-   files (JPEG, TIFF, PNG or WebP). This folder is git-ignored. Keep the originals backed up
-   elsewhere too.
+   files (JPEG, TIFF, PNG or WebP). Take them from the job's `05_delivery` folder
+   (`D:\studio\agisano\2026\2026-11_engen_01-lydenburg\05_delivery`), which is backed up with
+   the job. `assets/projects/` is git-ignored and is only a working copy.
 3. **Process them:**
 
    ```sh
@@ -85,14 +102,16 @@ Both print documents also render in the browser at `/projects/<slug>/sheet` and
 
    ```sh
    npm run build
-   npm run project:export -- engen
+   npm run project:export -- engen --out /clients/engen/2026-11_engen_01-lydenburg
    ```
 
-   The export prints the page count and fails if any photo doesn't load.
+   The export prints the page count and fails if any photo doesn't load. It replaces the
+   files of the same name in that folder.
 7. **Check all three outputs.** Run `npm run dev -- -H 0.0.0.0` and open
    `http://localhost:3000/projects/engen` at desktop and phone widths (opening the built HTML
    file directly loses the fonts, which load from the site root). Stop the dev server, then
-   open the two PDFs and the JPEG in `exports/projects/engen/`. Check
+   open the two PDFs and the JPEG in the job's docs folder
+   (`D:\docs\agisano\clients\engen\2026-11_engen_01-lydenburg`). Check
    for awkward pairings, crops that cut through faces (adjust `focus`), and highlighted text
    that's still there.
 8. **Publish.** Set `status: "published"`, build again (it fails if anything is still
@@ -140,7 +159,8 @@ the files were sent, so **it is never part of the public site**:
   `lib/projects/`. It lives in `private/projects/<slug>.delivery.json`, which is
   git-ignored, and is read only by the private page. Back that folder up yourself: git
   won't.
-- The PDF is written to `exports/`, which is also git-ignored.
+- The PDF is written to the job's docs folder with `--out` (synced by Nextcloud, which is
+  self-hosted), or to `exports/` without it. Both are outside git.
 
 To make one:
 
@@ -169,10 +189,10 @@ To make one:
 
    ```sh
    npm run build:client
-   npm run project:export -- engen
+   npm run project:export -- engen --out /clients/engen/2026-11_engen_01-lydenburg
    ```
 
-   This writes `exports/projects/engen/engen-delivery-summary.pdf` alongside the other
+   This writes `engen-delivery-summary.pdf` into the job's docs folder, alongside the other
    exports.
 3. **Run `npm run build` again afterwards**, so `out/` holds only the public site.
 4. Check the PDF, then send it to the client yourself.

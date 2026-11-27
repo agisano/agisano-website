@@ -1,9 +1,10 @@
 // Exports a project's print documents from the built site.
 //
 //   npm run build
-//   node tools/render-project.mjs <slug>
+//   node tools/render-project.mjs <slug> [--out <dir>]
 //
-// Writes to exports/projects/<slug>/:
+// Writes to exports/projects/<slug>/, or to <dir> when --out is given (for example the job's
+// docs folder, mounted into the container; see docs/projects.md):
 //   <slug>-case-study.pdf   A4 portrait, multi-page
 //   <slug>-project-sheet.pdf  A4 editorial project sheet, one page
 //   <slug>-project-sheet.jpg  the project sheet at 300 dpi (2481×3508), for Behance
@@ -15,15 +16,26 @@ import http from "node:http";
 import path from "node:path";
 import { chromium } from "playwright";
 
-const slug = process.argv[2];
+const usage = "Usage: node tools/render-project.mjs <slug> [--out <dir>]";
+const args = process.argv.slice(2);
+const slug = args[0];
 if (!slug || !/^[a-z0-9-]+$/.test(slug)) {
-  console.error("Usage: node tools/render-project.mjs <slug>");
+  console.error(usage);
   process.exit(1);
+}
+let out = null;
+for (let i = 1; i < args.length; i++) {
+  if (args[i] === "--out" && args[i + 1]) out = args[++i];
+  else if (args[i].startsWith("--out=")) out = args[i].slice("--out=".length);
+  else {
+    console.error(`Unknown argument: ${args[i]}\n${usage}`);
+    process.exit(1);
+  }
 }
 
 const root = path.resolve(import.meta.dirname, "..");
 const site = path.join(root, "out");
-const dest = path.join(root, "exports", "projects", slug);
+const dest = out ? path.resolve(out) : path.join(root, "exports", "projects", slug);
 if (!fs.existsSync(path.join(site, "projects", slug, "sheet.html"))) {
   console.error(`out/projects/${slug}/sheet.html not found — run \`npm run build\` first.`);
   process.exit(1);
@@ -125,4 +137,4 @@ if (fs.existsSync(path.join(site, "projects", slug, "delivery.html"))) {
 
 await browser.close();
 server.close();
-console.log(`\n→ ${path.relative(root, dest)}/`);
+console.log(`\n→ ${out ? dest : path.relative(root, dest)}/`);
