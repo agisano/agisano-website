@@ -21,7 +21,7 @@ import type { Project } from "./types";
  */
 export const ENGEN: Project = {
   slug: "engen",
-  status: "draft",
+  status: "published",
   discipline: "photography",
 
   title: "Engen",
